@@ -8,7 +8,9 @@
 		"phone": "vite --host 0.0.0.0 --mode phone",
 		"build": "tsc -p tsconfig.build.json && vite build --mode production",
 		"preview": "vite preview",
-		"generate-client": "openapi-ts"
+		"generate-client": "openapi-ts",
+		"lint": "biome check ./src",
+		"lint:fix": "biome check --apply ./src"
 	},
 	"dependencies": {
 		"@chakra-ui/react": "^3.8.0",

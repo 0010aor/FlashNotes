@@ -1,0 +1,66 @@
+# Contributing to FlashNotes
+
+Thank you for your interest in contributing to FlashNotes! We welcome contributions from everyone. By participating in this project, you agree to abide by our code of conduct (we should add one!).
+
+## How Can I Contribute?
+
+### Reporting Bugs
+
+If you find a bug, please ensure the bug was not already reported by searching on GitHub under [Issues](https://github.com/your-username/FlashNotes/issues). If you're unable to find an open issue addressing the problem, open a new one. Be sure to include a title and clear description, as much relevant information as possible, and a code sample or an executable test case demonstrating the expected behavior that is not occurring.
+
+### Suggesting Enhancements
+
+If you have an idea for an enhancement, please search the [Issues](https://github.com/your-username/FlashNotes/issues) to see if it has already been suggested. If not, open a new issue, providing a clear description of the proposed enhancement and its potential benefits.
+
+### Code Contributions
+
+1.  **Fork the repository** on GitHub.
+2.  **Clone your fork** locally:
+    ```bash
+    git clone https://github.com/your-username/FlashNotes.git
+    ```
+3.  **Set up the development environment** by following the instructions in the [README.md](README.md#setup-instructions).
+4.  **Create a new branch** for your feature or bug fix:
+    ```bash
+    git checkout -b name-of-your-feature-or-fix
+    ```
+5.  **Make your changes**. Ensure your code follows the project's style guidelines.
+6.  **Write tests** for your changes. For the backend, we use Pytest. Ensure all tests pass.
+7.  **Commit your changes**:
+    ```bash
+    git commit -m "feat: Describe your feature" -m "Detailed description of the changes."
+    # Or for a fix:
+    # git commit -m "fix: Describe your fix" -m "Detailed description of the fix."
+    ```
+    (Consider using [Conventional Commits](https://www.conventionalcommits.org/) for commit messages).
+8.  **Push your branch** to your fork:
+    ```bash
+    git push origin name-of-your-feature-or-fix
+    ```
+9.  **Open a Pull Request (PR)** to the `main` branch of the original repository. Provide a clear title and description for your PR, linking to any relevant issues.
+
+## Code Style
+
+*   Please ensure your code is formatted correctly before committing.
+*   Backend (Python): Follow PEP 8 guidelines. We use linters/formatters like Black and Ruff (mention specific tools if configured).
+*   Frontend (TypeScript/React): We use [Biome](https://biomejs.dev/) for linting and formatting. Please ensure your code adheres to the configuration in `frontend/biome.json`. Key aspects include:
+    *   2-space indentation.
+    *   100-character line width.
+    *   Single quotes for TS/JS, double quotes for JSX.
+    *   Trailing commas on multiline structures.
+    *   Adherence to recommended linter rules (with specific rules like `noExplicitAny`, `noArrayIndexKey`, and `noNonNullAssertion` set to generate warnings).
+
+## Testing
+
+*   Backend: Ensure all backend changes are covered by tests using `pytest`. Run tests from the `backend` directory.
+*   Frontend: (Add details about frontend testing if applicable, e.g., Vitest, React Testing Library).
+
+## Pull Request Process
+
+1.  Ensure any install or build dependencies are removed before the end of the layer when doing a build.
+2.  Update the README.md with details of changes to the interface, this includes new environment variables, exposed ports, useful file locations and container parameters.
+3.  Increase the version numbers in any examples files and the README.md to the new version that this Pull Request would represent.
+4.  Your PR will be reviewed by a maintainer. Address any feedback or changes requested.
+5.  Once approved, your PR will be merged.
+
+Thank you again for your contribution!

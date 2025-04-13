@@ -16,20 +16,27 @@
 	  "rules": {
 		"recommended": true,
 		"suspicious": {
-		  "noExplicitAny": "off",
-		  "noArrayIndexKey": "off"
+		  "noExplicitAny": "warn",
+		  "noArrayIndexKey": "warn"
 		},
 		"style": {
-		  "noNonNullAssertion": "off"
+		  "noNonNullAssertion": "warn"
 		}
 	  }
 	},
 	"formatter": {
-	  "indentStyle": "space"
+	  "enabled": true,
+	  "indentStyle": "space",
+	  "indentWidth": 2,
+	  "lineWidth": 100,
+	  "ignore": ["src/components/ui"]
 	},
 	"javascript": {
 	  "formatter": {
-		"quoteStyle": "double",
+		"quoteStyle": "single",
+		"jsxQuoteStyle": "double",
+		"quoteProperties": "asNeeded",
+		"trailingComma": "all",
 		"semicolons": "asNeeded"
 	  }
 	}
