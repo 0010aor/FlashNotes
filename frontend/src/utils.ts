@@ -18,7 +18,10 @@ export const namePattern = {
 }
 
 export const passwordRules = (isRequired = true) => {
-  const rules: any = {
+  const rules: {
+    minLength: { value: number; message: string }
+    required?: string
+  } = {
     minLength: {
       value: 8,
       message: t('general.errors.passwordMinCharacters'),
@@ -32,10 +35,14 @@ export const passwordRules = (isRequired = true) => {
   return rules
 }
 
-export const confirmPasswordRules = (getValues: () => any, isRequired = true) => {
-  const rules: any = {
+export const confirmPasswordRules = (getValues: () => unknown, isRequired = true) => {
+  const rules: {
+    validate: (value: string) => boolean | string
+    required?: string
+  } = {
     validate: (value: string) => {
-      const password = getValues().password || getValues().new_password
+      const formValues = getValues() as { password?: string; new_password?: string }
+      const password = formValues.password || formValues.new_password
       return value === password ? true : t('general.errors.passwordsDoNotMatch')
     },
   }
@@ -47,10 +54,16 @@ export const confirmPasswordRules = (getValues: () => any, isRequired = true) =>
   return rules
 }
 
-export const handleError = (err: ApiError, showToast: any) => {
-  const errDetail = (err.body as any)?.detail
-  let errorMessage = errDetail || t('general.errors.default')
-  if (Array.isArray(errDetail) && errDetail.length > 0) {
+export const handleError = (
+  err: ApiError,
+  showToast: (title: string, message: string, type: string) => void,
+) => {
+  const errDetail = (err.body as { detail?: string | { msg: string }[] })?.detail
+  let errorMessage = t('general.errors.default')
+
+  if (typeof errDetail === 'string') {
+    errorMessage = errDetail
+  } else if (Array.isArray(errDetail) && errDetail.length > 0) {
     errorMessage = errDetail[0].msg
   }
   showToast(t('general.errors.error'), errorMessage, 'error')

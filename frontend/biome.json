@@ -7,6 +7,7 @@
 	  "ignore": [
 		"node_modules",
 		"src/routeTree.gen.ts",
+		"src/client/*",
 		"src/components/ui"
 	  ]
 	},
@@ -36,7 +37,7 @@
 		"quoteStyle": "single",
 		"jsxQuoteStyle": "double",
 		"quoteProperties": "asNeeded",
-		"trailingComma": "all",
+		"trailingCommas": "all",
 		"semicolons": "asNeeded"
 	  }
 	}
