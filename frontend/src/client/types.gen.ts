@@ -218,9 +218,9 @@ export type FlashcardsGetPracticeSessionStatusResponse = PracticeSession
 
 export type FlashcardsListPracticeCardsData = {
   limit?: number
-  order?: "asc" | "desc" | "random" | null
+  order?: 'asc' | 'desc' | 'random' | null
   practiceSessionId: string
-  status?: "pending" | "completed" | "all" | null
+  status?: 'pending' | 'completed' | 'all' | null
 }
 
 export type FlashcardsListPracticeCardsResponse = PracticeCardListResponse
