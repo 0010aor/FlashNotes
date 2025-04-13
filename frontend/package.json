@@ -10,7 +10,8 @@
 		"preview": "vite preview",
 		"generate-client": "openapi-ts",
 		"lint": "biome check ./src",
-		"lint:fix": "biome check --apply ./src"
+		"lint:fix": "biome check --apply ./src",
+		"prepare": "husky"
 	},
 	"dependencies": {
 		"@chakra-ui/react": "^3.8.0",
@@ -43,6 +44,7 @@
 		"@types/react-dom": "^19.0.3",
 		"@vitejs/plugin-react": "^4.3.4",
 		"globals": "^15.14.0",
+		"husky": "^9.1.7",
 		"i18next": "^24.2.2",
 		"i18next-browser-languagedetector": "^8.0.4",
 		"i18next-http-backend": "^3.0.2",
