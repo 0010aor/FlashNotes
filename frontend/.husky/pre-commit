@@ -1,1 +1,15 @@
-pnpm lint
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "Running Biome checks..."
+
+# Navigate to the frontend directory
+cd frontend && pnpm exec biome check --apply --no-errors-on-warnings . ; echo "Exit code: $?" ; cd ..
+
+if [ $? -ne 0 ]; then
+  echo "Biome checks failed. Commit aborted."
+  exit 1
+fi
+
+echo "Biome checks passed."
+exit 0 
