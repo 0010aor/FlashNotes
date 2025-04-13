@@ -1,20 +1,27 @@
-"[typescript]": {
-    "editor.defaultFormatter": "biomejs.biome",
-    "editor.formatOnSave": true
-},
-"[typescriptreact]": {
-    "editor.defaultFormatter": "biomejs.biome",
-    "editor.formatOnSave": true
-},
-"[javascript]": {
-    "editor.defaultFormatter": "biomejs.biome",
-    "editor.formatOnSave": true
-},
-"[javascriptreact]": {
-    "editor.defaultFormatter": "biomejs.biome",
-    "editor.formatOnSave": true
-},
-"editor.codeActionsOnSave": {
-    "source.organizeImports.biome": "explicit", // Optional: Organize imports on save
-    "source.fixAll.biome": "explicit"          // Optional: Apply autofixes on save
+{
+    "[typescript]": {
+        "editor.defaultFormatter": "biomejs.biome",
+        "editor.formatOnSave": true
+    },
+    "[typescriptreact]": {
+        "editor.defaultFormatter": "biomejs.biome",
+        "editor.formatOnSave": true
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": "biomejs.biome",
+        "editor.formatOnSave": true
+    },
+    "[javascriptreact]": {
+        "editor.defaultFormatter": "biomejs.biome",
+        "editor.formatOnSave": true
+    },
+    "editor.codeActionsOnSave": {
+        "source.organizeImports.biome": "explicit", // Optional: Organize imports on save
+        "source.fixAll.biome": "explicit"          // Optional: Apply autofixes on save"
+    },
+    "files.exclude": {
+        // ... other patterns like .DS_Store, node_modules etc. ...
+        "**/.git": false, // <--- Change this from true to false
+        // ... other patterns ...
+    }
 }

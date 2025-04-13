@@ -1,5 +1,4 @@
 #!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
 
 echo "Running Biome checks..."
 
@@ -7,7 +6,7 @@ echo "Running Biome checks..."
 cd frontend || exit 1 # Exit if cd fails
 
 # Run Biome check and store its exit code
-pnpm exec biome check --apply --no-errors-on-warnings .
+pnpm exec biome check ./frontend/src
 EXIT_CODE=$? # Capture Biome's exit code immediately
 
 # Navigate back to the root

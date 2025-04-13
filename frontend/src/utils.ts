@@ -48,7 +48,7 @@ export const confirmPasswordRules = (getValues: () => unknown, isRequired = true
   }
 
   if (isRequired) {
-    rules.required = t("general.errors.passwordConfirmationIsRequired")
+    rules.required = t('general.errors.passwordConfirmationIsRequired')
   }
 
   return rules
