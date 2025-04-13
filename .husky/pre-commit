@@ -4,11 +4,19 @@
 echo "Running Biome checks..."
 
 # Navigate to the frontend directory
-cd frontend && pnpm exec biome check --apply --no-errors-on-warnings . ; echo "Exit code: $?" ; cd ..
+cd frontend || exit 1 # Exit if cd fails
 
-if [ $? -ne 0 ]; then
-  echo "Biome checks failed. Commit aborted."
-  exit 1
+# Run Biome check and store its exit code
+pnpm exec biome check --apply --no-errors-on-warnings .
+EXIT_CODE=$? # Capture Biome's exit code immediately
+
+# Navigate back to the root
+cd ..
+
+# Check Biome's exit code
+if [ $EXIT_CODE -ne 0 ]; then
+  echo "Biome checks failed (Exit code: $EXIT_CODE). Commit aborted."
+  exit 1 # Exit with Biome's non-zero exit code
 fi
 
 echo "Biome checks passed."
