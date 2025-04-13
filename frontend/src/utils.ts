@@ -41,7 +41,10 @@ export const confirmPasswordRules = (getValues: () => unknown, isRequired = true
     required?: string
   } = {
     validate: (value: string) => {
-      const formValues = getValues() as { password?: string; new_password?: string }
+      const formValues = getValues() as {
+        password?: string
+        new_password?: string
+      }
       const password = formValues.password || formValues.new_password
       return value === password ? true : t('general.errors.passwordsDoNotMatch')
     },
