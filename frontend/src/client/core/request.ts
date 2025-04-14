@@ -1,24 +1,19 @@
-import axios from "axios"
-import type {
-  AxiosError,
-  AxiosRequestConfig,
-  AxiosResponse,
-  AxiosInstance,
-} from "axios"
+import axios from 'axios'
+import type { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
 
-import { ApiError } from "./ApiError"
-import type { ApiRequestOptions } from "./ApiRequestOptions"
-import type { ApiResult } from "./ApiResult"
-import { CancelablePromise } from "./CancelablePromise"
-import type { OnCancel } from "./CancelablePromise"
-import type { OpenAPIConfig } from "./OpenAPI"
+import { ApiError } from './ApiError'
+import type { ApiRequestOptions } from './ApiRequestOptions'
+import type { ApiResult } from './ApiResult'
+import { CancelablePromise } from './CancelablePromise'
+import type { OnCancel } from './CancelablePromise'
+import type { OpenAPIConfig } from './OpenAPI'
 
 export const isString = (value: unknown): value is string => {
-  return typeof value === "string"
+  return typeof value === 'string'
 }
 
 export const isStringWithValue = (value: unknown): value is string => {
-  return isString(value) && value !== ""
+  return isString(value) && value !== ''
 }
 
 export const isBlob = (value: any): value is Blob => {
@@ -38,7 +33,7 @@ export const base64 = (str: string): string => {
     return btoa(str)
   } catch (err) {
     // @ts-ignore
-    return Buffer.from(str).toString("base64")
+    return Buffer.from(str).toString('base64')
   }
 }
 
@@ -58,7 +53,7 @@ export const getQueryString = (params: Record<string, unknown>): string => {
       append(key, value.toISOString())
     } else if (Array.isArray(value)) {
       value.forEach((v) => encodePair(key, v))
-    } else if (typeof value === "object") {
+    } else if (typeof value === 'object') {
       Object.entries(value).forEach(([k, v]) => encodePair(`${key}[${k}]`, v))
     } else {
       append(key, value)
@@ -67,14 +62,14 @@ export const getQueryString = (params: Record<string, unknown>): string => {
 
   Object.entries(params).forEach(([key, value]) => encodePair(key, value))
 
-  return qs.length ? `?${qs.join("&")}` : ""
+  return qs.length ? `?${qs.join('&')}` : ''
 }
 
 const getUrl = (config: OpenAPIConfig, options: ApiRequestOptions): string => {
   const encoder = config.ENCODE_PATH || encodeURI
 
   const path = options.url
-    .replace("{api-version}", config.VERSION)
+    .replace('{api-version}', config.VERSION)
     .replace(/{(.*?)}/g, (substring: string, group: string) => {
       if (options.path?.hasOwnProperty(group)) {
         return encoder(String(options.path[group]))
@@ -86,9 +81,7 @@ const getUrl = (config: OpenAPIConfig, options: ApiRequestOptions): string => {
   return options.query ? url + getQueryString(options.query) : url
 }
 
-export const getFormData = (
-  options: ApiRequestOptions,
-): FormData | undefined => {
+export const getFormData = (options: ApiRequestOptions): FormData | undefined => {
   if (options.formData) {
     const formData = new FormData()
 
@@ -121,7 +114,7 @@ export const resolve = async <T>(
   options: ApiRequestOptions<T>,
   resolver?: T | Resolver<T>,
 ): Promise<T | undefined> => {
-  if (typeof resolver === "function") {
+  if (typeof resolver === 'function') {
     return (resolver as Resolver<T>)(options)
   }
   return resolver
@@ -143,7 +136,7 @@ export const getHeaders = async <T>(
   ])
 
   const headers = Object.entries({
-    Accept: "application/json",
+    Accept: 'application/json',
     ...additionalHeaders,
     ...options.headers,
   })
@@ -157,27 +150,27 @@ export const getHeaders = async <T>(
     )
 
   if (isStringWithValue(token)) {
-    headers["Authorization"] = `Bearer ${token}`
+    headers['Authorization'] = `Bearer ${token}`
   }
 
   if (isStringWithValue(username) && isStringWithValue(password)) {
     const credentials = base64(`${username}:${password}`)
-    headers["Authorization"] = `Basic ${credentials}`
+    headers['Authorization'] = `Basic ${credentials}`
   }
 
   if (options.body !== undefined) {
     if (options.mediaType) {
-      headers["Content-Type"] = options.mediaType
+      headers['Content-Type'] = options.mediaType
     } else if (isBlob(options.body)) {
-      headers["Content-Type"] = options.body.type || "application/octet-stream"
+      headers['Content-Type'] = options.body.type || 'application/octet-stream'
     } else if (isString(options.body)) {
-      headers["Content-Type"] = "text/plain"
+      headers['Content-Type'] = 'text/plain'
     } else if (!isFormData(options.body)) {
-      headers["Content-Type"] = "application/json"
+      headers['Content-Type'] = 'application/json'
     }
   } else if (options.formData !== undefined) {
     if (options.mediaType) {
-      headers["Content-Type"] = options.mediaType
+      headers['Content-Type'] = options.mediaType
     }
   }
 
@@ -249,51 +242,48 @@ export const getResponseBody = (response: AxiosResponse<unknown>): unknown => {
   return undefined
 }
 
-export const catchErrorCodes = (
-  options: ApiRequestOptions,
-  result: ApiResult,
-): void => {
+export const catchErrorCodes = (options: ApiRequestOptions, result: ApiResult): void => {
   const errors: Record<number, string> = {
-    400: "Bad Request",
-    401: "Unauthorized",
-    402: "Payment Required",
-    403: "Forbidden",
-    404: "Not Found",
-    405: "Method Not Allowed",
-    406: "Not Acceptable",
-    407: "Proxy Authentication Required",
-    408: "Request Timeout",
-    409: "Conflict",
-    410: "Gone",
-    411: "Length Required",
-    412: "Precondition Failed",
-    413: "Payload Too Large",
-    414: "URI Too Long",
-    415: "Unsupported Media Type",
-    416: "Range Not Satisfiable",
-    417: "Expectation Failed",
-    418: "Im a teapot",
-    421: "Misdirected Request",
-    422: "Unprocessable Content",
-    423: "Locked",
-    424: "Failed Dependency",
-    425: "Too Early",
-    426: "Upgrade Required",
-    428: "Precondition Required",
-    429: "Too Many Requests",
-    431: "Request Header Fields Too Large",
-    451: "Unavailable For Legal Reasons",
-    500: "Internal Server Error",
-    501: "Not Implemented",
-    502: "Bad Gateway",
-    503: "Service Unavailable",
-    504: "Gateway Timeout",
-    505: "HTTP Version Not Supported",
-    506: "Variant Also Negotiates",
-    507: "Insufficient Storage",
-    508: "Loop Detected",
-    510: "Not Extended",
-    511: "Network Authentication Required",
+    400: 'Bad Request',
+    401: 'Unauthorized',
+    402: 'Payment Required',
+    403: 'Forbidden',
+    404: 'Not Found',
+    405: 'Method Not Allowed',
+    406: 'Not Acceptable',
+    407: 'Proxy Authentication Required',
+    408: 'Request Timeout',
+    409: 'Conflict',
+    410: 'Gone',
+    411: 'Length Required',
+    412: 'Precondition Failed',
+    413: 'Payload Too Large',
+    414: 'URI Too Long',
+    415: 'Unsupported Media Type',
+    416: 'Range Not Satisfiable',
+    417: 'Expectation Failed',
+    418: 'Im a teapot',
+    421: 'Misdirected Request',
+    422: 'Unprocessable Content',
+    423: 'Locked',
+    424: 'Failed Dependency',
+    425: 'Too Early',
+    426: 'Upgrade Required',
+    428: 'Precondition Required',
+    429: 'Too Many Requests',
+    431: 'Request Header Fields Too Large',
+    451: 'Unavailable For Legal Reasons',
+    500: 'Internal Server Error',
+    501: 'Not Implemented',
+    502: 'Bad Gateway',
+    503: 'Service Unavailable',
+    504: 'Gateway Timeout',
+    505: 'HTTP Version Not Supported',
+    506: 'Variant Also Negotiates',
+    507: 'Insufficient Storage',
+    508: 'Loop Detected',
+    510: 'Not Extended',
+    511: 'Network Authentication Required',
     ...options.errors,
   }
 
@@ -303,8 +293,8 @@ export const catchErrorCodes = (
   }
 
   if (!result.ok) {
-    const errorStatus = result.status ?? "unknown"
-    const errorStatusText = result.statusText ?? "unknown"
+    const errorStatus = result.status ?? 'unknown'
+    const errorStatusText = result.statusText ?? 'unknown'
     const errorBody = (() => {
       try {
         return JSON.stringify(result.body, null, 2)
@@ -358,10 +348,7 @@ export const request = <T>(
         }
 
         const responseBody = getResponseBody(response)
-        const responseHeader = getResponseHeader(
-          response,
-          options.responseHeader,
-        )
+        const responseHeader = getResponseHeader(response, options.responseHeader)
 
         let transformedBody = responseBody
         if (options.responseTransformer && isSuccess(response.status)) {

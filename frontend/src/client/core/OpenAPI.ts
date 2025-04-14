@@ -1,5 +1,5 @@
-import type { AxiosRequestConfig, AxiosResponse } from "axios"
-import type { ApiRequestOptions } from "./ApiRequestOptions"
+import type { AxiosRequestConfig, AxiosResponse } from 'axios'
+import type { ApiRequestOptions } from './ApiRequestOptions'
 
 type Headers = Record<string, string>
 type Middleware<T> = (value: T) => T | Promise<T>
@@ -26,7 +26,7 @@ export class Interceptors<T> {
 
 export type OpenAPIConfig = {
   BASE: string
-  CREDENTIALS: "include" | "omit" | "same-origin"
+  CREDENTIALS: 'include' | 'omit' | 'same-origin'
   ENCODE_PATH?: ((path: string) => string) | undefined
   HEADERS?: Headers | Resolver<Headers> | undefined
   PASSWORD?: string | Resolver<string> | undefined
@@ -41,14 +41,14 @@ export type OpenAPIConfig = {
 }
 
 export const OpenAPI: OpenAPIConfig = {
-  BASE: "",
-  CREDENTIALS: "include",
+  BASE: '',
+  CREDENTIALS: 'include',
   ENCODE_PATH: undefined,
   HEADERS: undefined,
   PASSWORD: undefined,
   TOKEN: undefined,
   USERNAME: undefined,
-  VERSION: "0.1.0",
+  VERSION: '0.1.0',
   WITH_CREDENTIALS: false,
   interceptors: {
     request: new Interceptors(),
