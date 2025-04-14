@@ -16,12 +16,7 @@
         "editor.formatOnSave": true
     },
     "editor.codeActionsOnSave": {
-        "source.organizeImports.biome": "explicit", // Optional: Organize imports on save
-        "source.fixAll.biome": "explicit"          // Optional: Apply autofixes on save"
-    },
-    "files.exclude": {
-        // ... other patterns like .DS_Store, node_modules etc. ...
-        "**/.git": false, // <--- Change this from true to false
-        // ... other patterns ...
+        "source.organizeImports.biome": "explicit",
+        "source.fixAll.biome": "explicit"
     }
 }

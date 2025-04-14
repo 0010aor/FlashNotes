@@ -1,8 +1,8 @@
 from fastapi import APIRouter
 
 from src.auth.api import router as auth_router
-from src.users.api import router as user_router
 from src.flashcards.api import router as flashcards_router
+from src.users.api import router as user_router
 
 api_router = APIRouter()
 

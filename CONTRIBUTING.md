@@ -20,24 +20,31 @@ If you have an idea for an enhancement, please search the [Issues](https://githu
     git clone https://github.com/your-username/FlashNotes.git
     ```
 3.  **Set up the development environment** by following the instructions in the [README.md](README.md#setup-instructions).
-4.  **Create a new branch** for your feature or bug fix:
+4.  **Install pre-commit hooks**: After setting up the environment, run the following command in the project root to enable automatic code style checks before each commit:
+    ```bash
+    # If you installed pre-commit via pip
+    pre-commit install
+    # Or if you are using uv to manage pre-commit
+    # uv run pre-commit install
+    ```
+5.  **Create a new branch** for your feature or bug fix:
     ```bash
     git checkout -b name-of-your-feature-or-fix
     ```
-5.  **Make your changes**. Ensure your code follows the project's style guidelines.
-6.  **Write tests** for your changes. For the backend, we use Pytest. Ensure all tests pass.
-7.  **Commit your changes**:
+6.  **Make your changes**. Ensure your code follows the project's style guidelines.
+7.  **Write tests** for your changes. For the backend, we use Pytest. Ensure all tests pass.
+8.  **Commit your changes**:
     ```bash
     git commit -m "feat: Describe your feature" -m "Detailed description of the changes."
     # Or for a fix:
     # git commit -m "fix: Describe your fix" -m "Detailed description of the fix."
     ```
     (Consider using [Conventional Commits](https://www.conventionalcommits.org/) for commit messages).
-8.  **Push your branch** to your fork:
+9.  **Push your branch** to your fork:
     ```bash
     git push origin name-of-your-feature-or-fix
     ```
-9.  **Open a Pull Request (PR)** to the `main` branch of the original repository. Provide a clear title and description for your PR, linking to any relevant issues.
+10. **Open a Pull Request (PR)** to the `main` branch of the original repository. Provide a clear title and description for your PR, linking to any relevant issues.
 
 ## Code Style
 

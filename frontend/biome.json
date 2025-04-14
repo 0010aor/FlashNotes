@@ -1,45 +1,43 @@
 {
 	"$schema": "https://biomejs.dev/schemas/1.6.1/schema.json",
 	"organizeImports": {
-	  "enabled": true
+		"enabled": true
 	},
 	"files": {
-	  "ignore": [
-		"node_modules",
-		"src/routeTree.gen.ts",
-		"src/client/*",
-		"src/components/ui"
-	  ]
+		"ignore": [
+			"node_modules",
+			"src/routeTree.gen.ts",
+			"src/client/*",
+			"src/components/ui"
+		]
 	},
 	"linter": {
-	  "enabled": true,
-	  "ignore": ["src/components/ui"],
-	  "rules": {
-		"recommended": true,
-		"suspicious": {
-		  "noExplicitAny": "warn",
-		  "noArrayIndexKey": "warn"
-		},
-		"style": {
-		  "noNonNullAssertion": "warn"
+		"enabled": true,
+		"ignore": ["src/components/ui"],
+		"rules": {
+			"recommended": true,
+			"suspicious": {
+				"noExplicitAny": "warn",
+				"noArrayIndexKey": "warn"
+			},
+			"style": {
+				"noNonNullAssertion": "warn"
+			}
 		}
-	  }
 	},
 	"formatter": {
-	  "enabled": true,
-	  "indentStyle": "space",
-	  "indentWidth": 2,
-	  "lineWidth": 100,
-	  "ignore": ["src/components/ui"]
+		"enabled": true,
+		"indentStyle": "space",
+		"indentWidth": 2,
+		"lineWidth": 100,
+		"ignore": ["src/components/ui"]
 	},
 	"javascript": {
-	  "formatter": {
-		"quoteStyle": "single",
-		"jsxQuoteStyle": "double",
-		"quoteProperties": "asNeeded",
-		"trailingCommas": "all",
-		"semicolons": "asNeeded"
-	  }
+		"formatter": {
+			"quoteStyle": "single",
+			"jsxQuoteStyle": "double",
+			"quoteProperties": "asNeeded",
+			"semicolons": "asNeeded"
+		}
 	}
-  }
-  
+}

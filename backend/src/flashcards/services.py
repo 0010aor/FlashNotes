@@ -214,7 +214,7 @@ def _get_uncompleted_session(
     statement = select(PracticeSession).where(
         PracticeSession.collection_id == collection_id,
         PracticeSession.user_id == user_id,
-        PracticeSession.is_completed == False,
+        PracticeSession.is_completed.is_not(True),
     )
     return session.exec(statement).first()
 
