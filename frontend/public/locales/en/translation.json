@@ -1,155 +1,178 @@
 {
-	"components": {
-		"AiCollectionDialog": {
-			"placeholder": "Enter a topic or concept (e.g., 'Quantum Physics', 'Spanish Verbs')",
-			"title": "Create a collection with AI"
-		},
-		"cardHeader": {
-			"switchCard": "Switch card side"
-		},
-		"collectionDialog": {
-			"title": "Add New Collection"
-		},
-		"editorToolbar": {
-			"heading1": "Heading 1",
-			"heading2": "Heading 2",
-			"heading3": "Heading 3",
-			"bold": "Bold",
-			"italic": "Italic",
-			"strikethrough": "Strikethrough",
-			"codeBlock": "Code Block",
-			"inlineCode": "Inline Code",
-			"numberedList": "Numbered List",
-			"bulletList": "Bullet List"
-		},
-		"practiceComplete": {
-			"cardsCorrect": "You got {{correct}} out of {{total}} cards correct",
-			"title": "Practice Complete"
-		},
-		"speedDial": {
-			"closeMenu": "Close menu",
-			"openMenu": "Open menu"
-		}
-	},
-	"general": {
-		"actions": {
-			"addCard": "Add Card",
-			"addCollection": "Add Collection",
-			"backToCollection": "Back to Collection",
-			"cancel": "Cancel",
-			"close": "Close",
-			"comingSoon": "Coming soon",
-			"confirmPassword": "Confirm Password",
-			"create": "Create",
-			"createAiCollection": "Create with AI",
-			"creating": "Creating",
-			"delete": "Delete",
-			"deleteCard": "Delete Card",
-			"doNotKnow": "Don't know",
-			"repeatPassword": "Repeat Password",
-			"getStarted": "Get started",
-			"goHome": "Go Home",
-			"login": "Log In",
-			"loading": "Loading",
-			"logout": "Log Out",
-			"letsStudy": "Let's study",
-			"practiceAgain": "Practice Again",
-			"practiceCards": "Practice Cards",
-			"save": "Save",
-			"showAnswer": "Show Answer",
-			"signUp": "Sign Up",
-			"startPracticing": "Start Practicing",
-			"toggleColorMode": "Toggle color mode",
-			"rename": "Rename"
-		},
-		"errors": {
-			"collectionNotFound": "Collection not found",
-			"default": "Something went wrong",
-			"emailIsRequired": "Email is required",
-			"errorCreatingAccount": "Error creating account",
-			"errorLoadingCard": "Error loading card",
-			"errorSavingCard": "Error saving card",
-			"fullNameIsRequired": "Full name is required",
-			"invalidCredentials": "Invalid credentials",
-			"invalidName": "Invalid name",
-			"invalidEmail": "Invalid email address",
-			"loginFailed": "Login failed",
-			"passwordConfirmationIsRequired": "Password confirmation is required",
-			"passwordsDoNotMatch": "The passwords do not match",
-			"passwordIsRequired": "Password is required",
-			"passwordMinCharacters": "Password must be at least 8 characters",
-			"somethingWentWrong": "Something went wrong",
-			"tryAgain": "Try again",
-			"usernameIsRequired": "Username is required"
-		},
-		"words": {
-			"back": "Back",
-			"collectionName": "Collection Name",
-			"correct": "Correct",
-			"email": "Email",
-			"error": "Error",
-			"easy": "Easy",
-			"features": "Features",
-			"flashNotes": "FlashNotes",
-			"front": "Front",
-			"fullName": "Full Name",
-			"hard": "Hard",
-			"incorrect": "Incorrect",
-			"github": "GitHub",
-			"medium": "Medium",
-			"noCardsAdded": "No cards added yet.",
-			"password": "Password",
-			"statistics": "Statistics",
-			"totalCards": "Total Cards",
-			"version": "Version"
-		}
-	},
-	"hooks": {
-		"auth": {
-			"accountCreated": "Account created",
-			"accountCreatedDescription": "Your account has been created successfully."
-		}
-	},
-	"routes": {
-		"layout": {
-			"collectionIndex": {
-				"addFirstCard": "Add your first flashcard using the blue button below and start mastering new concepts!",
-				"collectionEmpty": "This collection is empty"
-			},
-			"index": {
-				"readyToStartLearning": "Ready to start learning?",
-				"createFirstCollection": "Create your first collection and begin your learning journey!"
-			},
-			"stats": {
-				"averageScore": "Average Score",
-				"basicInfo": "Basic Information",
-				"cardsInProgress": "Cards In Progress",
-				"cardsMastered": "Cards Mastered",
-				"cardsToReview": "Cards To Review",
-				"difficultyDistribution": "Difficulty Distribution",
-				"practiceStatistics": "Practice Statistics",
-				"successRate": "Success Rate",
-				"totalPracticeSessions": "Total Practice Sessions",
-				"studyProgress": "Study Progress"
-			}
-		},
-		"publicLayout": {
-			"index": {
-				"title": "Learn Better with FlashNotes",
-				"description": "A simple flashcard app that helps you learn. Create cards,practice regularly, and remember what matters.",
-				"simpleDesign": "Simple Design",
-				"simpleDesignDescription": "A clean interface that helps you focus on learning.",
-				"aiGeneration": "AI Generation",
-				"aiGenerationDescription": "Create flashcards automatically with AI to save time and enhance learning.",
-				"responsiveDesign": "Responsive Design",
-				"responsiveDesignDescription": "Study anywhere on any device with a fully responsive interface."
-			},
-			"login": {
-				"dontHaveAccount": "Don't have an account?"
-			},
-			"signUp": {
-				"alreadyHaveAccount": "Already have an account?"
-			}
-		}
-	}
+  "components": {
+    "AiCollectionDialog": {
+      "placeholder": "Enter a topic or concept (e.g., 'Quantum Physics', 'Spanish Verbs')",
+      "title": "Create a collection with AI"
+    },
+    "cardHeader": {
+      "switchCard": "Switch card side"
+    },
+    "collectionDialog": {
+      "title": "Add New Collection"
+    },
+    "editorToolbar": {
+      "heading1": "Heading 1",
+      "heading2": "Heading 2",
+      "heading3": "Heading 3",
+      "bold": "Bold",
+      "italic": "Italic",
+      "strikethrough": "Strikethrough",
+      "codeBlock": "Code Block",
+      "inlineCode": "Inline Code",
+      "numberedList": "Numbered List",
+      "bulletList": "Bullet List"
+    },
+    "practiceComplete": {
+      "cardsCorrect": "You got {{correct}} out of {{total}} cards correct",
+      "title": "Practice Complete"
+    },
+    "speedDial": {
+      "closeMenu": "Close menu",
+      "openMenu": "Open menu"
+    },
+    "stats": {
+      "performanceOverTime": "Performance Over Time",
+      "correctRate": "Correct Rate",
+      "cardsPracticed": "Cards Practiced",
+      "latestSessionBreakdown": "Latest Session Breakdown",
+      "recentPracticeSessions": "Recent Practice Sessions",
+      "correctAnswers": "Correct Answers",
+      "incorrectAnswers": "Incorrect Answers",
+      "session": "Session",
+      "mostFailedCards": "Most Failed Cards",
+      "failedOutOfAttempts": "Failed {{failed}} out of {{total}} attempts",
+      "practiceTheseCards": "Focus on practicing these cards to improve your results",
+      "practiceSessions": "Practice Sessions",
+      "averageAccuracy": "Average Accuracy",
+      "allSessions": "all sessions",
+      "successRate": "Success Rate",
+      "studyStreak": "Study Streak",
+      "days": "days",
+      "correct": "Correct",
+      "incorrect": "Incorrect",
+      "notPracticedInSession": "Not Practiced",
+      "notPracticedYet": "Not Practiced Yet",
+      "noDataAvailable": "No data available for this chart",
+      "lastSession": "Last session",
+      "noRecentSessions": "No recent sessions",
+      "learningTrend": "Learning Trend",
+      "comparedToPrevious": "compared to previous",
+      "notEnoughData": "not enough data",
+      "successRateTooltip": "Percentage of correct answers in your most recent session",
+      "learningTrendTooltip": "Change in success rate between your two most recent sessions"
+    }
+  },
+  "general": {
+    "actions": {
+      "addCard": "Add Card",
+      "addCollection": "Add Collection",
+      "backToCollection": "Back to Collection",
+      "cancel": "Cancel",
+      "close": "Close",
+      "comingSoon": "Coming soon",
+      "confirmPassword": "Confirm Password",
+      "create": "Create",
+      "createAiCollection": "Create with AI",
+      "creating": "Creating",
+      "delete": "Delete",
+      "deleteCard": "Delete Card",
+      "doNotKnow": "Don't know",
+      "repeatPassword": "Repeat Password",
+      "getStarted": "Get started",
+      "goHome": "Go Home",
+      "login": "Log In",
+      "loading": "Loading",
+      "logout": "Log Out",
+      "letsStudy": "Let's study",
+      "practiceAgain": "Practice Again",
+      "practiceCards": "Practice Cards",
+      "save": "Save",
+      "showAnswer": "Show Answer",
+      "signUp": "Sign Up",
+      "startPracticing": "Start Practicing",
+      "toggleColorMode": "Toggle color mode",
+      "rename": "Rename",
+      "editCard": "Edit Card",
+      "practice": "Practice",
+      "viewStats": "View Statistics"
+    },
+    "errors": {
+      "collectionNotFound": "Collection not found",
+      "default": "Something went wrong",
+      "emailIsRequired": "Email is required",
+      "errorCreatingAccount": "Error creating account",
+      "errorLoadingCard": "Error loading card",
+      "errorSavingCard": "Error saving card",
+      "fullNameIsRequired": "Full name is required",
+      "invalidCredentials": "Invalid credentials",
+      "invalidName": "Invalid name",
+      "invalidEmail": "Invalid email address",
+      "loginFailed": "Login failed",
+      "passwordConfirmationIsRequired": "Password confirmation is required",
+      "passwordsDoNotMatch": "The passwords do not match",
+      "passwordIsRequired": "Password is required",
+      "passwordMinCharacters": "Password must be at least 8 characters",
+      "somethingWentWrong": "Something went wrong",
+      "tryAgain": "Try again",
+      "usernameIsRequired": "Username is required"
+    },
+    "words": {
+      "back": "Back",
+      "collectionName": "Collection Name",
+      "correct": "Correct",
+      "email": "Email",
+      "error": "Error",
+      "easy": "Easy",
+      "features": "Features",
+      "flashNotes": "FlashNotes",
+      "front": "Front",
+      "fullName": "Full Name",
+      "hard": "Hard",
+      "incorrect": "Incorrect",
+      "github": "GitHub",
+      "medium": "Medium",
+      "noCardsAdded": "No cards added yet.",
+      "password": "Password",
+      "statistics": "Statistics",
+      "totalCards": "Total Cards",
+      "cards": "cards",
+      "version": "Version"
+    }
+  },
+  "hooks": {
+    "auth": {
+      "accountCreated": "Account created",
+      "accountCreatedDescription": "Your account has been created successfully."
+    }
+  },
+  "routes": {
+    "layout": {
+      "collectionIndex": {
+        "addFirstCard": "Add your first flashcard using the blue button below and start mastering new concepts!",
+        "collectionEmpty": "This collection is empty"
+      },
+      "index": {
+        "readyToStartLearning": "Ready to start learning?",
+        "createFirstCollection": "Create your first collection and begin your learning journey!"
+      }
+    },
+    "publicLayout": {
+      "index": {
+        "title": "Learn Better with FlashNotes",
+        "description": "A simple flashcard app that helps you learn. Create cards,practice regularly, and remember what matters.",
+        "simpleDesign": "Simple Design",
+        "simpleDesignDescription": "A clean interface that helps you focus on learning.",
+        "aiGeneration": "AI Generation",
+        "aiGenerationDescription": "Create flashcards automatically with AI to save time and enhance learning.",
+        "responsiveDesign": "Responsive Design",
+        "responsiveDesignDescription": "Study anywhere on any device with a fully responsive interface."
+      },
+      "login": {
+        "dontHaveAccount": "Don't have an account?"
+      },
+      "signUp": {
+        "alreadyHaveAccount": "Already have an account?"
+      }
+    }
+  }
 }

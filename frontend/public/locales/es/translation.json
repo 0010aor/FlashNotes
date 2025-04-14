@@ -1,155 +1,176 @@
 {
-	"components": {
-		"AiCollectionDialog": {
-			"placeholder": "Introduce un tema o concepto (por ejemplo, 'Física Cuántica', 'Verbos en Inglés')",
-			"title": "Crear una colección con IA"
-		},
-		"cardHeader": {
-			"switchCard": "Cambiar lado de la tarjeta"
-		},
-		"collectionDialog": {
-			"title": "Agregar Nueva Colección"
-		},
-		"editorToolbar": {
-			"heading1": "Encabezado 1",
-			"heading2": "Encabezado 2",
-			"heading3": "Encabezado 3",
-			"bold": "Negrita",
-			"italic": "Cursiva",
-			"strikethrough": "Tachado",
-			"codeBlock": "Bloque de Código",
-			"inlineCode": "Código en Línea",
-			"numberedList": "Lista Numerada",
-			"bulletList": "Lista con Viñetas"
-		},
-		"practiceComplete": {
-			"cardsCorrect": "Has acertado {{correct}} de {{total}} tarjetas",
-			"title": "Práctica Completa"
-		},
-		"speedDial": {
-			"closeMenu": "Cerrar menú",
-			"openMenu": "Abrir menú"
-		}
-	},
-	"general": {
-		"actions": {
-			"addCard": "Agregar Tarjeta",
-			"addCollection": "Agregar Colección",
-			"backToCollection": "Volver a la Colección",
-			"cancel": "Cancelar",
-			"close": "Cerrar",
-			"comingSoon": "Próximamente",
-			"confirmPassword": "Confirmar Contraseña",
-			"create": "Crear",
-			"createAiCollection": "Crear con IA",
-			"creating": "Creando",
-			"delete": "Eliminar",
-			"deleteCard": "Eliminar Tarjeta",
-			"doNotKnow": "No sé",
-			"repeatPassword": "Repetir Contraseña",
-			"getStarted": "Empezar",
-			"goHome": "Ir a Inicio",
-			"login": "Iniciar Sesión",
-			"loading": "Cargando",
-			"logout": "Cerrar Sesión",
-			"letsStudy": "Vamos a estudiar",
-			"practiceAgain": "Practicar de Nuevo",
-			"practiceCards": "Practicar Tarjetas",
-			"save": "Guardar",
-			"showAnswer": "Mostrar Respuesta",
-			"signUp": "Registrarse",
-			"startPracticing": "Comenzar a Practicar",
-			"toggleColorMode": "Cambiar modo de color",
-			"rename": "Renombrar"
-		},
-		"errors": {
-			"collectionNotFound": "Colección no encontrada",
-			"default": "Algo salió mal",
-			"emailIsRequired": "Correo electrónico es requerido",
-			"errorCreatingAccount": "Error al crear la cuenta",
-			"errorLoadingCard": "Error al cargar la tarjeta",
-			"errorSavingCard": "Error al guardar la tarjeta",
-			"fullNameIsRequired": "Nombre completo es requerido",
-			"invalidCredentials": "Credenciales inválidas",
-			"invalidName": "Nombre inválido",
-			"invalidEmail": "Dirección de correo electrónico inválida",
-			"loginFailed": "Error al iniciar sesión",
-			"passwordConfirmationIsRequired": "Confirmación de contraseña es requerida",
-			"passwordsDoNotMatch": "Las contraseñas no coinciden",
-			"passwordIsRequired": "Contraseña es requerida",
-			"passwordMinCharacters": "La contraseña debe tener al menos 8 caracteres",
-			"somethingWentWrong": "Algo salió mal",
-			"tryAgain": "Inténtalo de nuevo",
-			"usernameIsRequired": "Nombre de usuario es requerido"
-		},
-		"words": {
-			"back": "Reverso",
-			"collectionName": "Nombre de la Colección",
-			"correct": "Correcto",
-			"email": "Correo Electrónico",
-			"error": "Error",
-			"easy": "Fácil",
-			"features": "Características",
-			"flashNotes": "FlashNotes",
-			"front": "Frente",
-			"fullName": "Nombre Completo",
-			"hard": "Difícil",
-			"incorrect": "Incorrecto",
-			"github": "GitHub",
-			"medium": "Medio",
-			"noCardsAdded": "No se han agregado tarjetas aún.",
-			"password": "Contraseña",
-			"statistics": "Estadísticas",
-			"totalCards": "Total de Tarjetas",
-			"version": "Versión"
-		}
-	},
-	"hooks": {
-		"auth": {
-			"accountCreated": "Cuenta creada",
-			"accountCreatedDescription": "Tu cuenta ha sido creada exitosamente."
-		}
-	},
-	"routes": {
-		"layout": {
-			"collectionIndex": {
-				"addFirstCard": "Agrega tu primera tarjeta usando el botón azul abajo y comienza a dominar nuevos conceptos!",
-				"collectionEmpty": "Esta colección está vacía"
-			},
-			"index": {
-				"readyToStartLearning": "¿Listo para empezar a aprender?",
-				"createFirstCollection": "Crea tu primera colección y comienza tu viaje de aprendizaje!"
-			},
-			"stats": {
-				"averageScore": "Puntuación Promedio",
-				"basicInfo": "Información Básica",
-				"cardsInProgress": "Tarjetas en Progreso",
-				"cardsMastered": "Tarjetas Dominadas",
-				"cardsToReview": "Tarjetas para Revisar",
-				"difficultyDistribution": "Distribución de Dificultad",
-				"practiceStatistics": "Estadísticas de Práctica",
-				"successRate": "Tasa de Éxito",
-				"totalPracticeSessions": "Total de Sesiones de Práctica",
-				"studyProgress": "Progreso de Estudio"
-			}
-		},
-		"publicLayout": {
-			"index": {
-				"title": "Aprende Mejor con FlashNotes",
-				"description": "Una aplicación de tarjetas de memoria simple que te ayuda a aprender. Crea tarjetas, practica regularmente y recuerda lo que importa.",
-				"simpleDesign": "Diseño Simple",
-				"simpleDesignDescription": "Una interfaz limpia que te ayuda a concentrarte en aprender.",
-				"aiGeneration": "Generación con IA",
-				"aiGenerationDescription": "Crea tarjetas de memoria automáticamente con IA para ahorrar tiempo y mejorar el aprendizaje.",
-				"responsiveDesign": "Diseño Responsivo",
-				"responsiveDesignDescription": "Estudia en cualquier lugar y en cualquier dispositivo con una interfaz completamente responsiva."
-			},
-			"login": {
-				"dontHaveAccount": "¿No tienes una cuenta?"
-			},
-			"signUp": {
-				"alreadyHaveAccount": "¿Ya tienes una cuenta?"
-			}
-		}
-	}
+  "components": {
+    "AiCollectionDialog": {
+      "placeholder": "Introduce un tema o concepto (por ejemplo, 'Física Cuántica', 'Verbos en Inglés')",
+      "title": "Crear una colección con IA"
+    },
+    "cardHeader": {
+      "switchCard": "Cambiar lado de la tarjeta"
+    },
+    "collectionDialog": {
+      "title": "Agregar Nueva Colección"
+    },
+    "editorToolbar": {
+      "heading1": "Encabezado 1",
+      "heading2": "Encabezado 2",
+      "heading3": "Encabezado 3",
+      "bold": "Negrita",
+      "italic": "Cursiva",
+      "strikethrough": "Tachado",
+      "codeBlock": "Bloque de Código",
+      "inlineCode": "Código en Línea",
+      "numberedList": "Lista Numerada",
+      "bulletList": "Lista con Viñetas"
+    },
+    "practiceComplete": {
+      "cardsCorrect": "Has acertado {{correct}} de {{total}} tarjetas",
+      "title": "Práctica Completa"
+    },
+    "speedDial": {
+      "closeMenu": "Cerrar menú",
+      "openMenu": "Abrir menú"
+    },
+    "stats": {
+      "performanceOverTime": "Rendimiento a lo Largo del Tiempo",
+      "correctRate": "Tasa de Aciertos",
+      "cardsPracticed": "Tarjetas Practicadas",
+      "latestSessionBreakdown": "Desglose Última Sesión",
+      "recentPracticeSessions": "Sesiones de Práctica Recientes",
+      "correctAnswers": "Respuestas Correctas",
+      "incorrectAnswers": "Respuestas Incorrectas",
+      "session": "Sesión",
+      "mostFailedCards": "Tarjetas con Más Fallos",
+      "failedOutOfAttempts": "Fallaste {{failed}} de {{total}} intentos",
+      "practiceTheseCards": "Concéntrate en practicar estas tarjetas para mejorar tus resultados",
+      "practiceSessions": "Sesiones de Práctica",
+      "averageAccuracy": "Precisión Promedio",
+      "allSessions": "todas las sesiones",
+      "successRate": "Tasa de Éxito",
+      "studyStreak": "Racha de Estudio",
+      "days": "días",
+      "correct": "Correcto",
+      "incorrect": "Incorrecto",
+      "notPracticedInSession": "No Practicadas",
+      "notPracticedYet": "Aún No Practicadas",
+      "noDataAvailable": "No hay datos disponibles para este gráfico",
+      "lastSession": "Última sesión",
+      "noRecentSessions": "Sin sesiones recientes",
+      "learningTrend": "Tendencia de Aprendizaje",
+      "comparedToPrevious": "comparado con anterior",
+      "notEnoughData": "datos insuficientes",
+      "successRateTooltip": "Porcentaje de respuestas correctas en tu sesión más reciente",
+      "learningTrendTooltip": "Cambio en la tasa de éxito entre tus dos sesiones más recientes"
+    }
+  },
+  "general": {
+    "actions": {
+      "addCard": "Agregar Tarjeta",
+      "addCollection": "Agregar Colección",
+      "backToCollection": "Volver a la Colección",
+      "cancel": "Cancelar",
+      "close": "Cerrar",
+      "comingSoon": "Próximamente",
+      "confirmPassword": "Confirmar Contraseña",
+      "create": "Crear",
+      "createAiCollection": "Crear con IA",
+      "creating": "Creando",
+      "delete": "Eliminar",
+      "deleteCard": "Eliminar Tarjeta",
+      "doNotKnow": "No sé",
+      "repeatPassword": "Repetir Contraseña",
+      "getStarted": "Empezar",
+      "goHome": "Ir a Inicio",
+      "login": "Iniciar Sesión",
+      "loading": "Cargando",
+      "logout": "Cerrar Sesión",
+      "letsStudy": "Vamos a estudiar",
+      "practiceAgain": "Practicar de Nuevo",
+      "practiceCards": "Practicar Tarjetas",
+      "save": "Guardar",
+      "showAnswer": "Mostrar Respuesta",
+      "signUp": "Registrarse",
+      "startPracticing": "Comenzar a Practicar",
+      "toggleColorMode": "Cambiar modo de color",
+      "rename": "Renombrar",
+      "practice": "Practicar"
+    },
+    "errors": {
+      "collectionNotFound": "Colección no encontrada",
+      "default": "Algo salió mal",
+      "emailIsRequired": "Correo electrónico es requerido",
+      "errorCreatingAccount": "Error al crear la cuenta",
+      "errorLoadingCard": "Error al cargar la tarjeta",
+      "errorSavingCard": "Error al guardar la tarjeta",
+      "fullNameIsRequired": "Nombre completo es requerido",
+      "invalidCredentials": "Credenciales inválidas",
+      "invalidName": "Nombre inválido",
+      "invalidEmail": "Dirección de correo electrónico inválida",
+      "loginFailed": "Error al iniciar sesión",
+      "passwordConfirmationIsRequired": "Confirmación de contraseña es requerida",
+      "passwordsDoNotMatch": "Las contraseñas no coinciden",
+      "passwordIsRequired": "Contraseña es requerida",
+      "passwordMinCharacters": "La contraseña debe tener al menos 8 caracteres",
+      "somethingWentWrong": "Algo salió mal",
+      "tryAgain": "Inténtalo de nuevo",
+      "usernameIsRequired": "Nombre de usuario es requerido"
+    },
+    "words": {
+      "back": "Reverso",
+      "collectionName": "Nombre de la Colección",
+      "correct": "Correcto",
+      "email": "Correo Electrónico",
+      "error": "Error",
+      "easy": "Fácil",
+      "features": "Características",
+      "flashNotes": "FlashNotes",
+      "front": "Frente",
+      "fullName": "Nombre Completo",
+      "hard": "Difícil",
+      "incorrect": "Incorrecto",
+      "github": "GitHub",
+      "medium": "Medio",
+      "noCardsAdded": "No se han agregado tarjetas aún.",
+      "password": "Contraseña",
+      "statistics": "Estadísticas",
+      "totalCards": "Total de Tarjetas",
+      "cards": "tarjetas",
+      "version": "Versión"
+    }
+  },
+  "hooks": {
+    "auth": {
+      "accountCreated": "Cuenta creada",
+      "accountCreatedDescription": "Tu cuenta ha sido creada exitosamente."
+    }
+  },
+  "routes": {
+    "layout": {
+      "collectionIndex": {
+        "addFirstCard": "Agrega tu primera tarjeta usando el botón azul abajo y comienza a dominar nuevos conceptos!",
+        "collectionEmpty": "Esta colección está vacía"
+      },
+      "index": {
+        "readyToStartLearning": "¿Listo para empezar a aprender?",
+        "createFirstCollection": "Crea tu primera colección y comienza tu viaje de aprendizaje!"
+      }
+    },
+    "publicLayout": {
+      "index": {
+        "title": "Aprende Mejor con FlashNotes",
+        "description": "Una aplicación de tarjetas de memoria simple que te ayuda a aprender. Crea tarjetas, practica regularmente y recuerda lo que importa.",
+        "simpleDesign": "Diseño Simple",
+        "simpleDesignDescription": "Una interfaz limpia que te ayuda a concentrarte en aprender.",
+        "aiGeneration": "Generación con IA",
+        "aiGenerationDescription": "Crea tarjetas de memoria automáticamente con IA para ahorrar tiempo y mejorar el aprendizaje.",
+        "responsiveDesign": "Diseño Responsivo",
+        "responsiveDesignDescription": "Estudia en cualquier lugar y en cualquier dispositivo con una interfaz completamente responsiva."
+      },
+      "login": {
+        "dontHaveAccount": "¿No tienes una cuenta?"
+      },
+      "signUp": {
+        "alreadyHaveAccount": "¿Ya tienes una cuenta?"
+      }
+    }
+  }
 }

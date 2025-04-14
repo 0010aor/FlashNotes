@@ -1,155 +1,176 @@
 {
-	"components": {
-		"AiCollectionDialog": {
-			"placeholder": "Voer een onderwerp of concept in (bijv. 'Kwantumfysica', 'Spaanse Werkwoorden')",
-			"title": "Maak een collectie met AI"
-		},
-		"cardHeader": {
-			"switchCard": "Wissel kaartzijde"
-		},
-		"collectionDialog": {
-			"title": "Nieuwe Collectie Toevoegen"
-		},
-		"editorToolbar": {
-			"heading1": "Kop 1",
-			"heading2": "Kop 2",
-			"heading3": "Kop 3",
-			"bold": "Vet",
-			"italic": "Cursief",
-			"strikethrough": "Doorhalen",
-			"codeBlock": "Codeblok",
-			"inlineCode": "Inline Code",
-			"numberedList": "Genummerde Lijst",
-			"bulletList": "Lijst met Opsommingstekens"
-		},
-		"practiceComplete": {
-			"cardsCorrect": "Je hebt {{correct}} van de {{total}} kaarten goed",
-			"title": "Oefening Voltooid"
-		},
-		"speedDial": {
-			"closeMenu": "Menu sluiten",
-			"openMenu": "Menu openen"
-		}
-	},
-	"general": {
-		"actions": {
-			"addCard": "Kaart Toevoegen",
-			"addCollection": "Collectie Toevoegen",
-			"backToCollection": "Terug naar Collectie",
-			"cancel": "Annuleren",
-			"close": "Sluiten",
-			"comingSoon": "Binnenkort beschikbaar",
-			"confirmPassword": "Bevestig Wachtwoord",
-			"create": "Creëren",
-			"createAiCollection": "Creëren met AI",
-			"creating": "Creëren",
-			"delete": "Verwijderen",
-			"deleteCard": "Kaart Verwijderen",
-			"doNotKnow": "Weet het niet",
-			"repeatPassword": "Herhaal Wachtwoord",
-			"getStarted": "Beginnen",
-			"goHome": "Ga naar Start",
-			"login": "Inloggen",
-			"loading": "Laden",
-			"logout": "Uitloggen",
-			"letsStudy": "Laten we studeren",
-			"practiceAgain": "Opnieuw Oefenen",
-			"practiceCards": "Kaarten Oefenen",
-			"save": "Opslaan",
-			"showAnswer": "Toon Antwoord",
-			"signUp": "Aanmelden",
-			"startPracticing": "Begin met Oefenen",
-			"toggleColorMode": "Kleurmodus Wisselen",
-			"rename": "Hernoemen"
-		},
-		"errors": {
-			"collectionNotFound": "Collectie niet gevonden",
-			"default": "Er is iets misgegaan",
-			"emailIsRequired": "E-mail is vereist",
-			"errorCreatingAccount": "Fout bij het aanmaken van account",
-			"errorLoadingCard": "Fout bij het laden van kaart",
-			"errorSavingCard": "Fout bij het opslaan van kaart",
-			"fullNameIsRequired": "Volledige naam is vereist",
-			"invalidCredentials": "Ongeldige inloggegevens",
-			"invalidName": "Ongeldige naam",
-			"invalidEmail": "Ongeldig e-mailadres",
-			"loginFailed": "Inloggen mislukt",
-			"passwordConfirmationIsRequired": "Bevestiging van wachtwoord is vereist",
-			"passwordsDoNotMatch": "De wachtwoorden komen niet overeen",
-			"passwordIsRequired": "Wachtwoord is vereist",
-			"passwordMinCharacters": "Wachtwoord moet minimaal 8 tekens bevatten",
-			"somethingWentWrong": "Er is iets misgegaan",
-			"tryAgain": "Probeer opnieuw",
-			"usernameIsRequired": "Gebruikersnaam is vereist"
-		},
-		"words": {
-			"back": "Achterkant",
-			"collectionName": "Collectienaam",
-			"correct": "Correct",
-			"email": "E-mail",
-			"error": "Fout",
-			"easy": "Makkelijk",
-			"features": "Kenmerken",
-			"flashNotes": "FlashNotes",
-			"front": "Voorkant",
-			"fullName": "Volledige Naam",
-			"hard": "Moeilijk",
-			"incorrect": "Onjuist",
-			"github": "GitHub",
-			"medium": "Gemiddeld",
-			"noCardsAdded": "Nog geen kaarten toegevoegd.",
-			"password": "Wachtwoord",
-			"statistics": "Statistieken",
-			"totalCards": "Totaal Aantal Kaarten",
-			"version": "Versie"
-		}
-	},
-	"hooks": {
-		"auth": {
-			"accountCreated": "Account aangemaakt",
-			"accountCreatedDescription": "Je account is succesvol aangemaakt."
-		}
-	},
-	"routes": {
-		"layout": {
-			"collectionIndex": {
-				"addFirstCard": "Voeg je eerste kaart toe met de blauwe knop hieronder en begin nieuwe concepten te beheersen!",
-				"collectionEmpty": "Deze collectie is leeg"
-			},
-			"index": {
-				"readyToStartLearning": "Klaar om te beginnen met leren?",
-				"createFirstCollection": "Maak je eerste collectie en begin je leerreis!"
-			},
-			"stats": {
-				"averageScore": "Gemiddelde Score",
-				"basicInfo": "Basisinformatie",
-				"cardsInProgress": "Kaarten in Behandeling",
-				"cardsMastered": "Beheerde Kaarten",
-				"cardsToReview": "Kaarten om te Herzien",
-				"difficultyDistribution": "Moeilijkheidsverdeling",
-				"practiceStatistics": "Oefenstatistieken",
-				"successRate": "Succespercentage",
-				"totalPracticeSessions": "Totaal Aantal Oefensessies",
-				"studyProgress": "Studievoortgang"
-			}
-		},
-		"publicLayout": {
-			"index": {
-				"title": "Beter Leren met FlashNotes",
-				"description": "Een eenvoudige flashcard-app die je helpt te leren. Maak kaarten, oefen regelmatig en onthoud wat belangrijk is.",
-				"simpleDesign": "Eenvoudig Ontwerp",
-				"simpleDesignDescription": "Een schone interface die je helpt je te concentreren op leren.",
-				"aiGeneration": "AI Generatie",
-				"aiGenerationDescription": "Maak automatisch flashcards met AI om tijd te besparen en het leren te verbeteren.",
-				"responsiveDesign": "Responsief Ontwerp",
-				"responsiveDesignDescription": "Studie overal op elk apparaat met een volledig responsieve interface."
-			},
-			"login": {
-				"dontHaveAccount": "Heb je geen account?"
-			},
-			"signUp": {
-				"alreadyHaveAccount": "Heb je al een account?"
-			}
-		}
-	}
+  "components": {
+    "AiCollectionDialog": {
+      "placeholder": "Voer een onderwerp of concept in (bijv. 'Kwantumfysica', 'Spaanse Werkwoorden')",
+      "title": "Maak een collectie met AI"
+    },
+    "cardHeader": {
+      "switchCard": "Wissel kaartzijde"
+    },
+    "collectionDialog": {
+      "title": "Nieuwe Collectie Toevoegen"
+    },
+    "editorToolbar": {
+      "heading1": "Kop 1",
+      "heading2": "Kop 2",
+      "heading3": "Kop 3",
+      "bold": "Vet",
+      "italic": "Cursief",
+      "strikethrough": "Doorhalen",
+      "codeBlock": "Codeblok",
+      "inlineCode": "Inline Code",
+      "numberedList": "Genummerde Lijst",
+      "bulletList": "Lijst met Opsommingstekens"
+    },
+    "practiceComplete": {
+      "cardsCorrect": "Je hebt {{correct}} van de {{total}} kaarten goed",
+      "title": "Oefening Voltooid"
+    },
+    "speedDial": {
+      "closeMenu": "Menu sluiten",
+      "openMenu": "Menu openen"
+    },
+    "stats": {
+      "performanceOverTime": "Prestaties Over Tijd",
+      "correctRate": "Correctheid (%)",
+      "cardsPracticed": "Kaarten Geoefend",
+      "latestSessionBreakdown": "Uitsplitsing Laatste Sessie",
+      "recentPracticeSessions": "Recente Oefensessies",
+      "correctAnswers": "Juiste Antwoorden",
+      "incorrectAnswers": "Onjuiste Antwoorden",
+      "session": "Sessie",
+      "mostFailedCards": "Meest Gemiste Kaarten",
+      "failedOutOfAttempts": "{{failed}} van de {{total}} pogingen gemist",
+      "practiceTheseCards": "Focus op het oefenen van deze kaarten om je resultaten te verbeteren",
+      "practiceSessions": "Oefensessies",
+      "averageAccuracy": "Gemiddelde Nauwkeurigheid",
+      "allSessions": "alle sessies",
+      "successRate": "Succespercentage",
+      "studyStreak": "Studiereeks",
+      "days": "dagen",
+      "learningTrend": "Leertrend",
+      "comparedToPrevious": "vergeleken met vorige",
+      "notEnoughData": "niet genoeg gegevens",
+      "successRateTooltip": "Percentage juiste antwoorden in je meest recente sessie",
+      "learningTrendTooltip": "Verandering in succespercentage tussen je twee meest recente sessies",
+      "correct": "Correct",
+      "incorrect": "Onjuist",
+      "notPracticedInSession": "Niet Geoefend",
+      "notPracticedYet": "Nog Niet Geoefend",
+      "noDataAvailable": "Geen gegevens beschikbaar voor deze grafiek",
+      "lastSession": "Laatste sessie",
+      "noRecentSessions": "Geen recente sessies"
+    }
+  },
+  "general": {
+    "actions": {
+      "addCard": "Kaart Toevoegen",
+      "addCollection": "Collectie Toevoegen",
+      "backToCollection": "Terug naar Collectie",
+      "cancel": "Annuleren",
+      "close": "Sluiten",
+      "comingSoon": "Binnenkort beschikbaar",
+      "confirmPassword": "Bevestig Wachtwoord",
+      "create": "Creëren",
+      "createAiCollection": "Creëren met AI",
+      "creating": "Creëren",
+      "delete": "Verwijderen",
+      "deleteCard": "Kaart Verwijderen",
+      "doNotKnow": "Weet het niet",
+      "repeatPassword": "Herhaal Wachtwoord",
+      "getStarted": "Beginnen",
+      "goHome": "Ga naar Start",
+      "login": "Inloggen",
+      "loading": "Laden",
+      "logout": "Uitloggen",
+      "letsStudy": "Laten we studeren",
+      "practiceAgain": "Opnieuw Oefenen",
+      "practiceCards": "Kaarten Oefenen",
+      "save": "Opslaan",
+      "showAnswer": "Toon Antwoord",
+      "signUp": "Aanmelden",
+      "startPracticing": "Begin met Oefenen",
+      "toggleColorMode": "Kleurmodus Wisselen",
+      "rename": "Hernoemen",
+      "practice": "Oefenen"
+    },
+    "errors": {
+      "collectionNotFound": "Collectie niet gevonden",
+      "default": "Er is iets misgegaan",
+      "emailIsRequired": "E-mail is vereist",
+      "errorCreatingAccount": "Fout bij het aanmaken van account",
+      "errorLoadingCard": "Fout bij het laden van kaart",
+      "errorSavingCard": "Fout bij het opslaan van kaart",
+      "fullNameIsRequired": "Volledige naam is vereist",
+      "invalidCredentials": "Ongeldige inloggegevens",
+      "invalidName": "Ongeldige naam",
+      "invalidEmail": "Ongeldig e-mailadres",
+      "loginFailed": "Inloggen mislukt",
+      "passwordConfirmationIsRequired": "Bevestiging van wachtwoord is vereist",
+      "passwordsDoNotMatch": "De wachtwoorden komen niet overeen",
+      "passwordIsRequired": "Wachtwoord is vereist",
+      "passwordMinCharacters": "Wachtwoord moet minimaal 8 tekens bevatten",
+      "somethingWentWrong": "Er is iets misgegaan",
+      "tryAgain": "Probeer opnieuw",
+      "usernameIsRequired": "Gebruikersnaam is vereist"
+    },
+    "words": {
+      "back": "Achterkant",
+      "collectionName": "Collectienaam",
+      "correct": "Correct",
+      "email": "E-mail",
+      "error": "Fout",
+      "easy": "Makkelijk",
+      "features": "Kenmerken",
+      "flashNotes": "FlashNotes",
+      "front": "Voorkant",
+      "fullName": "Volledige Naam",
+      "hard": "Moeilijk",
+      "incorrect": "Onjuist",
+      "github": "GitHub",
+      "medium": "Gemiddeld",
+      "noCardsAdded": "Nog geen kaarten toegevoegd.",
+      "password": "Wachtwoord",
+      "statistics": "Statistieken",
+      "totalCards": "Totaal Aantal Kaarten",
+      "cards": "kaarten",
+      "version": "Versie"
+    }
+  },
+  "hooks": {
+    "auth": {
+      "accountCreated": "Account aangemaakt",
+      "accountCreatedDescription": "Je account is succesvol aangemaakt."
+    }
+  },
+  "routes": {
+    "layout": {
+      "collectionIndex": {
+        "addFirstCard": "Voeg je eerste kaart toe met de blauwe knop hieronder en begin nieuwe concepten te beheersen!",
+        "collectionEmpty": "Deze collectie is leeg"
+      },
+      "index": {
+        "readyToStartLearning": "Klaar om te beginnen met leren?",
+        "createFirstCollection": "Maak je eerste collectie en begin je leerreis!"
+      }
+    },
+    "publicLayout": {
+      "index": {
+        "title": "Beter Leren met FlashNotes",
+        "description": "Een eenvoudige flashcard-app die je helpt te leren. Maak kaarten, oefen regelmatig en onthoud wat belangrijk is.",
+        "simpleDesign": "Eenvoudig Ontwerp",
+        "simpleDesignDescription": "Een schone interface die je helpt je te concentreren op leren.",
+        "aiGeneration": "AI Generatie",
+        "aiGenerationDescription": "Maak automatisch flashcards met AI om tijd te besparen en het leren te verbeteren.",
+        "responsiveDesign": "Responsief Ontwerp",
+        "responsiveDesignDescription": "Studie overal op elk apparaat met een volledig responsieve interface."
+      },
+      "login": {
+        "dontHaveAccount": "Heb je geen account?"
+      },
+      "signUp": {
+        "alreadyHaveAccount": "Heb je al een account?"
+      }
+    }
+  }
 }

@@ -1,7 +1,11 @@
 import uuid
 from datetime import datetime, timezone
+from typing import TYPE_CHECKING
 
 from sqlmodel import Field, Relationship, SQLModel
+
+if TYPE_CHECKING:
+    from src.users.models import User
 
 
 class Collection(SQLModel, table=True):
@@ -57,7 +61,3 @@ class PracticeCard(SQLModel, table=True):
     updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     session: PracticeSession = Relationship(back_populates="practice_cards")
     card: Card = Relationship(back_populates="practice_cards")
-
-
-# This is needed to resolve forward references
-from src.users.models import User

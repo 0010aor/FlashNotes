@@ -1,37 +1,43 @@
 {
 	"$schema": "https://biomejs.dev/schemas/1.6.1/schema.json",
 	"organizeImports": {
-	  "enabled": true
+		"enabled": true
 	},
 	"files": {
-	  "ignore": [
-		"node_modules",
-		"src/routeTree.gen.ts",
-		"src/components/ui"
-	  ]
+		"ignore": [
+			"node_modules",
+			"src/routeTree.gen.ts",
+			"src/client/*",
+			"src/components/ui"
+		]
 	},
 	"linter": {
-	  "enabled": true,
-	  "ignore": ["src/components/ui"],
-	  "rules": {
-		"recommended": true,
-		"suspicious": {
-		  "noExplicitAny": "off",
-		  "noArrayIndexKey": "off"
-		},
-		"style": {
-		  "noNonNullAssertion": "off"
+		"enabled": true,
+		"ignore": ["src/components/ui"],
+		"rules": {
+			"recommended": true,
+			"suspicious": {
+				"noExplicitAny": "warn",
+				"noArrayIndexKey": "warn"
+			},
+			"style": {
+				"noNonNullAssertion": "warn"
+			}
 		}
-	  }
 	},
 	"formatter": {
-	  "indentStyle": "space"
+		"enabled": true,
+		"indentStyle": "space",
+		"indentWidth": 2,
+		"lineWidth": 100,
+		"ignore": ["src/components/ui", "src/client/*", "src/assets/*"]
 	},
 	"javascript": {
-	  "formatter": {
-		"quoteStyle": "double",
-		"semicolons": "asNeeded"
-	  }
+		"formatter": {
+			"quoteStyle": "single",
+			"jsxQuoteStyle": "double",
+			"quoteProperties": "asNeeded",
+			"semicolons": "asNeeded"
+		}
 	}
-  }
-  
+}

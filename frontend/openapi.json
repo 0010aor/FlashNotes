@@ -736,6 +736,58 @@
           }
         }
       }
+    },
+    "/api/v1/stats/collections/{collection_id}": {
+      "get": {
+        "tags": ["stats"],
+        "summary": "Get Collection Statistics Endpoint",
+        "operationId": "stats-get_collection_statistics_endpoint",
+        "security": [{ "OAuth2PasswordBearer": [] }],
+        "parameters": [
+          {
+            "name": "collection_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Collection Id"
+            }
+          },
+          {
+            "name": "days",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 90,
+              "minimum": 1,
+              "description": "Number of days of history to include",
+              "default": 30,
+              "title": "Days"
+            },
+            "description": "Number of days of history to include"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CollectionStats" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -779,6 +831,17 @@
         "type": "object",
         "required": ["front", "back", "id", "collection_id"],
         "title": "Card"
+      },
+      "CardBasicStats": {
+        "properties": {
+          "id": { "type": "string", "format": "uuid", "title": "Id" },
+          "front": { "type": "string", "title": "Front" },
+          "total_attempts": { "type": "integer", "title": "Total Attempts" },
+          "correct_answers": { "type": "integer", "title": "Correct Answers" }
+        },
+        "type": "object",
+        "required": ["id", "front", "total_attempts", "correct_answers"],
+        "title": "CardBasicStats"
       },
       "CardCreate": {
         "properties": {
@@ -831,6 +894,19 @@
         "required": ["name", "id", "user_id", "cards"],
         "title": "Collection"
       },
+      "CollectionBasicInfo": {
+        "properties": {
+          "name": { "type": "string", "title": "Name" },
+          "total_cards": { "type": "integer", "title": "Total Cards" },
+          "total_practice_sessions": {
+            "type": "integer",
+            "title": "Total Practice Sessions"
+          }
+        },
+        "type": "object",
+        "required": ["name", "total_cards", "total_practice_sessions"],
+        "title": "CollectionBasicInfo"
+      },
       "CollectionCreate": {
         "properties": {
           "name": { "type": "string", "title": "Name" },
@@ -855,6 +931,26 @@
         "type": "object",
         "required": ["data", "count"],
         "title": "CollectionList"
+      },
+      "CollectionStats": {
+        "properties": {
+          "collection_info": {
+            "$ref": "#/components/schemas/CollectionBasicInfo"
+          },
+          "recent_sessions": {
+            "items": { "$ref": "#/components/schemas/PracticeSessionStats" },
+            "type": "array",
+            "title": "Recent Sessions"
+          },
+          "difficult_cards": {
+            "items": { "$ref": "#/components/schemas/CardBasicStats" },
+            "type": "array",
+            "title": "Difficult Cards"
+          }
+        },
+        "type": "object",
+        "required": ["collection_info", "recent_sessions", "difficult_cards"],
+        "title": "CollectionStats"
       },
       "CollectionUpdate": {
         "properties": {
@@ -1016,6 +1112,30 @@
         "type": "object",
         "required": ["data", "count"],
         "title": "PracticeSessionList"
+      },
+      "PracticeSessionStats": {
+        "properties": {
+          "id": { "type": "string", "format": "uuid", "title": "Id" },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "cards_practiced": { "type": "integer", "title": "Cards Practiced" },
+          "correct_answers": { "type": "integer", "title": "Correct Answers" },
+          "total_cards": { "type": "integer", "title": "Total Cards" },
+          "is_completed": { "type": "boolean", "title": "Is Completed" }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "created_at",
+          "cards_practiced",
+          "correct_answers",
+          "total_cards",
+          "is_completed"
+        ],
+        "title": "PracticeSessionStats"
       },
       "Token": {
         "properties": {

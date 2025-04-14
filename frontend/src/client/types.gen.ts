@@ -16,6 +16,13 @@ export type Card = {
   collection_id: string
 }
 
+export type CardBasicStats = {
+  id: string
+  front: string
+  total_attempts: number
+  correct_answers: number
+}
+
 export type CardCreate = {
   front: string
   back: string
@@ -38,6 +45,12 @@ export type Collection = {
   cards: Array<Card>
 }
 
+export type CollectionBasicInfo = {
+  name: string
+  total_cards: number
+  total_practice_sessions: number
+}
+
 export type CollectionCreate = {
   name: string
   prompt?: string | null
@@ -46,6 +59,12 @@ export type CollectionCreate = {
 export type CollectionList = {
   data: Array<Collection>
   count: number
+}
+
+export type CollectionStats = {
+  collection_info: CollectionBasicInfo
+  recent_sessions: Array<PracticeSessionStats>
+  difficult_cards: Array<CardBasicStats>
 }
 
 export type CollectionUpdate = {
@@ -101,6 +120,15 @@ export type PracticeSessionCreate = {
 export type PracticeSessionList = {
   data: Array<PracticeSession>
   count: number
+}
+
+export type PracticeSessionStats = {
+  id: string
+  created_at: string
+  cards_practiced: number
+  correct_answers: number
+  total_cards: number
+  is_completed: boolean
 }
 
 export type Token = {
@@ -218,9 +246,9 @@ export type FlashcardsGetPracticeSessionStatusResponse = PracticeSession
 
 export type FlashcardsListPracticeCardsData = {
   limit?: number
-  order?: "asc" | "desc" | "random" | null
+  order?: 'asc' | 'desc' | 'random' | null
   practiceSessionId: string
-  status?: "pending" | "completed" | "all" | null
+  status?: 'pending' | 'completed' | 'all' | null
 }
 
 export type FlashcardsListPracticeCardsResponse = PracticeCardListResponse
@@ -238,6 +266,16 @@ export type LoginLoginAccessTokenData = {
 }
 
 export type LoginLoginAccessTokenResponse = Token
+
+export type StatsGetCollectionStatisticsEndpointData = {
+  collectionId: string
+  /**
+   * Number of days of history to include
+   */
+  days?: number
+}
+
+export type StatsGetCollectionStatisticsEndpointResponse = CollectionStats
 
 export type UsersReadUserMeResponse = UserPublic
 
