@@ -1,14 +1,15 @@
+<p align="center">
 <img src="frontend/src/assets/Logo.svg" alt="FlashNotes Logo" width="80" height="80"/>
+</p>
 
-# Learn Better with FlashNotes
-
-#### A simple flashcard app focused on quick card creation and distraction-free practice.
-
-[![Live Demo](https://img.shields.io/badge/Live_Demo-2D3748?style=for-the-badge&logo=firefox&logoColor=white)](https://flash-notes.com)
+<h1 align="center">FlashNotes</h1>
+<p align="center">A simple flashcard app focused on quick card creation and distraction-free practice.</p>
+<p align="center">
+ <a href="https://flash-notes.com" target="_blank"><img src="https://img.shields.io/badge/-flash--notes.com-2D3748" alt="Live Demo URL"></a>
+ <a href="https://discord.gg/CDPHbQ3Ct5" target="_blank"><img src="https://img.shields.io/static/v1?label=Join%20our&message=Discord&color=blue&logo=Discord" alt="Discord"></a>
+</p>
 
 ## Technology Stack and Features
-
-
 
 - **Backend:**
     - [**FastAPI**](https://fastapi.tiangolo.com) for the Python backend API.
@@ -118,7 +119,7 @@ pnpm install
 pnpm run dev
 ```
 
-### Generate Frontend API Client
+### Generate Frontend API Client (Only if backend API is updated)
 
 The frontend uses a generated TypeScript client to communicate with the backend API. To update the client after making changes to the backend:
 
@@ -135,32 +136,11 @@ source .venv/bin/activate  # For Unix/Linux
 ./scripts/generate_client.sh
 ```
 
-This script will:
-- Generate OpenAPI specification from the backend
-- Move it to the frontend directory
-- Generate the TypeScript client
-- Format the generated code
-
-<img src="preview.gif" alt="Preview" width="300" align="center"/>
-
 ## API Documentation
 Once the backend is running, access the interactive API documentation at:
 - ReDoc: http://127.0.0.1:8000/redoc
 - Swagger UI: http://127.0.0.1:8000/docs
 
 ## Contributing
-1. Fork the repository
-2. Create a new branch for your feature
-3. Commit your changes
-4. Push to your branch
-5. Create a Pull Request
 
-## License
-This project is licensed under the MIT License.
-
-
-## Related Projects
-
-Check out my other projects:
-
-- [TasteThis!](https://github.com/ZorroGuadaPavos/taste-this-front) - Find the most popular dishes (https://taste-this.com)
+We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details on how to get started, report bugs, suggest enhancements, and submit pull requests. Feel free to join our [Discord](https://discord.gg/CDPHbQ3Ct5) for questions and discussions!

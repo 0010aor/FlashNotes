@@ -10,7 +10,7 @@ interface FooterProps {
 
 export function Footer({
   version = '0.8',
-  githubUrl = 'https://github.com/ZorroGuadaPavos/FlashNotes',
+  githubUrl = 'https://github.com/0010aor/FlashNotes',
   copyrightYear = new Date().getFullYear().toString(),
 }: FooterProps) {
   const { t } = useTranslation()

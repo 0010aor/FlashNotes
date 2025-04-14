@@ -6,18 +6,18 @@ Thank you for your interest in contributing to FlashNotes! We welcome contributi
 
 ### Reporting Bugs
 
-If you find a bug, please ensure the bug was not already reported by searching on GitHub under [Issues](https://github.com/your-username/FlashNotes/issues). If you're unable to find an open issue addressing the problem, open a new one. Be sure to include a title and clear description, as much relevant information as possible, and a code sample or an executable test case demonstrating the expected behavior that is not occurring.
+If you find a bug, please ensure the bug was not already reported by searching on GitHub under [Issues](https://github.com/0010aor/FlashNotes/issues). If you're unable to find an open issue addressing the problem, open a new one. Be sure to include a title and clear description, as much relevant information as possible, and a code sample or an executable test case demonstrating the expected behavior that is not occurring.
 
 ### Suggesting Enhancements
 
-If you have an idea for an enhancement, please search the [Issues](https://github.com/your-username/FlashNotes/issues) to see if it has already been suggested. If not, open a new issue, providing a clear description of the proposed enhancement and its potential benefits.
+If you have an idea for an enhancement, please search the [Issues](https://github.com/0010aor/FlashNotes/issues) to see if it has already been suggested. If not, open a new issue, providing a clear description of the proposed enhancement and its potential benefits.
 
 ### Code Contributions
 
 1.  **Fork the repository** on GitHub.
 2.  **Clone your fork** locally:
     ```bash
-    git clone https://github.com/your-username/FlashNotes.git
+    git clone https://github.com/0010aor/FlashNotes.git
     ```
 3.  **Set up the development environment** by following the instructions in the [README.md](README.md#setup-instructions).
 4.  **Install pre-commit hooks**: After setting up the environment, run the following command in the project root to enable automatic code style checks before each commit:
@@ -61,13 +61,5 @@ If you have an idea for an enhancement, please search the [Issues](https://githu
 
 *   Backend: Ensure all backend changes are covered by tests using `pytest`. Run tests from the `backend` directory.
 *   Frontend: (Add details about frontend testing if applicable, e.g., Vitest, React Testing Library).
-
-## Pull Request Process
-
-1.  Ensure any install or build dependencies are removed before the end of the layer when doing a build.
-2.  Update the README.md with details of changes to the interface, this includes new environment variables, exposed ports, useful file locations and container parameters.
-3.  Increase the version numbers in any examples files and the README.md to the new version that this Pull Request would represent.
-4.  Your PR will be reviewed by a maintainer. Address any feedback or changes requested.
-5.  Once approved, your PR will be merged.
 
 Thank you again for your contribution!
