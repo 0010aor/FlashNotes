@@ -8,43 +8,30 @@ import {
   DialogRoot,
   DialogTitle,
 } from '@/components/ui/dialog'
-import { useDisclosure } from '@chakra-ui/react'
-import { forwardRef, useImperativeHandle, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BlueButton, RedButton } from '../commonUI/Button'
 import { DefaultInput } from '../commonUI/Input'
 
 interface CollectionDialogProps {
-  onAdd: (collectionData: { name: string }) => Promise<void>
+  isOpen: boolean
+  onClose: () => void
+  onSubmit: (name: string) => void
 }
 
-export interface CollectionDialogRef {
-  open: () => void
-  close: () => void
-}
-
-const CollectionDialog = forwardRef<CollectionDialogRef, CollectionDialogProps>((props, ref) => {
-  const { onAdd } = props
+const CollectionDialog: React.FC<CollectionDialogProps> = ({ isOpen, onClose, onSubmit }) => {
   const { t } = useTranslation()
   const [collectionName, setCollectionName] = useState('')
   const closeButtonRef = useRef<HTMLButtonElement>(null)
-  const { open, onOpen, onClose } = useDisclosure()
 
-  useImperativeHandle(ref, () => ({
-    open: onOpen,
-    close: onClose,
-  }))
-
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     if (!collectionName.trim()) return
+    onSubmit(collectionName)
+    setCollectionName('')
+  }
 
-    try {
-      await onAdd({ name: collectionName })
-      setCollectionName('')
-      onClose()
-    } catch (error) {
-      console.error('Failed to create collection:', error)
-    }
+  if (!isOpen && collectionName !== '') {
+    setCollectionName('')
   }
 
   return (
@@ -52,9 +39,9 @@ const CollectionDialog = forwardRef<CollectionDialogRef, CollectionDialogProps>(
       key="add-collection-dialog"
       placement="center"
       motionPreset="slide-in-bottom"
-      open={open}
-      onOpenChange={(e) => {
-        if (!e.open) {
+      open={isOpen}
+      onOpenChange={(detail) => {
+        if (!detail.open) {
           onClose()
         }
       }}
@@ -81,13 +68,15 @@ const CollectionDialog = forwardRef<CollectionDialogRef, CollectionDialogProps>(
             <RedButton onClick={onClose}>{t('general.actions.cancel')}</RedButton>
           </DialogActionTrigger>
           <DialogActionTrigger asChild>
-            <BlueButton onClick={handleSubmit}>{t('general.actions.save')}</BlueButton>
+            <BlueButton onClick={handleSubmit} disabled={!collectionName.trim()}>
+              {t('general.actions.save')}
+            </BlueButton>
           </DialogActionTrigger>
         </DialogFooter>
         <DialogCloseTrigger ref={closeButtonRef} />
       </DialogContent>
     </DialogRoot>
   )
-})
+}
 
 export default CollectionDialog

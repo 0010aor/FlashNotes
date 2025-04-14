@@ -1,10 +1,6 @@
 import { type CollectionCreate, FlashcardsService } from '@/client'
-import AiCollectionDialog, {
-  type AiCollectionDialogRef,
-} from '@/components/collections/AiCollectionDialog'
-import CollectionDialog, {
-  type CollectionDialogRef,
-} from '@/components/collections/CollectionDialog'
+import AiCollectionDialog from '@/components/collections/AiCollectionDialog'
+import CollectionDialog from '@/components/collections/CollectionDialog'
 import CollectionListItem from '@/components/collections/CollectionListItem'
 import EmptyState from '@/components/commonUI/EmptyState'
 import ErrorState from '@/components/commonUI/ErrorState'
@@ -33,9 +29,9 @@ function Collections() {
   const { t } = useTranslation()
   const queryClient = useQueryClient()
   const [isCreatingAiCollection, setIsCreatingAiCollection] = useState(false)
-
-  const addDialogRef = useRef<CollectionDialogRef>(null)
-  const aiDialogRef = useRef<AiCollectionDialogRef>(null)
+  const [isSpeedDialLoading, setIsSpeedDialLoading] = useState(false)
+  const [isAiDialogOpen, setIsAiDialogOpen] = useState(false)
+  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
 
   const {
     data: collections,
@@ -46,9 +42,11 @@ function Collections() {
     placeholderData: (prevData) => prevData,
   })
 
-  const addCollection = async (collectionData: CollectionCreate) => {
+  const addCollection = async (name: string) => {
+    if (!name) return
     try {
-      await FlashcardsService.createCollection({ requestBody: collectionData })
+      setIsAddDialogOpen(false)
+      await FlashcardsService.createCollection({ requestBody: { name: name } })
       queryClient.invalidateQueries({ queryKey: ['collections'] })
     } catch (error) {
       console.error(error)
@@ -56,8 +54,11 @@ function Collections() {
   }
 
   const addAiCollection = async (prompt: string) => {
+    if (!prompt) return
     try {
       setIsCreatingAiCollection(true)
+      setIsSpeedDialLoading(true)
+      setIsAiDialogOpen(false)
       await FlashcardsService.createCollection({
         requestBody: { name: '', prompt: prompt },
       })
@@ -66,6 +67,7 @@ function Collections() {
       console.error(error)
     } finally {
       setIsCreatingAiCollection(false)
+      setIsSpeedDialLoading(false)
     }
   }
 
@@ -98,7 +100,7 @@ function Collections() {
       id: 'add',
       icon: <VscAdd />,
       label: t('general.actions.addCollection'),
-      onClick: () => addDialogRef.current?.open(),
+      onClick: () => setIsAddDialogOpen(true),
     },
     {
       id: 'ai',
@@ -108,7 +110,7 @@ function Collections() {
         </Text>
       ),
       label: t('general.actions.createAiCollection'),
-      onClick: () => aiDialogRef.current?.open(),
+      onClick: () => setIsAiDialogOpen(true),
       bgColor: 'fbuttons.orange',
     },
   ]
@@ -135,12 +137,17 @@ function Collections() {
         </Stack>
       </ScrollableContainer>
 
-      <SpeedDial actions={speedDialActions} />
+      <SpeedDial actions={speedDialActions} isLoading={isSpeedDialLoading} />
 
-      <CollectionDialog ref={addDialogRef} onAdd={addCollection} />
+      <CollectionDialog
+        isOpen={isAddDialogOpen}
+        onClose={() => setIsAddDialogOpen(false)}
+        onSubmit={addCollection}
+      />
       <AiCollectionDialog
-        ref={aiDialogRef}
-        onAddAi={addAiCollection}
+        isOpen={isAiDialogOpen}
+        onClose={() => setIsAiDialogOpen(false)}
+        onSubmit={addAiCollection}
         isLoading={isCreatingAiCollection}
       />
     </>

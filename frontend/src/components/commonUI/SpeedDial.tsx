@@ -1,5 +1,5 @@
 import { Tooltip } from '@/components/ui/tooltip'
-import { Box, IconButton, Stack, useDisclosure } from '@chakra-ui/react'
+import { Box, IconButton, Spinner, Stack, useDisclosure } from '@chakra-ui/react'
 import { keyframes } from '@emotion/react'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
@@ -32,9 +32,14 @@ export interface SpeedDialActionItem {
 interface SpeedDialProps {
   actions: SpeedDialActionItem[]
   mainButtonBgColor?: string
+  isLoading?: boolean
 }
 
-const SpeedDial: React.FC<SpeedDialProps> = ({ actions, mainButtonBgColor = 'fbuttons.blue' }) => {
+const SpeedDial: React.FC<SpeedDialProps> = ({
+  actions,
+  mainButtonBgColor = 'fbuttons.blue',
+  isLoading = false,
+}) => {
   const { t } = useTranslation()
   const { open, onToggle, onClose } = useDisclosure()
 
@@ -92,13 +97,20 @@ const SpeedDial: React.FC<SpeedDialProps> = ({ actions, mainButtonBgColor = 'fbu
             transition="all 0.3s"
             _hover={{ transform: 'scale(1.1)' }}
             _active={{ transform: 'scale(0.95)' }}
+            disabled={isLoading}
             animation={
               open
                 ? `${rotateOpen} 0.3s ease-in-out forwards`
                 : `${rotateClose} 0.3s ease-in-out forwards`
             }
           >
-            {open ? <VscClose color="white" /> : <VscAdd color="white" />}
+            {open ? (
+              <VscClose color="white" />
+            ) : isLoading ? (
+              <Spinner size="md" color="white" />
+            ) : (
+              <VscAdd color="white" />
+            )}
           </IconButton>
         </Tooltip>
       </Box>
