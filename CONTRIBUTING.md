@@ -42,7 +42,7 @@ If you have an idea for an enhancement, please search the [Issues](https://githu
 ## Code Style
 
 *   Please ensure your code is formatted correctly before committing.
-*   Backend (Python): Follow PEP 8 guidelines. We use linters/formatters like Black and Ruff (mention specific tools if configured).
+*   Backend (Python): Follow PEP 8 guidelines. We use Ruff, configured in `backend/pyproject.toml`.
 *   Frontend (TypeScript/React): We use [Biome](https://biomejs.dev/) for linting and formatting. Please ensure your code adheres to the configuration in `frontend/biome.json`. Key aspects include:
     *   2-space indentation.
     *   100-character line width.
