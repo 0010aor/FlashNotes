@@ -1,5 +1,5 @@
 import Logo from '@/assets/Logo.svg'
-import { FlashcardsService } from '@/client'
+import type { Collection } from '@/client/types.gen'
 import { useColorMode } from '@/components/ui/color-mode'
 import {
   DrawerBackdrop,
@@ -10,7 +10,9 @@ import {
   DrawerHeader,
   DrawerRoot,
 } from '@/components/ui/drawer'
+import type { LocalCard, LocalCollection } from '@/db/flashcardsDB'
 import useAuth from '@/hooks/useAuth'
+import { getCollections } from '@/services/flashcards/collections'
 import { HStack, IconButton, Image, List, Spinner, Text, VStack } from '@chakra-ui/react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
@@ -19,30 +21,53 @@ import { FiLogOut, FiMoon, FiSun } from 'react-icons/fi'
 import { DefaultButton } from './Button'
 import LanguageSelector from './LanguageSelector'
 
-function getCollectionsQueryOptions() {
-  return {
-    queryFn: () => FlashcardsService.readCollections(),
-    queryKey: ['collections'],
-  }
+type DrawerCollection = Collection | (LocalCollection & { cards: LocalCard[] })
+
+function CollectionListItem({
+  collection,
+  onNavigate,
+}: { collection: DrawerCollection; onNavigate: () => void }) {
+  return (
+    <List.Item
+      key={collection.id}
+      display="flex"
+      alignItems="center"
+      px={3}
+      py={2}
+      borderRadius="lg"
+      transition="all 0.4s"
+      _hover={{ bg: 'bg.100' }}
+      _active={{ bg: 'bg.100' }}
+    >
+      <Link
+        to="/collections/$collectionId"
+        params={{ collectionId: collection.id }}
+        onClick={onNavigate}
+        style={{ width: '100%' }}
+      >
+        <Text fontSize="15px" color="fg.DEFAULT" truncate>
+          {collection.name}
+        </Text>
+      </Link>
+    </List.Item>
+  )
 }
 
-function Drawer({
-  isOpen,
-  setIsOpen,
-}: {
-  isOpen: boolean
-  setIsOpen: (open: boolean) => void
-}) {
+function Drawer({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void }) {
   const { t } = useTranslation()
   const { logout } = useAuth()
   const { colorMode, toggleColorMode } = useColorMode()
   const queryClient = useQueryClient()
   const currentUser = queryClient.getQueryData<{ email: string }>(['currentUser'])
+  const flashcardsService = { getCollections }
+
   const { data, isLoading } = useQuery({
-    ...getCollectionsQueryOptions(),
+    queryKey: ['collections'],
+    queryFn: flashcardsService.getCollections,
     placeholderData: (prevData) => prevData,
   })
-  const collections = data?.data ?? []
+
+  const collections = data || []
 
   const handleNavigate = () => setIsOpen(false)
 
@@ -68,29 +93,12 @@ function Drawer({
               </VStack>
             ) : (
               <List.Root>
-                {collections.map((collection) => (
-                  <List.Item
+                {collections.map((collection: DrawerCollection) => (
+                  <CollectionListItem
                     key={collection.id}
-                    display="flex"
-                    alignItems="center"
-                    px={3}
-                    py={2}
-                    borderRadius="lg"
-                    transition="all 0.4s"
-                    _hover={{ bg: 'bg.100' }}
-                    _active={{ bg: 'bg.100' }}
-                  >
-                    <Link
-                      to="/collections/$collectionId"
-                      params={{ collectionId: collection.id }}
-                      onClick={handleNavigate}
-                      style={{ width: '100%' }}
-                    >
-                      <Text fontSize="15px" color="fg.DEFAULT" truncate>
-                        {collection.name}
-                      </Text>
-                    </Link>
-                  </List.Item>
+                    collection={collection}
+                    onNavigate={handleNavigate}
+                  />
                 ))}
               </List.Root>
             )}

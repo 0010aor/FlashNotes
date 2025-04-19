@@ -2,9 +2,9 @@ import { BlueButton, DefaultButton } from '@/components/commonUI/Button'
 import { Footer } from '@/components/commonUI/Footer'
 import { useColorMode } from '@/components/ui/color-mode'
 import { Container, Heading, Image, Stack, Text, VStack } from '@chakra-ui/react'
-import { Link, createFileRoute } from '@tanstack/react-router'
+import { Link, createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
-import { isLoggedIn } from '../../hooks/useAuth'
+import { isLoggedIn, setGuestMode } from '../../hooks/useAuth'
 
 export const Route = createFileRoute('/_publicLayout/')({
   component: LandingPage,
@@ -14,8 +14,14 @@ function LandingPage() {
   const { t } = useTranslation()
   const isAuthenticated = isLoggedIn()
   const { colorMode } = useColorMode()
+  const navigate = useNavigate()
 
   const videoSrc = colorMode === 'dark' ? '/preview_dark.mp4' : '/preview_light.mp4'
+
+  const handleTryAsGuest = () => {
+    setGuestMode(true)
+    navigate({ to: '/collections' })
+  }
 
   return (
     <Container
@@ -45,14 +51,14 @@ function LandingPage() {
                 <BlueButton size="lg">{t('general.actions.letsStudy')}!</BlueButton>
               </Link>
             ) : (
-              <>
-                <Link to="/signup">
-                  <DefaultButton size="lg">{t('general.actions.getStarted')}</DefaultButton>
-                </Link>
+              <Stack direction="row" gap={4}>
                 <Link to="/login">
                   <DefaultButton size="lg">{t('general.actions.login')}</DefaultButton>
                 </Link>
-              </>
+                <DefaultButton size="lg" onClick={handleTryAsGuest}>
+                  {t('general.actions.getStarted', 'Get Started')}
+                </DefaultButton>
+              </Stack>
             )}
           </Stack>
         </VStack>

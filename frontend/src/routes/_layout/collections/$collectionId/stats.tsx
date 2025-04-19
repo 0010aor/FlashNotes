@@ -1,4 +1,5 @@
 import { StatsService } from '@/client'
+import type { CollectionStats } from '@/client/types.gen'
 import ErrorState from '@/components/commonUI/ErrorState'
 import LoadingState from '@/components/commonUI/LoadingState'
 import MasteryDonutChart from '@/components/stats/MasteryDonutChart'
@@ -6,6 +7,9 @@ import MostFailedCards from '@/components/stats/MostFailedCards'
 import PerformanceChart from '@/components/stats/PerformanceChart'
 import PracticeBarChart from '@/components/stats/PracticeBarChart'
 import StatsSummaryGrid from '@/components/stats/StatsSummaryGrid'
+
+import { isGuest } from '@/hooks/useAuth'
+import { getLocalCollectionStats } from '@/services/localDB/stats'
 import { Container, Heading, SimpleGrid, Stack } from '@chakra-ui/react'
 import { useQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
@@ -23,13 +27,15 @@ function StatsPage() {
     data: stats,
     isLoading,
     error,
-  } = useQuery({
+  } = useQuery<CollectionStats>({
     queryKey: ['collectionStats', collectionId, 7],
     queryFn: () =>
-      StatsService.getCollectionStatisticsEndpoint({
-        collectionId,
-        days: 7,
-      }),
+      isGuest()
+        ? getLocalCollectionStats(collectionId)
+        : StatsService.getCollectionStatisticsEndpoint({
+            collectionId,
+            days: 7,
+          }),
   })
 
   if (isLoading) return <LoadingState />

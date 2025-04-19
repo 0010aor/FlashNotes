@@ -1,4 +1,4 @@
-import { FlashcardsService } from '@/client'
+import type { Collection } from '@/client/types.gen'
 import AiCollectionDialog from '@/components/collections/AiCollectionDialog'
 import CollectionDialog from '@/components/collections/CollectionDialog'
 import CollectionListItem from '@/components/collections/CollectionListItem'
@@ -7,6 +7,13 @@ import ErrorState from '@/components/commonUI/ErrorState'
 import ListSkeleton from '@/components/commonUI/ListSkeleton'
 import ScrollableContainer from '@/components/commonUI/ScrollableContainer'
 import SpeedDial, { type SpeedDialActionItem } from '@/components/commonUI/SpeedDial'
+import type { LocalCard, LocalCollection } from '@/db/flashcardsDB'
+import {
+  createCollection,
+  deleteCollection as deleteCollectionApi,
+  getCollections,
+  updateCollection,
+} from '@/services/flashcards/collections'
 import { Stack, Text } from '@chakra-ui/react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
@@ -14,12 +21,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { VscAdd } from 'react-icons/vsc'
 
-function getCollectionsQueryOptions() {
-  return {
-    queryFn: () => FlashcardsService.readCollections(),
-    queryKey: ['collections'],
-  }
-}
+export type CollectionListItemType = Collection | (LocalCollection & { cards: LocalCard[] })
 
 export const Route = createFileRoute('/_layout/collections/')({
   component: Collections,
@@ -33,20 +35,19 @@ function Collections() {
   const [isAiDialogOpen, setIsAiDialogOpen] = useState(false)
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
 
-  const {
-    data: collections,
-    error,
-    isLoading,
-  } = useQuery({
-    ...getCollectionsQueryOptions(),
+  const { data, error, isLoading } = useQuery({
+    queryKey: ['collections'],
+    queryFn: getCollections,
     placeholderData: (prevData) => prevData,
   })
+
+  const collectionList: CollectionListItemType[] = data || []
 
   const addCollection = async (name: string) => {
     if (!name) return
     try {
       setIsAddDialogOpen(false)
-      await FlashcardsService.createCollection({ requestBody: { name: name } })
+      await createCollection({ name })
       queryClient.invalidateQueries({ queryKey: ['collections'] })
     } catch (error) {
       console.error(error)
@@ -59,9 +60,7 @@ function Collections() {
       setIsCreatingAiCollection(true)
       setIsSpeedDialLoading(true)
       setIsAiDialogOpen(false)
-      await FlashcardsService.createCollection({
-        requestBody: { name: '', prompt: prompt },
-      })
+      await createCollection({ name: '', prompt })
       queryClient.invalidateQueries({ queryKey: ['collections'] })
     } catch (error) {
       console.error(error)
@@ -73,19 +72,16 @@ function Collections() {
 
   const renameCollection = async (collectionId: string, newName: string) => {
     try {
-      await FlashcardsService.updateCollection({
-        collectionId: collectionId,
-        requestBody: { name: newName },
-      })
+      await updateCollection(collectionId, { name: newName })
       queryClient.invalidateQueries({ queryKey: ['collections'] })
     } catch (error) {
       console.error(error)
     }
   }
 
-  const deleteCollection = async (collectionId: string) => {
+  const handleDeleteCollection = async (collectionId: string) => {
     try {
-      await FlashcardsService.deleteCollection({ collectionId })
+      await deleteCollectionApi(collectionId)
       queryClient.invalidateQueries({ queryKey: ['collections'] })
     } catch (error) {
       console.error(error)
@@ -119,17 +115,17 @@ function Collections() {
     <>
       <ScrollableContainer>
         <Stack gap={4} pt={14}>
-          {collections?.data.length === 0 ? (
+          {collectionList.length === 0 ? (
             <EmptyState
               title={t('routes.layout.index.readyToStartLearning')}
               message={t('routes.layout.index.createFirstCollection')}
             />
           ) : (
-            collections?.data.map((collection) => (
+            collectionList.map((collection: CollectionListItemType) => (
               <CollectionListItem
                 key={collection.id}
                 collection={collection}
-                onDelete={deleteCollection}
+                onDelete={handleDeleteCollection}
                 onRename={renameCollection}
               />
             ))

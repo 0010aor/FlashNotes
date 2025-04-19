@@ -19,8 +19,22 @@ interface ErrorResponse {
   }
 }
 
+const GUEST_MODE_KEY = 'guest_mode'
+
+const setGuestMode = (value: boolean) => {
+  if (value) {
+    localStorage.setItem(GUEST_MODE_KEY, 'true')
+  } else {
+    localStorage.removeItem(GUEST_MODE_KEY)
+  }
+}
+
+const isGuest = () => {
+  return localStorage.getItem(GUEST_MODE_KEY) === 'true'
+}
+
 const isLoggedIn = () => {
-  return localStorage.getItem('access_token') !== null
+  return localStorage.getItem('access_token') !== null || isGuest()
 }
 
 const useAuth = () => {
@@ -31,7 +45,7 @@ const useAuth = () => {
   const { data: user, isLoading } = useQuery<UserPublic | null, Error>({
     queryKey: ['currentUser'],
     queryFn: UsersService.readUserMe,
-    enabled: isLoggedIn(),
+    enabled: isLoggedIn() && !isGuest(),
   })
 
   const signUpMutation = useMutation({
@@ -99,6 +113,7 @@ const useAuth = () => {
 
   const logout = () => {
     localStorage.removeItem('access_token')
+    setGuestMode(false)
     navigate({ to: '/' })
   }
 
@@ -113,5 +128,5 @@ const useAuth = () => {
   }
 }
 
-export { isLoggedIn }
+export { isLoggedIn, setGuestMode, isGuest }
 export default useAuth

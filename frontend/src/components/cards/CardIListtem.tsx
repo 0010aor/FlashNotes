@@ -1,12 +1,15 @@
-import type { Card } from '@/client'
+import type { Card } from '@/client/types.gen'
+import type { LocalCard } from '@/db/flashcardsDB'
 import { stripHtml } from '@/utils/text'
 import { Box, HStack, IconButton, Text } from '@chakra-ui/react'
 import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { MdDelete } from 'react-icons/md'
 
+type CardListItemType = Card | LocalCard
+
 interface CardListItemProps {
-  card: Card
+  card: CardListItemType
   onDelete: (id: string) => void
 }
 
@@ -23,7 +26,10 @@ function CardListItem({ card, onDelete }: CardListItemProps) {
       <Box p="1rem" flex="1" overflow="hidden" asChild>
         <Link
           to="/collections/$collectionId/cards/$cardId"
-          params={{ collectionId: card.collection_id, cardId: card.id }}
+          params={{
+            collectionId: 'collection_id' in card ? card.collection_id : card.collectionId,
+            cardId: card.id,
+          }}
         >
           <Text fontSize="md" color="fg.DEFAULT" truncate>
             {stripHtml(card.front)}

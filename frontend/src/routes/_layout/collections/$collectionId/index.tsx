@@ -1,4 +1,4 @@
-import { FlashcardsService } from '@/client'
+import type { Card } from '@/client/types.gen'
 import CardListItem from '@/components/cards/CardIListtem'
 import CollectionActionHeader from '@/components/collections/CollectionActionHeader'
 import EmptyState from '@/components/commonUI/EmptyState'
@@ -6,6 +6,8 @@ import ErrorState from '@/components/commonUI/ErrorState'
 import FloatingActionButton from '@/components/commonUI/FloatingActionButton'
 import ListSkeleton from '@/components/commonUI/ListSkeleton'
 import ScrollableContainer from '@/components/commonUI/ScrollableContainer'
+import type { LocalCard } from '@/db/flashcardsDB'
+import { deleteCard, getCards } from '@/services/flashcards/cards'
 import { Stack } from '@chakra-ui/react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
@@ -13,12 +15,7 @@ import { useTranslation } from 'react-i18next'
 import { MdSchool } from 'react-icons/md'
 import { VscAdd } from 'react-icons/vsc'
 
-function getCardsQueryOptions(collectionId: string) {
-  return {
-    queryFn: () => FlashcardsService.readCards({ collectionId }),
-    queryKey: ['collections', collectionId, 'cards'],
-  }
-}
+type CardListItemType = Card | LocalCard
 
 export const Route = createFileRoute('/_layout/collections/$collectionId/')({
   component: CollectionComponent,
@@ -30,15 +27,16 @@ function CollectionComponent() {
   const queryClient = useQueryClient()
   const { collectionId } = Route.useParams()
 
-  const { data, error, isLoading } = useQuery({
-    ...getCardsQueryOptions(collectionId),
+  const { data, error, isLoading } = useQuery<Card[] | LocalCard[]>({
+    queryKey: ['collections', collectionId, 'cards'],
+    queryFn: () => getCards(collectionId),
     placeholderData: (prevData) => prevData,
   })
-  const cards = data?.data ?? []
+  const cards = Array.isArray(data) ? data : []
 
-  const deleteCard = async (cardId: string) => {
+  const handleDeleteCard = async (cardId: string) => {
     try {
-      await FlashcardsService.deleteCard({ collectionId, cardId })
+      await deleteCard(collectionId, cardId)
       queryClient.invalidateQueries({
         queryKey: ['collections', collectionId, 'cards'],
       })
@@ -62,7 +60,9 @@ function CollectionComponent() {
               message={t('routes.layout.collectionIndex.addFirstCard')}
             />
           ) : (
-            cards.map((card) => <CardListItem key={card.id} card={card} onDelete={deleteCard} />)
+            cards.map((card: CardListItemType) => (
+              <CardListItem key={card.id} card={card} onDelete={handleDeleteCard} />
+            ))
           )}
         </Stack>
       </ScrollableContainer>

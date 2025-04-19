@@ -1,4 +1,4 @@
-import type { Collection } from '@/client'
+import type { CollectionListItemType } from '@/routes/_layout/collections'
 import { Box, HStack, Text } from '@chakra-ui/react'
 import { Link } from '@tanstack/react-router'
 import { useState } from 'react'
@@ -7,7 +7,7 @@ import { DefaultInput } from '../commonUI/Input'
 import CollectionKebabMenu from './CollectionKebabMenu'
 
 interface CollectionListItemProps {
-  collection: Collection
+  collection: CollectionListItemType
   onDelete: (id: string) => void
   onRename: (id: string, newName: string) => void
 }
