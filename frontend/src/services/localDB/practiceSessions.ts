@@ -22,11 +22,7 @@ export const addLocalPracticeSession = async (
 export const getLocalPracticeSessions = async (
   collectionId: string,
 ): Promise<LocalPracticeSession[]> => {
-  return await db.practice_sessions
-    .where('collectionId')
-    .equals(collectionId)
-    .reverse()
-    .sortBy('startedAt')
+  return await db.practice_sessions.where('collectionId').equals(collectionId).sortBy('startedAt')
 }
 
 export const getLocalPracticeSessionById = async (id: string): Promise<LocalPracticeSession> => {

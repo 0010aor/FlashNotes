@@ -1,4 +1,3 @@
-import { db } from '../../db/flashcardsDB'
 import * as cards from './cards'
 import * as collections from './collections'
 import * as practiceSessions from './practiceSessions'
@@ -28,16 +27,5 @@ export async function getLocalCollectionStats(collectionId: string) {
       total_attempts: 0,
       correct_answers: 0,
     })),
-  }
-}
-
-export async function getLocalPracticeSessionStats(sessionId: string) {
-  const session = await db.practice_sessions.get(sessionId)
-  if (!session) throw new Error('Practice session not found')
-  return {
-    correctAnswers: session.correctAnswers,
-    cardsPracticed: session.cardsPracticed,
-    totalCards: session.totalCards,
-    isCompleted: session.isCompleted,
   }
 }
