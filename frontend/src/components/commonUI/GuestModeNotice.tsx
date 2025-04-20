@@ -26,7 +26,9 @@ export default function GuestModeNotice() {
       fontWeight="medium"
       pointerEvents="auto"
     >
-      <Text display={{ base: 'block', md: 'none' }}>{t('components.guestModeNotice.message')}</Text>
+      <Text textStyle="xs" display={{ base: 'block', md: 'none' }}>
+        {t('components.guestModeNotice.message')}
+      </Text>
       <Text display={{ base: 'none', md: 'block' }}>
         {t('components.guestModeNotice.messageWithAction')}
       </Text>

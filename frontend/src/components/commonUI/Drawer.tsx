@@ -106,7 +106,7 @@ function Drawer({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: bool
         </DrawerBody>
         <DrawerFooter>
           <VStack width="100%" gap={2}>
-            <HStack justifyContent="space-between" w="100%" alignItems="center">
+            <HStack justifyContent="flex-end" w="100%" alignItems="center">
               {currentUser?.email && (
                 <Text fontSize="sm" color="fg.muted" maxWidth="11.5rem" truncate>
                   {currentUser.email}
