@@ -60,6 +60,10 @@
       "notEnoughData": "not enough data",
       "successRateTooltip": "Percentage of correct answers in your most recent session",
       "learningTrendTooltip": "Change in success rate between your two most recent sessions"
+    },
+    "guestModeNotice": {
+      "message": "You are in Guest mode.",
+      "messageWithAction": "You are in Guest mode. Login to save your progress."
     }
   },
   "general": {

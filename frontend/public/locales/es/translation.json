@@ -60,6 +60,10 @@
       "notEnoughData": "datos insuficientes",
       "successRateTooltip": "Porcentaje de respuestas correctas en tu sesión más reciente",
       "learningTrendTooltip": "Cambio en la tasa de éxito entre tus dos sesiones más recientes"
+    },
+    "guestModeNotice": {
+      "message": "Estás en modo Invitado.",
+      "messageWithAction": "Estás en modo Invitado. Inicia sesión para guardar tu progreso."
     }
   },
   "general": {

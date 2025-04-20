@@ -60,6 +60,10 @@
       "noDataAvailable": "Geen gegevens beschikbaar voor deze grafiek",
       "lastSession": "Laatste sessie",
       "noRecentSessions": "Geen recente sessies"
+    },
+    "guestModeNotice": {
+      "message": "Je bent in Gastmodus.",
+      "messageWithAction": "Je bent in Gastmodus. Log in om je voortgang op te slaan."
     }
   },
   "general": {
