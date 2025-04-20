@@ -53,6 +53,7 @@
       "notEnoughData": "niet genoeg gegevens",
       "successRateTooltip": "Percentage juiste antwoorden in je meest recente sessie",
       "learningTrendTooltip": "Verandering in succespercentage tussen je twee meest recente sessies",
+      "guestStatsBlur": "Log in om gedetailleerde statistieken van deze collectie te bekijken.",
       "correct": "Correct",
       "incorrect": "Onjuist",
       "notPracticedInSession": "Niet Geoefend",

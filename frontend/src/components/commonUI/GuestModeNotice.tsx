@@ -21,6 +21,7 @@ export default function GuestModeNotice() {
       px={3}
       py={1}
       borderColor="orange.200"
+      borderWidth="1px"
       color="orange.700"
       fontSize="sm"
       fontWeight="medium"

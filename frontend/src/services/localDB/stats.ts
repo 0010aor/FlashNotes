@@ -4,8 +4,8 @@ import * as practiceSessions from './practiceSessions'
 
 export async function getLocalCollectionStats(collectionId: string) {
   const collection = await collections.getLocalCollectionById(collectionId)
-  const cardList = await cards.getLocalCardsForCollection(collectionId)
-  const sessionList = await practiceSessions.getLocalPracticeSessions(collectionId)
+  const cardList = await cards.getLocalCardsForCollection(collectionId, 5)
+  const sessionList = await practiceSessions.getLocalPracticeSessions(collectionId, 30)
 
   return {
     collection_info: {

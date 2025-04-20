@@ -59,7 +59,8 @@
       "comparedToPrevious": "compared to previous",
       "notEnoughData": "not enough data",
       "successRateTooltip": "Percentage of correct answers in your most recent session",
-      "learningTrendTooltip": "Change in success rate between your two most recent sessions"
+      "learningTrendTooltip": "Change in success rate between your two most recent sessions",
+      "guestStatsBlur": "Sign in to see detailed statistics for this collection."
     },
     "guestModeNotice": {
       "message": "You are in Guest mode.",

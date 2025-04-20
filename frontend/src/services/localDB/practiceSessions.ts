@@ -21,7 +21,15 @@ export const addLocalPracticeSession = async (
 
 export const getLocalPracticeSessions = async (
   collectionId: string,
+  limit?: number,
 ): Promise<LocalPracticeSession[]> => {
+  if (limit && limit > 0) {
+    return await db.practice_sessions
+      .where('collectionId')
+      .equals(collectionId)
+      .limit(limit)
+      .sortBy('startedAt')
+  }
   return await db.practice_sessions.where('collectionId').equals(collectionId).sortBy('startedAt')
 }
 
