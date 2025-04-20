@@ -61,16 +61,25 @@ export const getUnsyncedPracticeSessions = async (): Promise<LocalPracticeSessio
 }
 
 export const startLocalPracticeSession = async (collectionId: string) => {
-  const cards = await db.cards.where('collectionId').equals(collectionId).toArray()
-  const session = await addLocalPracticeSession(collectionId, cards.length)
-  for (const card of cards) {
-    await db.practice_cards.add({
-      id: uuidv4(),
-      sessionId: session.id,
-      cardId: card.id,
-      isPracticed: false,
-      synced: false,
-    })
+  const session = await db.practice_sessions
+    .where('collectionId')
+    .equals(collectionId)
+    .filter((session) => session.isCompleted === false)
+    .last()
+
+  if (session) {
+    return session
   }
-  return session
+
+  const cards = await db.cards.where('collectionId').equals(collectionId).toArray()
+  const newSession = await addLocalPracticeSession(collectionId, cards.length)
+  const practiceCards = cards.map((card) => ({
+    id: uuidv4(),
+    sessionId: newSession.id,
+    cardId: card.id,
+    isPracticed: false,
+    synced: false,
+  }))
+  await db.practice_cards.bulkAdd(practiceCards)
+  return newSession
 }

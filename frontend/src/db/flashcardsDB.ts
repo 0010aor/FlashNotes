@@ -49,7 +49,7 @@ export class FlashcardsDB extends Dexie {
 
   constructor() {
     super('FlashcardsDB')
-    this.version(2).stores({
+    this.version(1).stores({
       collections: 'id, name, updatedAt, synced',
       cards: 'id, collectionId, updatedAt, synced',
       practice_sessions: 'id, collectionId, startedAt, isCompleted, synced',

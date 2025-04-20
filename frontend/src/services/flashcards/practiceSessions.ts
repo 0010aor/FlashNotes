@@ -1,12 +1,10 @@
 import { FlashcardsService } from '@/client'
 import { isGuest } from '../../hooks/useAuth'
-import * as cards from '../localDB/cards'
 import * as practiceSessions from '../localDB/practiceSessions'
 
 export const startPracticeSession = async (collectionId: string) => {
   if (isGuest()) {
-    const localCards = await cards.getLocalCardsForCollection(collectionId)
-    return await practiceSessions.addLocalPracticeSession(collectionId, localCards.length)
+    return await practiceSessions.startLocalPracticeSession(collectionId)
   }
   return await FlashcardsService.startPracticeSession({
     requestBody: { collection_id: collectionId },
