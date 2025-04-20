@@ -17,7 +17,6 @@ export default function CardEditor({ side, isFlipped, frontEditor, backEditor }:
     backfaceVisibility: 'hidden' as const,
     borderRadius: 'lg',
     borderWidth: '1px',
-    boxShadow: 'sm',
     borderColor: 'bg.200',
     cursor: 'text',
   }

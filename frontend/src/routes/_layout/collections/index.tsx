@@ -20,6 +20,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { VscAdd } from 'react-icons/vsc'
+import { isGuest } from '../../../hooks/useAuth'
 
 export type CollectionListItemType = Collection | (LocalCollection & { cards: LocalCard[] })
 
@@ -108,6 +109,7 @@ function Collections() {
       label: t('general.actions.createAiCollection'),
       onClick: () => setIsAiDialogOpen(true),
       bgColor: 'fbuttons.orange',
+      disabled: isGuest(),
     },
   ]
 
