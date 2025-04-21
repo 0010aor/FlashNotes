@@ -20,8 +20,12 @@
     - [**React**](https://react.dev) with TypeScript, hooks, and Vite for a modern frontend stack.
         - [Chakra UI](https://chakra-ui.com) for UI components.
         - Generated client for consuming the backend API.
+    - [Dexie.js](https://dexie.org/) and IndexedDB for offline/guest mode support and local data storage.
 - **Authentication:**
     - JWT (JSON Web Token) authentication.
+- **Guest Mode & Offline Support:**
+    - Users can try the app instantly as a guest, with all data stored locally in the browser (IndexedDB).
+    - Guest Mode users can create, edit, and practice flashcards, but data will not sync across devices.
 - **Testing:**
     - [Pytest](https://pytest.org) for backend testing.
 
@@ -42,11 +46,15 @@ Explore the API documentation at [http://127.0.0.1:8000/docs](http://127.0.0.1:8
 │   └── tests/            # Backend tests
 └── frontend/
     ├── src/
-    │   ├── components/   # Reusable UI components
+    │   ├── components/   # Reusable UI components (cards, collections, stats, etc.)
+    │   ├── db/           # IndexedDB (Dexie) setup for guest/offline mode
     │   ├── hooks/        # Custom React hooks
     │   ├── routes/       # Application routes
+    │   ├── services/
+    │   │   ├── flashcards/   # API and localDB logic for cards, collections, practice
+    │   │   └── localDB/      # Local (IndexedDB) CRUD for guest/offline mode
     │   └── client/       # Generated API client
-    └── public/           # Static assets
+    └── public/           # Static assets and translations
 ```
 
 ## Setup Instructions

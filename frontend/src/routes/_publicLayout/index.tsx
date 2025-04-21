@@ -56,7 +56,7 @@ function LandingPage() {
                   <DefaultButton size="lg">{t('general.actions.login')}</DefaultButton>
                 </Link>
                 <DefaultButton size="lg" onClick={handleTryAsGuest}>
-                  {t('general.actions.getStarted', 'Get Started')}
+                  {t('general.actions.tryOffline', 'Try Offline')}
                 </DefaultButton>
               </Stack>
             )}
@@ -86,8 +86,8 @@ function LandingPage() {
         </Heading>
         <Stack direction={{ base: 'column', md: 'row' }} gap={8} align="stretch">
           <Feature
-            title={t('routes.publicLayout.index.simpleDesign')}
-            description={t('routes.publicLayout.index.simpleDesignDescription')}
+            title={t('routes.publicLayout.index.offlineMode')}
+            description={t('routes.publicLayout.index.offlineModeDescription')}
           />
           <Feature
             title={t('routes.publicLayout.index.aiGeneration')}

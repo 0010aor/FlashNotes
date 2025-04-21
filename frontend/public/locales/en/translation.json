@@ -60,11 +60,11 @@
       "notEnoughData": "not enough data",
       "successRateTooltip": "Percentage of correct answers in your most recent session",
       "learningTrendTooltip": "Change in success rate between your two most recent sessions",
-      "guestStatsBlur": "Sign in to see detailed statistics for this collection."
+      "guestStatsBlur": "Sign in to see detailed statistics."
     },
     "guestModeNotice": {
-      "message": "You are in Guest mode.",
-      "messageWithAction": "You are in Guest mode. Login to save your progress."
+      "message": "You are currently offline.",
+      "messageWithAction": "You are offline. Data may be lost. Log in to save your progress."
     }
   },
   "general": {
@@ -83,7 +83,6 @@
       "deleteCard": "Delete Card",
       "doNotKnow": "Don't know",
       "repeatPassword": "Repeat Password",
-      "getStarted": "Get started",
       "goHome": "Go Home",
       "login": "Log In",
       "loading": "Loading",
@@ -99,7 +98,8 @@
       "rename": "Rename",
       "editCard": "Edit Card",
       "practice": "Practice",
-      "viewStats": "View Statistics"
+      "viewStats": "View Statistics",
+      "tryOffline": "Try Offline"
     },
     "errors": {
       "collectionNotFound": "Collection not found",
@@ -165,8 +165,8 @@
       "index": {
         "title": "Learn Better with FlashNotes",
         "description": "A simple flashcard app that helps you learn. Create cards,practice regularly, and remember what matters.",
-        "simpleDesign": "Simple Design",
-        "simpleDesignDescription": "A clean interface that helps you focus on learning.",
+        "offlineMode": "Offline Mode",
+        "offlineModeDescription": "Use FlashNotes anywhere, even without an internet connection. Guest mode and all your data work fully offline!",
         "aiGeneration": "AI Generation",
         "aiGenerationDescription": "Create flashcards automatically with AI to save time and enhance learning.",
         "responsiveDesign": "Responsive Design",
