@@ -25,7 +25,7 @@ interface UserRegisterForm extends UserRegister {
 
 function SignUp() {
   const { t } = useTranslation()
-  const { signUpMutation } = useAuth()
+  const { signUpMutation, error, resetError } = useAuth()
   const {
     register,
     handleSubmit,
@@ -43,6 +43,8 @@ function SignUp() {
   })
 
   const onSubmit: SubmitHandler<UserRegisterForm> = (data) => {
+    if (isSubmitting) return
+    resetError()
     signUpMutation.mutate(data)
   }
 
@@ -89,6 +91,11 @@ function SignUp() {
               {errors.email && (
                 <Text color="red.500" fontSize="sm">
                   {errors.email.message}
+                </Text>
+              )}
+              {error && (
+                <Text color="red.500" fontSize="sm">
+                  {error}
                 </Text>
               )}
             </Field.Root>

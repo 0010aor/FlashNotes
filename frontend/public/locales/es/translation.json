@@ -110,6 +110,7 @@
       "invalidCredentials": "Credenciales inválidas",
       "invalidName": "Nombre inválido",
       "invalidEmail": "Dirección de correo electrónico inválida",
+      "emailAlreadyInUse": "Esa dirección de correo electrónico ya existe",
       "loginFailed": "Error al iniciar sesión",
       "passwordConfirmationIsRequired": "Confirmación de contraseña es requerida",
       "passwordsDoNotMatch": "Las contraseñas no coinciden",

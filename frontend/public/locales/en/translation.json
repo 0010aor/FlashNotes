@@ -112,6 +112,7 @@
       "invalidCredentials": "Invalid credentials",
       "invalidName": "Invalid name",
       "invalidEmail": "Invalid email address",
+      "emailAlreadyInUse": "Email is already in use",
       "loginFailed": "Login failed",
       "passwordConfirmationIsRequired": "Password confirmation is required",
       "passwordsDoNotMatch": "The passwords do not match",

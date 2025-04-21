@@ -32,7 +32,7 @@ def register_user(session: SessionDep, user_in: UserRegister) -> Any:
     user = services.get_user_by_email(session=session, email=user_in.email)
     if user:
         raise HTTPException(
-            status_code=400,
+            status_code=409,
             detail="The user with this email already exists in the system",
         )
     user_create = UserCreate.model_validate(user_in)

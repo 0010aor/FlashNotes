@@ -110,6 +110,7 @@
       "invalidCredentials": "Ongeldige inloggegevens",
       "invalidName": "Ongeldige naam",
       "invalidEmail": "Ongeldig e-mailadres",
+      "emailAlreadyInUse": "Dat e-mailadres bestaat al",
       "loginFailed": "Inloggen mislukt",
       "passwordConfirmationIsRequired": "Bevestiging van wachtwoord is vereist",
       "passwordsDoNotMatch": "De wachtwoorden komen niet overeen",
