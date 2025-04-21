@@ -444,7 +444,7 @@ export class StatsService {
    * Get Collection Statistics Endpoint
    * @param data The data for the request.
    * @param data.collectionId
-   * @param data.days Number of days of history to include
+   * @param data.limit Maximum number of recent sessions to return
    * @returns CollectionStats Successful Response
    * @throws ApiError
    */
@@ -458,7 +458,7 @@ export class StatsService {
         collection_id: data.collectionId,
       },
       query: {
-        days: data.days,
+        limit: data.limit,
       },
       errors: {
         422: 'Validation Error',

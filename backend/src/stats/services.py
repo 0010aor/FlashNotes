@@ -48,9 +48,10 @@ def _get_recent_sessions(
         select(PracticeSession)
         .where(
             PracticeSession.collection_id == collection_id,
+            PracticeSession.is_completed,
             PracticeSession.created_at >= recent_date,
         )
-        .order_by(PracticeSession.created_at.asc())
+        .order_by(PracticeSession.created_at.desc())
         .limit(limit)
     )
 
@@ -115,12 +116,22 @@ def _get_difficult_cards(
 
 
 def get_collection_stats(
-    session: Session, collection_id: uuid.UUID, max_days: int = 30
+    session: Session, collection_id: uuid.UUID, limit: int = 30
 ) -> CollectionStats:
-    recent_date = datetime.now() - timedelta(days=max_days)
+    # Use a fixed 90-day window for data relevance and database performance
+    recent_date = datetime.now() - timedelta(days=90)
 
     return CollectionStats(
         collection_info=_get_collection_basic_info(session, collection_id),
-        recent_sessions=_get_recent_sessions(session, collection_id, recent_date),
-        difficult_cards=_get_difficult_cards(session, collection_id, recent_date),
+        recent_sessions=_get_recent_sessions(
+            session=session,
+            collection_id=collection_id,
+            recent_date=recent_date,
+            limit=limit,
+        ),
+        difficult_cards=_get_difficult_cards(
+            session=session,
+            collection_id=collection_id,
+            recent_date=recent_date,
+        ),
     )
