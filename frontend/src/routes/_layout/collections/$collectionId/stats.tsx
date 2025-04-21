@@ -28,7 +28,7 @@ function StatsPage() {
     queryFn: () =>
       StatsService.getCollectionStatisticsEndpoint({
         collectionId,
-        limit: 7,
+        limit: 30,
       }),
   })
 
