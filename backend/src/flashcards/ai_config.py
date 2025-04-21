@@ -42,3 +42,20 @@ def get_flashcard_config(schema_type) -> types.GenerateContentConfig:
         response_schema=collection_response_schema(schema_type),
         system_instruction=settings.COLLECTION_GENERATION_PROMPT,
     )
+
+def get_card_config(schema_type) -> types.GenerateContentConfig:
+    # Define a schema like the following:
+    """"
+    type=schema_type.Type.OBJECT,
+    required=["front", "back"],
+    properties={
+        "front": schema_type.Schema(
+            type=schema_type.Type.STRING,
+        ),
+        "back": schema_type.Schema(
+            type=schema_type.Type.STRING,
+        ),
+    },
+    """
+    # maybe extract and reuse for other schema?
+    pass

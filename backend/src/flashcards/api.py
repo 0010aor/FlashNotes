@@ -12,6 +12,7 @@ from .exceptions import EmptyCollectionError
 from .schemas import (
     Card,
     CardCreate,
+    CardBase,
     CardList,
     CardUpdate,
     Collection,
@@ -125,15 +126,22 @@ def read_cards(
     return CardList(data=cards, count=count)
 
 
-@router.post("/collections/{collection_id}/cards/", response_model=Card)
+@router.post("/collections/{collection_id}/cards/", response_model=Card | CardBase)
 def create_card(
     session: SessionDep,
     current_user: CurrentUser,
     collection_id: uuid.UUID,
     card_in: CardCreate,
+    provider: GeminiProviderDep
 ) -> Any:
     if not services.check_collection_access(session, collection_id, current_user.id):
         raise HTTPException(status_code=404, detail="Collection not found")
+    if card_in.ai_prompt:
+        # Call AI service and return front + back model:
+        # Define new schema for cards output from Gemini and configure config call
+        # Create model from output and validate model. Apply correct error handling
+        # Return model to frontend
+        return services.generate_ai_flashcard(card_in.prompt, provider)
     return services.create_card(
         session=session, collection_id=collection_id, card_in=card_in
     )

@@ -24,7 +24,7 @@ class CardBase(SQLModel):
 
 
 class CardCreate(CardBase):
-    pass
+    ai_prompt: str | None = None
 
 
 class CardUpdate(CardBase):
