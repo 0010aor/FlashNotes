@@ -25,13 +25,13 @@ function StatsPage() {
     isLoading,
     error,
   } = useQuery<CollectionStats>({
-    queryKey: ['collectionStats', collectionId, 7],
+    queryKey: ['collectionStats', collectionId, 30],
     queryFn: () =>
       isGuest()
         ? getLocalCollectionStats(collectionId)
         : StatsService.getCollectionStatisticsEndpoint({
             collectionId,
-            days: 7,
+            limit: 30,
           }),
   })
 

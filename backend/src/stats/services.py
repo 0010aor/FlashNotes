@@ -1,5 +1,4 @@
 import uuid
-from datetime import datetime, timedelta
 
 from sqlalchemy import Float, case, func
 from sqlmodel import Session, select
@@ -41,14 +40,14 @@ def _get_collection_basic_info(
 
 
 def _get_recent_sessions(
-    session: Session, collection_id: uuid.UUID, recent_date: datetime, limit: int = 10
+    session: Session, collection_id: uuid.UUID, limit: int = 10
 ) -> list[PracticeSessionStats]:
     """Get recent practice sessions using an optimized query."""
     statement = (
         select(PracticeSession)
         .where(
             PracticeSession.collection_id == collection_id,
-            PracticeSession.created_at >= recent_date,
+            PracticeSession.is_completed,
         )
         .order_by(PracticeSession.created_at.asc())
         .limit(limit)
@@ -71,7 +70,6 @@ def _get_recent_sessions(
 def _get_difficult_cards(
     session: Session,
     collection_id: uuid.UUID,
-    recent_date: datetime,
     min_attempts: int = 2,
     limit: int = 5,
 ) -> list[CardBasicStats]:
@@ -91,7 +89,6 @@ def _get_difficult_cards(
             PracticeSession.is_completed,
             PracticeCard.is_practiced,
             PracticeCard.is_correct.is_not(None),
-            PracticeSession.created_at >= recent_date,
         )
         .group_by(Card.id, Card.front)
         .having(func.count(PracticeCard.id) >= min_attempts)
@@ -115,12 +112,17 @@ def _get_difficult_cards(
 
 
 def get_collection_stats(
-    session: Session, collection_id: uuid.UUID, max_days: int = 30
+    session: Session, collection_id: uuid.UUID, limit: int = 30
 ) -> CollectionStats:
-    recent_date = datetime.now() - timedelta(days=max_days)
-
     return CollectionStats(
         collection_info=_get_collection_basic_info(session, collection_id),
-        recent_sessions=_get_recent_sessions(session, collection_id, recent_date),
-        difficult_cards=_get_difficult_cards(session, collection_id, recent_date),
+        recent_sessions=_get_recent_sessions(
+            session=session,
+            collection_id=collection_id,
+            limit=limit,
+        ),
+        difficult_cards=_get_difficult_cards(
+            session=session,
+            collection_id=collection_id,
+        ),
     )

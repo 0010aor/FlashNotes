@@ -10,4 +10,4 @@ mv openapi.json frontend/
 cd frontend
 pnpm exec biome format --write openapi.json
 pnpm run generate-client
-pnpm exec biome format --write ./src/client
+pnpm exec biome check --fix --unsafe ./src/client

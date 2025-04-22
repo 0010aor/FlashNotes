@@ -270,9 +270,9 @@ export type LoginLoginAccessTokenResponse = Token
 export type StatsGetCollectionStatisticsEndpointData = {
   collectionId: string
   /**
-   * Number of days of history to include
+   * Maximum number of recent sessions to return
    */
-  days?: number
+  limit?: number
 }
 
 export type StatsGetCollectionStatisticsEndpointResponse = CollectionStats

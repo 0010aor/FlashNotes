@@ -657,18 +657,18 @@
             "schema": { "type": "string", "format": "uuid", "title": "Collection Id" }
           },
           {
-            "name": "days",
+            "name": "limit",
             "in": "query",
             "required": false,
             "schema": {
               "type": "integer",
               "maximum": 90,
               "minimum": 1,
-              "description": "Number of days of history to include",
+              "description": "Maximum number of recent sessions to return",
               "default": 30,
-              "title": "Days"
+              "title": "Limit"
             },
-            "description": "Number of days of history to include"
+            "description": "Maximum number of recent sessions to return"
           }
         ],
         "responses": {

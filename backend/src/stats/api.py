@@ -17,8 +17,8 @@ def get_collection_statistics_endpoint(
     session: SessionDep,
     current_user: CurrentUser,
     collection_id: uuid.UUID,
-    days: int = Query(
-        30, description="Number of days of history to include", ge=1, le=90
+    limit: int = Query(
+        30, description="Maximum number of recent sessions to return", ge=1, le=90
     ),
 ) -> Any:
     if not check_collection_access(session, collection_id, current_user.id):
@@ -28,7 +28,7 @@ def get_collection_statistics_endpoint(
         statistics = get_collection_stats(
             session=session,
             collection_id=collection_id,
-            max_days=days,
+            limit=limit,
         )
         return statistics
     except ValueError as e:
