@@ -66,6 +66,7 @@ class Settings(BaseSettings):
     AI_MODEL: str | None = None
 
     COLLECTION_GENERATION_PROMPT: str | None = None
+    CARD_GENERATION_PROMPT: str | None = None
 
     @computed_field  # type: ignore[prop-decorator]
     @property

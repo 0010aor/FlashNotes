@@ -387,12 +387,6 @@ def get_card_by_id(session: Session, card_id: uuid.UUID) -> Card | None:
     statement = select(Card).where(Card.id == card_id)
     return session.exec(statement).first()
 
-async def _generate_ai_flashcard(provider, prompt: str) -> CardBase:
-    # get card config
-    # get raw response, validate model and return
-    content_config = get_card_config(genai.types)
-    raw_response = await provider.run_model(content_config, prompt)
-    pass
 
 async def _generate_ai_flashcards(provider, prompt: str) -> AIFlashcardCollection:
     content_config = get_flashcard_config(genai.types)
@@ -449,6 +443,27 @@ async def generate_ai_collection(
 async def generate_ai_flashcard(
     prompt: str, provider
 ) -> CardBase:
-    # call generate_ai_flashcard
-    # return output from gemini
-    return await _generate_ai_flashcard(provider, prompt)
+    """
+    Generates a flashcard using AI.
+
+    Args:
+        prompt (str): the prompt that should create the flashcard using AI.
+        provider: the AI provider that generates the flashcard.
+
+    Returns:
+        CardBase: the model containing front (str) and back (str) of the flashcard.
+    """
+    content_config = get_card_config(genai.types)
+    raw_response = await provider.run_model(content_config, prompt)
+    try:
+        json_data = json.loads(raw_response)
+        if "front" not in json_data or "back" not in json_data:
+            raise AIGenerationError("AI response missing 'front' or 'back' field")
+        card = CardBase(front=json_data["front"], back=json_data["back"])
+        return card
+    except json.JSONDecodeError:
+        raise AIGenerationError("Failed to parse AI response as JSON")
+    except ValidationError as e:
+        raise AIGenerationError(f"Invalid AI response format: {str(e)}")
+    except Exception as e:
+        raise AIGenerationError(f"Error processing AI response: {str(e)}")

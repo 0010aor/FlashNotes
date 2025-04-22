@@ -1,4 +1,5 @@
 import uuid
+import asyncio
 from typing import Any, Literal
 
 from fastapi import APIRouter, HTTPException
@@ -127,7 +128,7 @@ def read_cards(
 
 
 @router.post("/collections/{collection_id}/cards/", response_model=Card | CardBase)
-def create_card(
+async def create_card(
     session: SessionDep,
     current_user: CurrentUser,
     collection_id: uuid.UUID,
@@ -137,13 +138,12 @@ def create_card(
     if not services.check_collection_access(session, collection_id, current_user.id):
         raise HTTPException(status_code=404, detail="Collection not found")
     if card_in.ai_prompt:
-        # Call AI service and return front + back model:
-        # Define new schema for cards output from Gemini and configure config call
-        # Create model from output and validate model. Apply correct error handling
-        # Return model to frontend
-        return services.generate_ai_flashcard(card_in.prompt, provider)
-    return services.create_card(
-        session=session, collection_id=collection_id, card_in=card_in
+        return await services.generate_ai_flashcard(card_in.ai_prompt, provider)
+    # don't call sync functions in an async function.
+    return await asyncio.to_thread(lambda: 
+        services.create_card(
+            session=session, collection_id=collection_id, card_in=card_in
+        )
     )
 
 
