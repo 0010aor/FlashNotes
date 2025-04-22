@@ -1,68 +1,83 @@
-import uuid
-
-from fastapi.testclient import TestClient
-from sqlmodel import Session
+import pytest
 
 from src.core.config import settings
-from src.flashcards.models import Card, Collection, PracticeCard, PracticeSession
-from src.users.schemas import UserCreate
-from src.users import services as user_services
-from tests.utils.utils import random_email, random_lower_string
-from tests.utils.user import user_authentication_headers
+from src.flashcards.models import Collection
+from tests.stats.utils import create_cards, create_practice_cards, create_sessions
+from tests.utils.user import authentication_token_from_email, create_random_user
 
 
-def create_test_data(db: Session, user_id: uuid.UUID) -> Collection:
-    collection = Collection(name="Test Collection", user_id=user_id)
-    db.add(collection)
-    db.flush()
-
-    cards = []
-    for i in range(5):
-        card = Card(front=f"Front {i}", back=f"Back {i}",
-                    collection_id=collection.id)
-        db.add(card)
-        cards.append(card)
-
-    for i in range(10):
-        session = PracticeSession(
-            user_id=user_id,
-            collection_id=collection.id,
-            total_cards=len(cards),
-            cards_practiced=len(cards),
-            correct_answers=3,
-            is_completed=True,
-        )
-        db.add(session)
+@pytest.fixture
+def collection_with_sessions(db):
+    def _create(user_id, num_cards=5, num_sessions=10):
+        collection = Collection(name="Test Collection", user_id=user_id)
+        db.add(collection)
         db.flush()
+        cards = create_cards(db, collection, num_cards)
+        sessions = create_sessions(db, user_id, collection, num_sessions, num_cards)
+        create_practice_cards(db, sessions, cards)
+        return collection
 
-        for j, card in enumerate(cards):
-            pc = PracticeCard(
-                session_id=session.id,
-                card_id=card.id,
-                is_practiced=True,
-                is_correct=(j % 2 == 0),
-            )
-            db.add(pc)
-
-    db.commit()
-    return collection
+    return _create
 
 
-def test_stats_endpoint_with_limit(client: TestClient, db: Session) -> None:
-    email = random_email()
-    password = random_lower_string()
-    limit = 7
-    user_create = UserCreate(email=email, password=password)
-    user = user_services.create_user(session=db, user_create=user_create)
-    headers = user_authentication_headers(client=client, email=email,
-                                          password=password)
+@pytest.mark.parametrize("limit", [1, 10, 30])
+def test_stats_endpoint_with_various_limits(
+    client, db, collection_with_sessions, limit
+):
+    user = create_random_user(db)
+    headers = authentication_token_from_email(client=client, email=user.email, db=db)
+    collection = collection_with_sessions(user.id, num_cards=5, num_sessions=10)
 
-    collection = create_test_data(db, user.id)
-    url = f"{settings.API_V1_STR}/collections/{collection.id}/stats?limit={limit}"
+    response = client.get(
+        f"{settings.API_V1_STR}/collections/{collection.id}/stats?limit={limit}",
+        headers=headers,
+    )
 
-    response = client.get(url, headers=headers)
     assert response.status_code == 200
-
     data = response.json()
     assert len(data["recent_sessions"]) <= limit
+    assert all(session["is_completed"] for session in data["recent_sessions"])
+    created_ats = [s["created_at"] for s in data["recent_sessions"]]
+    assert created_ats == sorted(created_ats)
     assert len(data["difficult_cards"]) <= 5
+
+
+def test_stats_endpoint_default_limit(client, db, collection_with_sessions):
+    user = create_random_user(db)
+    headers = authentication_token_from_email(client=client, email=user.email, db=db)
+    collection = collection_with_sessions(user.id, num_cards=5, num_sessions=10)
+
+    response = client.get(
+        f"{settings.API_V1_STR}/collections/{collection.id}/stats", headers=headers
+    )
+
+    assert response.status_code == 200
+    data = response.json()
+    assert len(data["recent_sessions"]) <= 30
+
+
+@pytest.mark.parametrize("bad_limit", [0, 100])
+def test_stats_endpoint_limit_constraints(
+    client, db, collection_with_sessions, bad_limit
+):
+    user = create_random_user(db)
+    headers = authentication_token_from_email(client=client, email=user.email, db=db)
+    collection = collection_with_sessions(user.id, num_cards=5, num_sessions=10)
+
+    response = client.get(
+        f"{settings.API_V1_STR}/collections/{collection.id}/stats?limit={bad_limit}",
+        headers=headers,
+    )
+
+    assert response.status_code == 422
+
+
+def test_stats_endpoint_unauthorized(client, db, collection_with_sessions):
+    user = create_random_user(db)
+    collection = collection_with_sessions(user.id, num_cards=5, num_sessions=10)
+
+    response = client.get(
+        f"{settings.API_V1_STR}/collections/{collection.id}/stats", headers=None
+    )
+
+    assert response.status_code in (401, 403)
