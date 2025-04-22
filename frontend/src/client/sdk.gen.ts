@@ -191,7 +191,7 @@ export class FlashcardsService {
    * @param data The data for the request.
    * @param data.collectionId
    * @param data.requestBody
-   * @returns Card Successful Response
+   * @returns unknown Successful Response
    * @throws ApiError
    */
   public static createCard(

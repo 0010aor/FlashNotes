@@ -16,6 +16,11 @@ export type Card = {
   collection_id: string
 }
 
+export type CardBase = {
+  front: string
+  back: string
+}
+
 export type CardBasicStats = {
   id: string
   front: string
@@ -26,6 +31,7 @@ export type CardBasicStats = {
 export type CardCreate = {
   front: string
   back: string
+  ai_prompt?: string | null
 }
 
 export type CardList = {
@@ -201,7 +207,7 @@ export type FlashcardsCreateCardData = {
   requestBody: CardCreate
 }
 
-export type FlashcardsCreateCardResponse = Card
+export type FlashcardsCreateCardResponse = Card | CardBase
 
 export type FlashcardsReadCardData = {
   cardId: string

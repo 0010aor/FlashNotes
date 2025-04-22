@@ -304,7 +304,17 @@
         "responses": {
           "200": {
             "description": "Successful Response",
-            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Card" } } }
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    { "$ref": "#/components/schemas/Card" },
+                    { "$ref": "#/components/schemas/CardBase" }
+                  ],
+                  "title": "Response Flashcards-Create Card"
+                }
+              }
+            }
           },
           "422": {
             "description": "Validation Error",
@@ -725,6 +735,15 @@
         "required": ["front", "back", "id", "collection_id"],
         "title": "Card"
       },
+      "CardBase": {
+        "properties": {
+          "front": { "type": "string", "title": "Front" },
+          "back": { "type": "string", "title": "Back" }
+        },
+        "type": "object",
+        "required": ["front", "back"],
+        "title": "CardBase"
+      },
       "CardBasicStats": {
         "properties": {
           "id": { "type": "string", "format": "uuid", "title": "Id" },
@@ -739,7 +758,8 @@
       "CardCreate": {
         "properties": {
           "front": { "type": "string", "title": "Front" },
-          "back": { "type": "string", "title": "Back" }
+          "back": { "type": "string", "title": "Back" },
+          "ai_prompt": { "anyOf": [{ "type": "string" }, { "type": "null" }], "title": "Ai Prompt" }
         },
         "type": "object",
         "required": ["front", "back"],
