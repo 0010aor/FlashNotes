@@ -6,12 +6,21 @@ import * as collections from '../localDB/collections'
 export const getCollections = async () => {
   if (isGuest()) {
     const localCollections = await collections.getLocalCollections()
-    const collectionsWithCards = await Promise.all(
-      localCollections.map(async (col) => ({
-        ...col,
-        cards: await cards.getLocalCardsForCollection(col.id),
-      })),
-    )
+    if (localCollections.length === 0) return []
+
+    const collectionIds = localCollections.map((col) => col.id)
+    const allCards = await cards.getLocalCardsForCollections(collectionIds)
+
+    const cardsByCollection: Record<string, typeof allCards> = {}
+    for (const card of allCards) {
+      if (!cardsByCollection[card.collectionId]) cardsByCollection[card.collectionId] = []
+      cardsByCollection[card.collectionId].push(card)
+    }
+
+    const collectionsWithCards = localCollections.map((col) => ({
+      ...col,
+      cards: cardsByCollection[col.id] || [],
+    }))
     return collectionsWithCards
   }
   const res = await FlashcardsService.readCollections()

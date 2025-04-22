@@ -79,48 +79,9 @@ export const getUnsyncedCardsForCollection = async (collectionId: string): Promi
   return await db.cards.where({ collectionId: collectionId, synced: 0 }).toArray()
 }
 
-export async function getLocalDifficultCardsForCollection(
-  collectionId: string,
-  minAttempts = 2,
-  limit = 5,
-) {
-  // Get all sessions for the collection
-  const sessions = await db.practice_sessions.where('collectionId').equals(collectionId).toArray()
-  const sessionIds = sessions.filter((s) => s.isCompleted).map((s) => s.id)
-  if (sessionIds.length === 0) return []
-
-  // Get all practice cards for these sessions
-  const allPracticeCards = await db.practice_cards.where('sessionId').anyOf(sessionIds).toArray()
-
-  // Aggregate stats by cardId
-  const statsMap: Record<string, { total_attempts: number; correct_answers: number }> = {}
-  for (const pc of allPracticeCards) {
-    if (!pc.isPracticed || typeof pc.isCorrect !== 'boolean') continue
-    if (!statsMap[pc.cardId]) statsMap[pc.cardId] = { total_attempts: 0, correct_answers: 0 }
-    statsMap[pc.cardId].total_attempts += 1
-    if (pc.isCorrect) statsMap[pc.cardId].correct_answers += 1
-  }
-
-  // Get card info
-  const cardIds = Object.keys(statsMap)
-  const cards = await db.cards.bulkGet(cardIds)
-
-  // Build result array
-  const difficultCards = cardIds
-    .map((cardId, idx) => ({
-      id: cardId,
-      front: cards[idx]?.front || '',
-      total_attempts: statsMap[cardId].total_attempts,
-      correct_answers: statsMap[cardId].correct_answers,
-      accuracy:
-        statsMap[cardId].total_attempts > 0
-          ? statsMap[cardId].correct_answers / statsMap[cardId].total_attempts
-          : 1,
-    }))
-    .filter((card) => card.total_attempts >= minAttempts)
-    .sort((a, b) => a.accuracy - b.accuracy)
-    .slice(0, limit)
-    .map(({ accuracy, ...rest }) => rest) // Remove accuracy from final output
-
-  return difficultCards
+export const getLocalCardsForCollections = async (
+  collectionIds: string[],
+): Promise<LocalCard[]> => {
+  if (!collectionIds.length) return []
+  return await db.cards.where('collectionId').anyOf(collectionIds).toArray()
 }
