@@ -76,7 +76,7 @@ const PracticeBarChart = ({ sessions, title }: PracticeBarChartProps) => {
               ]}
               labelFormatter={(label) => {
                 return (
-                  <Text color="fg.muted" fontWeight="semibold">
+                  <Text as="span" color="fg.muted" fontWeight="semibold">
                     {label}
                   </Text>
                 )
