@@ -64,8 +64,10 @@ async def create_collection(
         except AIGenerationError as e:
             raise HTTPException(status_code=500, detail=str(e))
     else:
-        return services.create_collection(
-            session=session, collection_in=collection_in, user_id=current_user.id
+        return await asyncio.to_thread(lambda: 
+            services.create_collection(
+                session=session, collection_in=collection_in, user_id=current_user.id
+            )
         )
 
 
