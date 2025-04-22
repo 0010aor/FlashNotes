@@ -28,7 +28,6 @@ const MasteryDonutChart = ({ recentSessions, collectionInfo, title }: MasteryDon
   if (latestSession && totalCards > 0) {
     const correctCount = latestSession.correct_answers
     const incorrectCount = latestSession.cards_practiced - latestSession.correct_answers
-    const notPracticedCount = Math.max(0, totalCards - latestSession.cards_practiced)
 
     sessionBreakdownData = [
       {
@@ -40,11 +39,6 @@ const MasteryDonutChart = ({ recentSessions, collectionInfo, title }: MasteryDon
         name: t('components.stats.incorrect'),
         value: incorrectCount,
         color: 'var(--chakra-colors-stat-negative)',
-      },
-      {
-        name: t('components.stats.notPracticedInSession'),
-        value: notPracticedCount,
-        color: 'var(--chakra-colors-stat-neutral)',
       },
     ].filter((item) => item.value >= 0)
   } else if (totalCards > 0) {
