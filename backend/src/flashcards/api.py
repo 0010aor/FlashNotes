@@ -141,7 +141,6 @@ async def create_card(
         raise HTTPException(status_code=404, detail="Collection not found")
     if card_in.ai_prompt:
         return await services.generate_ai_flashcard(card_in.ai_prompt, provider)
-    # don't call sync functions in an async function.
     return await asyncio.to_thread(lambda: 
         services.create_card(
             session=session, collection_id=collection_id, card_in=card_in
