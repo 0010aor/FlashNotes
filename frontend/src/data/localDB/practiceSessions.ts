@@ -69,7 +69,6 @@ export const startLocalPracticeSession = async (
 ): Promise<LocalPracticeSession> => {
   const now = Date.now()
   const existingSession = await getUncompletedSession(collectionId)
-  console.log('existingSession', existingSession)
   if (existingSession) {
     if (existingSession.cardsPracticed === 0) {
       await deleteSessionAndPracticeCards(existingSession.id)

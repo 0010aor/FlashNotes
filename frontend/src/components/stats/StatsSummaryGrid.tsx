@@ -43,11 +43,8 @@ interface StatsSummaryGridProps {
 const StatsSummaryGrid = ({ collectionInfo, recentSessions }: StatsSummaryGridProps) => {
   const { t } = useTranslation()
 
-  const latestSession = recentSessions.length > 0 ? recentSessions[0] : null
-  const previousSession = recentSessions.length > 1 ? recentSessions[1] : null
-
   const averageAccuracy = calculateAverageAccuracy(recentSessions)
-  const learningTrend = calculateLearningTrend(latestSession, previousSession)
+  const learningTrend = calculateLearningTrend(recentSessions)
 
   const formattedTrend =
     learningTrend !== null ? `${learningTrend > 0 ? '+' : ''}${learningTrend}%` : '-'

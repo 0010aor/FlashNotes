@@ -18,13 +18,12 @@ export const calculateSessionSuccessRate = (
   return Math.round((session.correct_answers / session.cards_practiced) * 100)
 }
 
-export const calculateLearningTrend = (
-  latestSession: PracticeSessionStats | null,
-  previousSession: PracticeSessionStats | null,
-): number | null => {
-  const latestRate = calculateSessionSuccessRate(latestSession)
-  const previousRate = calculateSessionSuccessRate(previousSession)
-
-  if (latestRate === null || previousRate === null) return null
-  return latestRate - previousRate
+export function calculateLearningTrend(
+  sessions: PracticeSessionStats[] | undefined,
+): number | null {
+  if (!sessions || sessions.length < 2) return null
+  const firstRate = calculateSessionSuccessRate(sessions[0])
+  const lastRate = calculateSessionSuccessRate(sessions[sessions.length - 1])
+  if (firstRate === null || lastRate === null) return null
+  return lastRate - firstRate
 }

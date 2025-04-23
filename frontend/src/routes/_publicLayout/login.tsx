@@ -61,7 +61,17 @@ function Login() {
       gap={4}
       centerContent
     >
-      <Image src={Logo} alt="Logo" height="auto" maxW="2xs" alignSelf="center" mb={4} />
+      <Link to="/" style={{ display: 'flex', justifyContent: 'center' }}>
+        <Image
+          src={Logo}
+          alt="Logo"
+          height="auto"
+          maxW="2xs"
+          alignSelf="center"
+          mb={4}
+          cursor="pointer"
+        />
+      </Link>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Fieldset.Root maxW="sm">
           <Fieldset.Content>

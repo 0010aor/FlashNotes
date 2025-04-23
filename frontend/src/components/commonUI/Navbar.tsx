@@ -24,6 +24,7 @@ function Navbar() {
         align="center"
         zIndex="1000"
         pointerEvents="none"
+        justifyContent="space-between"
       >
         <Link to="/collections" style={{ pointerEvents: 'auto' }}>
           <IconButton variant="ghost" aria-label="Home" size="md" _hover={{ bg: 'none' }}>
@@ -31,20 +32,7 @@ function Navbar() {
           </IconButton>
         </Link>
 
-        <Box flex={{ base: 0, md: 1 }} />
-
-        {isGuest && (
-          <Box
-            flex={{ base: 1, md: 'none' }}
-            display="flex"
-            justifyContent={{ base: 'center', md: 'flex-end' }}
-            alignItems="center"
-            pointerEvents="auto"
-            mr={{ base: 0, md: 2 }}
-          >
-            <GuestModeNotice />
-          </Box>
-        )}
+        {isGuest && <GuestModeNotice />}
 
         <IconButton
           variant="ghost"

@@ -55,7 +55,8 @@ export class FlashcardsDB extends Dexie {
       collections: 'id, name, updatedAt, synced',
       cards: 'id, collectionId, updatedAt, synced',
       practice_sessions: 'id, collectionId, startedAt, isCompleted, synced',
-      practice_cards: 'id, sessionId, cardId, isPracticed, practicedAt, synced',
+      practice_cards:
+        '++id, sessionId, cardId, [sessionId+cardId], isPracticed, practicedAt, synced',
     })
   }
 }

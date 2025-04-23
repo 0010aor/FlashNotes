@@ -56,7 +56,7 @@
       "lastSession": "Last session",
       "noRecentSessions": "No recent sessions",
       "learningTrend": "Learning Trend",
-      "comparedToPrevious": "compared to previous",
+      "comparedToPrevious": "compared to first trial",
       "notEnoughData": "not enough data",
       "successRateTooltip": "Percentage of correct answers in your most recent session",
       "learningTrendTooltip": "Change in success rate between your two most recent sessions",
