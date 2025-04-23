@@ -7,6 +7,7 @@ import { PostHogProvider } from 'posthog-js/react'
 import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
 import { ApiError, OpenAPI } from './client'
+import { AuthProvider } from './hooks/useAuthContext'
 import { routeTree } from './routeTree.gen'
 import { system } from './theme'
 
@@ -48,19 +49,21 @@ if (rootElement && !rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement)
   root.render(
     <StrictMode>
-      <ChakraProvider value={system}>
-        <ColorModeProvider>
-          <QueryClientProvider client={queryClient}>
-            {posthogConfig.enabled ? (
-              <PostHogProvider apiKey={posthogApiKey} options={posthogConfig.options}>
+      <AuthProvider>
+        <ChakraProvider value={system}>
+          <ColorModeProvider>
+            <QueryClientProvider client={queryClient}>
+              {posthogConfig.enabled ? (
+                <PostHogProvider apiKey={posthogApiKey} options={posthogConfig.options}>
+                  <RouterProvider router={router} />
+                </PostHogProvider>
+              ) : (
                 <RouterProvider router={router} />
-              </PostHogProvider>
-            ) : (
-              <RouterProvider router={router} />
-            )}
-          </QueryClientProvider>
-        </ColorModeProvider>
-      </ChakraProvider>
+              )}
+            </QueryClientProvider>
+          </ColorModeProvider>
+        </ChakraProvider>
+      </AuthProvider>
     </StrictMode>,
   )
 }

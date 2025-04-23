@@ -1,16 +1,16 @@
 import { HStack, Text } from '@chakra-ui/react'
 import { useNavigate } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
-import { setGuestMode } from '../../hooks/useAuth'
+import { useAuthContext } from '../../hooks/useAuthContext'
 import { DefaultButton } from './Button'
 
 export default function GuestModeNotice() {
   const navigate = useNavigate()
   const { t } = useTranslation()
+  const { logout } = useAuthContext()
 
   const handleLogin = () => {
-    localStorage.removeItem('access_token')
-    setGuestMode(false)
+    logout()
     navigate({ to: '/login' })
   }
 

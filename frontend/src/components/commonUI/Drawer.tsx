@@ -15,7 +15,7 @@ import useAuth from '@/hooks/useAuth'
 import { getCollections } from '@/services/flashcards/collections'
 import { HStack, IconButton, Image, List, Spinner, Text, VStack } from '@chakra-ui/react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { Link } from '@tanstack/react-router'
+import { Link, useNavigate } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { FiLogOut, FiMoon, FiSun } from 'react-icons/fi'
 import { DefaultButton } from './Button'
@@ -60,6 +60,7 @@ function Drawer({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: bool
   const queryClient = useQueryClient()
   const currentUser = queryClient.getQueryData<{ email: string }>(['currentUser'])
   const flashcardsService = { getCollections }
+  const navigate = useNavigate()
 
   const { data, isLoading } = useQuery({
     queryKey: ['collections'],
@@ -74,6 +75,7 @@ function Drawer({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: bool
   const handleLogout = async () => {
     logout()
     setIsOpen(false)
+    navigate({ to: '/' })
   }
 
   return (
