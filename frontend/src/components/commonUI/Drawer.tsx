@@ -11,7 +11,7 @@ import {
   DrawerRoot,
 } from '@/components/ui/drawer'
 import useAuth from '@/hooks/useAuth'
-import { getCollections } from '@/services/flashcards/collections'
+import { getCollections } from '@/services/collections'
 import { HStack, IconButton, Image, List, Spinner, Text, VStack } from '@chakra-ui/react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { Link, useNavigate } from '@tanstack/react-router'

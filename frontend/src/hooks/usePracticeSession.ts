@@ -3,7 +3,7 @@ import {
   getNextPracticeCard,
   startPracticeSession,
   submitPracticeCardResult,
-} from '@/services/flashcards/practiceSessions'
+} from '@/services/practiceSessions'
 import { useCallback, useRef, useState } from 'react'
 
 interface PracticeSessionState {

@@ -2,7 +2,7 @@ import { toaster } from '@/components/ui/toaster'
 import { useQueryClient } from '@tanstack/react-query'
 import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { createCard, getCardById, updateCard } from '../services/flashcards/cards'
+import { createCard, getCardById, updateCard } from '../services/cards'
 
 interface CardData {
   front: string

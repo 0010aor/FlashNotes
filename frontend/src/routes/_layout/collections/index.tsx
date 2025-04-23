@@ -12,7 +12,7 @@ import {
   deleteCollection as deleteCollectionApi,
   getCollections,
   updateCollection,
-} from '@/services/flashcards/collections'
+} from '@/services/collections'
 import { Stack, Text } from '@chakra-ui/react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
