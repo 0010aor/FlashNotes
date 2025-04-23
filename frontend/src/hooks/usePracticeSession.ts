@@ -30,12 +30,16 @@ export function usePracticeSession(collectionId: string) {
     },
     isComplete: false,
   })
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const startingRef = useRef(false)
 
   const start = useCallback(async () => {
     if (startingRef.current || state.sessionId) return
     startingRef.current = true
+    setIsLoading(true)
+    setError(null)
     try {
       const session = await startPracticeSession(collectionId)
       setState((prev) => ({
@@ -56,7 +60,10 @@ export function usePracticeSession(collectionId: string) {
           isFlipped: false,
         }))
       }
+    } catch (err: any) {
+      setError(err.message || 'Failed to start session')
     } finally {
+      setIsLoading(false)
       startingRef.current = false
     }
   }, [collectionId, state.sessionId])
@@ -68,33 +75,36 @@ export function usePracticeSession(collectionId: string) {
   const handleAnswer = useCallback(
     async (isCorrect: boolean) => {
       if (!state.sessionId || !state.currentCard) return
-      await submitPracticeCardResult(state.sessionId, state.currentCard.id, isCorrect)
-      setState((prev) => {
-        const newProgress = {
-          ...prev.progress,
-          correct: prev.progress.correct + (isCorrect ? 1 : 0),
-          incorrect: prev.progress.incorrect + (isCorrect ? 0 : 1),
-        }
-        const isComplete = newProgress.correct + newProgress.incorrect >= prev.progress.total
-        return {
-          ...prev,
-          progress: newProgress,
-          isComplete,
-        }
-      })
-      if (state.sessionId) {
+      setIsLoading(true)
+      setError(null)
+      try {
+        await submitPracticeCardResult(state.sessionId, state.currentCard.id, isCorrect)
         const nextCardData = await getNextPracticeCard(state.sessionId)
-        setState((prev) => ({
-          ...prev,
-          currentCard: nextCardData ? nextCardData.card : null,
-          isFlipped: false,
-        }))
+        setState((prev) => {
+          const newProgress = {
+            ...prev.progress,
+            correct: prev.progress.correct + (isCorrect ? 1 : 0),
+            incorrect: prev.progress.incorrect + (isCorrect ? 0 : 1),
+          }
+          const isComplete = newProgress.correct + newProgress.incorrect >= prev.progress.total
+          return {
+            ...prev,
+            progress: newProgress,
+            isComplete,
+            currentCard: nextCardData ? nextCardData.card : null,
+            isFlipped: false,
+          }
+        })
+      } catch (err: any) {
+        setError(err.message || 'Failed to submit answer')
+      } finally {
+        setIsLoading(false)
       }
     },
     [state.sessionId, state.currentCard],
   )
 
-  const reset = useCallback(() => {
+  const reset = useCallback(async () => {
     setState({
       sessionId: null,
       currentCard: null,
@@ -106,13 +116,19 @@ export function usePracticeSession(collectionId: string) {
       },
       isComplete: false,
     })
-    start()
+    setError(null)
+    setIsLoading(true)
+    try {
+      await start()
+    } finally {
+      setIsLoading(false)
+    }
   }, [start])
 
   return {
     ...state,
-    isLoading: false,
-    error: null,
+    isLoading,
+    error,
     handleFlip,
     handleAnswer,
     reset,

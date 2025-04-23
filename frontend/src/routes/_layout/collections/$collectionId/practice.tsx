@@ -40,7 +40,12 @@ function PracticeComponent() {
   return (
     <VStack gap={4} h="calc(100dvh - 8rem)" width="100%">
       <PracticeHeader cardId={currentCard.id} progress={progress} collectionId={collectionId} />
-      <PracticeCard card={currentCard} isFlipped={isFlipped} onFlip={handleFlip} />
+      <PracticeCard
+        key={currentCard.id}
+        card={currentCard}
+        isFlipped={isFlipped}
+        onFlip={handleFlip}
+      />
       <PracticeControls isFlipped={isFlipped} onFlip={handleFlip} onAnswer={handleAnswer} />
     </VStack>
   )
