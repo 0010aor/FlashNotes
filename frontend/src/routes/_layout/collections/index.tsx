@@ -7,7 +7,6 @@ import ErrorState from '@/components/commonUI/ErrorState'
 import ListSkeleton from '@/components/commonUI/ListSkeleton'
 import ScrollableContainer from '@/components/commonUI/ScrollableContainer'
 import SpeedDial, { type SpeedDialActionItem } from '@/components/commonUI/SpeedDial'
-import type { LocalCard, LocalCollection } from '@/db/flashcardsDB'
 import {
   createCollection,
   deleteCollection as deleteCollectionApi,
@@ -22,8 +21,6 @@ import { useTranslation } from 'react-i18next'
 import { VscAdd } from 'react-icons/vsc'
 import { isGuest } from '../../../utils/authUtils'
 
-export type CollectionListItemType = Collection | (LocalCollection & { cards: LocalCard[] })
-
 export const Route = createFileRoute('/_layout/collections/')({
   component: Collections,
 })
@@ -36,13 +33,13 @@ function Collections() {
   const [isAiDialogOpen, setIsAiDialogOpen] = useState(false)
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
 
-  const { data, error, isLoading } = useQuery({
+  const { data, error, isLoading } = useQuery<Collection[]>({
     queryKey: ['collections'],
     queryFn: getCollections,
     placeholderData: (prevData) => prevData,
   })
 
-  const collectionList: CollectionListItemType[] = data || []
+  const collectionList: Collection[] = data || []
 
   const addCollection = async (name: string) => {
     if (!name) return
@@ -123,7 +120,7 @@ function Collections() {
               message={t('routes.layout.index.createFirstCollection')}
             />
           ) : (
-            collectionList.map((collection: CollectionListItemType) => (
+            collectionList.map((collection: Collection) => (
               <CollectionListItem
                 key={collection.id}
                 collection={collection}

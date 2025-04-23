@@ -4,8 +4,7 @@ import ErrorState from '@/components/commonUI/ErrorState'
 import LoadingState from '@/components/commonUI/LoadingState'
 import StatsGrids from '@/components/stats/StatsGrids'
 import StatsSummaryGrid from '@/components/stats/StatsSummaryGrid'
-
-import { getLocalCollectionStats } from '@/data/localDB/stats'
+import { getCollectionStats } from '@/services/flashcards/stats'
 import { isGuest } from '@/utils/authUtils'
 import { Box, Container, Heading, Stack, Text } from '@chakra-ui/react'
 import { useQuery } from '@tanstack/react-query'
@@ -26,13 +25,7 @@ function StatsPage() {
     error,
   } = useQuery<CollectionStats>({
     queryKey: ['collectionStats', collectionId, 30],
-    queryFn: () =>
-      isGuest()
-        ? getLocalCollectionStats(collectionId)
-        : StatsService.getCollectionStatisticsEndpoint({
-            collectionId,
-            limit: 30,
-          }),
+    queryFn: () => getCollectionStats(collectionId, 30),
   })
 
   if (isLoading) return <LoadingState />

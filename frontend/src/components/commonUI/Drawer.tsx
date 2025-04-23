@@ -10,7 +10,6 @@ import {
   DrawerHeader,
   DrawerRoot,
 } from '@/components/ui/drawer'
-import type { LocalCard, LocalCollection } from '@/db/flashcardsDB'
 import useAuth from '@/hooks/useAuth'
 import { getCollections } from '@/services/flashcards/collections'
 import { HStack, IconButton, Image, List, Spinner, Text, VStack } from '@chakra-ui/react'
@@ -21,12 +20,10 @@ import { FiLogOut, FiMoon, FiSun } from 'react-icons/fi'
 import { DefaultButton } from './Button'
 import LanguageSelector from './LanguageSelector'
 
-type DrawerCollection = Collection | (LocalCollection & { cards: LocalCard[] })
-
 function CollectionListItem({
   collection,
   onNavigate,
-}: { collection: DrawerCollection; onNavigate: () => void }) {
+}: { collection: Collection; onNavigate: () => void }) {
   return (
     <List.Item
       key={collection.id}
@@ -68,7 +65,7 @@ function Drawer({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: bool
     placeholderData: (prevData) => prevData,
   })
 
-  const collections = data || []
+  const collections: Collection[] = data || []
 
   const handleNavigate = () => setIsOpen(false)
 
@@ -95,7 +92,7 @@ function Drawer({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: bool
               </VStack>
             ) : (
               <List.Root>
-                {collections.map((collection: DrawerCollection) => (
+                {collections.map((collection: Collection) => (
                   <CollectionListItem
                     key={collection.id}
                     collection={collection}

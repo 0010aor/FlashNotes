@@ -6,7 +6,6 @@ import ErrorState from '@/components/commonUI/ErrorState'
 import FloatingActionButton from '@/components/commonUI/FloatingActionButton'
 import ListSkeleton from '@/components/commonUI/ListSkeleton'
 import ScrollableContainer from '@/components/commonUI/ScrollableContainer'
-import type { LocalCard } from '@/db/flashcardsDB'
 import { deleteCard, getCards } from '@/services/flashcards/cards'
 import { Stack } from '@chakra-ui/react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
@@ -14,8 +13,6 @@ import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { MdSchool } from 'react-icons/md'
 import { VscAdd } from 'react-icons/vsc'
-
-type CardListItemType = Card | LocalCard
 
 export const Route = createFileRoute('/_layout/collections/$collectionId/')({
   component: CollectionComponent,
@@ -27,7 +24,7 @@ function CollectionComponent() {
   const queryClient = useQueryClient()
   const { collectionId } = Route.useParams()
 
-  const { data, error, isLoading } = useQuery<Card[] | LocalCard[]>({
+  const { data, error, isLoading } = useQuery<Card[]>({
     queryKey: ['collections', collectionId, 'cards'],
     queryFn: () => getCards(collectionId),
     placeholderData: (prevData) => prevData,
@@ -60,7 +57,7 @@ function CollectionComponent() {
               message={t('routes.layout.collectionIndex.addFirstCard')}
             />
           ) : (
-            cards.map((card: CardListItemType) => (
+            cards.map((card: Card) => (
               <CardListItem key={card.id} card={card} onDelete={handleDeleteCard} />
             ))
           )}
