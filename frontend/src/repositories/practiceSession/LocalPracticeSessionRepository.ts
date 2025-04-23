@@ -1,12 +1,11 @@
 import type { PracticeCardResponse, PracticeSession } from '@/client'
-import * as practiceCards from '@/data/localDB/practiceCards'
 import * as practiceSessions from '@/data/localDB/practiceSessions'
-import type { LocalPracticeCard, LocalPracticeSession } from '@/db/flashcardsDB'
+import type { LocalPracticeSession } from '@/db/flashcardsDB'
 import type { PracticeSessionRepository } from './PracticeSessionRepository'
 
 function toPracticeSession(
   local: LocalPracticeSession,
-  practiceCardsList: LocalPracticeCard[],
+  practiceCardsList: PracticeCardResponse[],
 ): PracticeSession {
   return {
     id: local.id,
@@ -18,14 +17,14 @@ function toPracticeSession(
     correct_answers: local.correctAnswers,
     created_at: new Date(local.createdAt).toISOString(),
     updated_at: new Date(local.updatedAt).toISOString(),
-    practice_cards: practiceCardsList.map((card) => ({
-      card_id: card.cardId,
-      id: card.id,
-      session_id: card.sessionId,
+    practice_cards: practiceCardsList.map((c) => ({
+      card_id: c.card.id,
+      id: c.card.id,
+      session_id: local.id,
       created_at: '',
       updated_at: '',
-      is_practiced: card.isPracticed ?? false,
-      is_correct: card.isCorrect ?? null,
+      is_practiced: c.is_practiced,
+      is_correct: c.is_correct,
     })),
   }
 }
@@ -37,26 +36,15 @@ export class LocalPracticeSessionRepository implements PracticeSessionRepository
     return toPracticeSession(local, practiceCardsList)
   }
 
-  async getPracticeCardsForSession(sessionId: string): Promise<LocalPracticeCard[]> {
-    return await practiceCards.getLocalPracticeCardsForSession(sessionId)
+  async getPracticeCardsForSession(sessionId: string): Promise<PracticeCardResponse[]> {
+    return await practiceSessions.getPracticeCardsForSession(sessionId)
   }
 
   async getNextCard(sessionId: string): Promise<PracticeCardResponse | null> {
-    const localCard = await practiceCards.getNextLocalPracticeCard(sessionId)
-    if (!localCard) return null
-    return {
-      card: {
-        id: localCard.id,
-        front: localCard.front,
-        back: localCard.back,
-        collection_id: localCard.collectionId,
-      },
-      is_practiced: localCard.isPracticed,
-      is_correct: localCard.isCorrect,
-    } as PracticeCardResponse
+    return await practiceSessions.getNextLocalPracticeCard(sessionId)
   }
 
   async submitCardResult(sessionId: string, cardId: string, isCorrect: boolean): Promise<void> {
-    await practiceCards.updateLocalPracticeCard(sessionId, cardId, isCorrect)
+    await practiceSessions.submitCardResult(sessionId, cardId, isCorrect)
   }
 }

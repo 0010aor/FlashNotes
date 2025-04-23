@@ -30,7 +30,6 @@ export interface LocalPracticeSession {
   correctAnswers: number
   createdAt: number
   updatedAt: number
-  practiceCards: string[]
   synced?: boolean
 }
 

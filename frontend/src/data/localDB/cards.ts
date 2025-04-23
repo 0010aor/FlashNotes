@@ -1,6 +1,18 @@
 import { v4 as uuidv4 } from 'uuid'
 import { type LocalCard, db } from '../../db/flashcardsDB'
 
+async function removeIncompletePracticeSessionsForCollection(collectionId: string) {
+  const sessions = await db.practice_sessions
+    .where('collectionId')
+    .equals(collectionId)
+    .filter((session) => session.isCompleted === false || session.isCompleted === undefined)
+    .toArray()
+  for (const session of sessions) {
+    await db.practice_cards.where('sessionId').equals(session.id).delete()
+    await db.practice_sessions.delete(session.id)
+  }
+}
+
 export const addLocalCard = async (
   collectionId: string,
   front: string,
@@ -20,6 +32,7 @@ export const addLocalCard = async (
     updatedAt: Date.now(),
     synced: false,
   })
+  await removeIncompletePracticeSessionsForCollection(collectionId)
   return newCard
 }
 
@@ -69,4 +82,5 @@ export const deleteLocalCard = async (id: string): Promise<void> => {
     updatedAt: Date.now(),
     synced: false,
   })
+  await removeIncompletePracticeSessionsForCollection(card.collectionId)
 }
