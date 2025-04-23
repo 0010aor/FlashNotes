@@ -5,14 +5,18 @@ export const addLocalPracticeSession = async (
   collectionId: string,
   totalCards: number,
 ): Promise<LocalPracticeSession> => {
+  const now = Date.now()
   const newSession: LocalPracticeSession = {
     id: uuidv4(),
     collectionId,
-    startedAt: Date.now(),
+    startedAt: now,
     isCompleted: false,
     totalCards,
     cardsPracticed: 0,
     correctAnswers: 0,
+    createdAt: now,
+    updatedAt: now,
+    practiceCards: [],
     synced: false,
   }
   await db.practice_sessions.add(newSession)
@@ -41,13 +45,14 @@ export const getLocalPracticeSessionById = async (id: string): Promise<LocalPrac
 
 export const updateLocalPracticeSession = async (
   id: string,
-  updates: Partial<Omit<LocalPracticeSession, 'id' | 'collectionId' | 'startedAt'>>,
-): Promise<number> => {
+  updates: Partial<Omit<LocalPracticeSession, 'id' | 'createdAt'>>,
+): Promise<void> => {
   const session = await db.practice_sessions.get(id)
-  if (!session) throw new Error('Practice session not found for update')
-  return await db.practice_sessions.update(id, {
+  if (!session) throw new Error('Session not found')
+  await db.practice_sessions.update(id, {
     ...updates,
-    synced: false,
+    updatedAt: Date.now(),
+    ...(updates.practiceCards ? { practiceCards: updates.practiceCards } : {}),
   })
 }
 
@@ -64,26 +69,23 @@ export const getUnsyncedPracticeSessions = async (): Promise<LocalPracticeSessio
   return await db.practice_sessions.where('synced').equals(0).toArray()
 }
 
-export const startLocalPracticeSession = async (collectionId: string) => {
-  const session = await db.practice_sessions
-    .where('collectionId')
-    .equals(collectionId)
-    .filter((session) => session.isCompleted === false)
-    .last()
-
-  if (session) {
-    return session
-  }
-
-  const cards = await db.cards.where('collectionId').equals(collectionId).toArray()
-  const newSession = await addLocalPracticeSession(collectionId, cards.length)
-  const practiceCards = cards.map((card) => ({
-    id: uuidv4(),
-    sessionId: newSession.id,
-    cardId: card.id,
-    isPracticed: false,
+export const startLocalPracticeSession = async (
+  collectionId: string,
+): Promise<LocalPracticeSession> => {
+  const now = Date.now()
+  const newSession: LocalPracticeSession = {
+    id: crypto.randomUUID(),
+    collectionId,
+    startedAt: now,
+    isCompleted: false,
+    totalCards: 0,
+    cardsPracticed: 0,
+    correctAnswers: 0,
+    createdAt: now,
+    updatedAt: now,
+    practiceCards: [],
     synced: false,
-  }))
-  await db.practice_cards.bulkAdd(practiceCards)
+  }
+  await db.practice_sessions.add(newSession)
   return newSession
 }

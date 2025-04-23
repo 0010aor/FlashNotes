@@ -2,15 +2,15 @@ import { useMutation } from '@tanstack/react-query'
 import type { UseMutationResult } from '@tanstack/react-query'
 import { useCallback, useRef, useState } from 'react'
 import type { Dispatch, SetStateAction } from 'react'
-import type { PracticeCardListResponse, PracticeSession } from '../client/types.gen'
-import type { LocalCard, LocalPracticeSession } from '../db/flashcardsDB'
-import { listPracticeCards, updatePracticeCardResult } from '../services/flashcards/practiceCards'
-import { startPracticeSession } from '../services/flashcards/practiceSessions'
+import type { Card, PracticeCardListResponse, PracticeSession } from '../client/types.gen'
 import {
   getNextLocalPracticeCard,
   updateLocalPracticeCardResult,
-} from '../services/localDB/practiceCards'
-import * as practiceSessions from '../services/localDB/practiceSessions'
+} from '../data/localDB/practiceCards'
+import * as practiceSessions from '../data/localDB/practiceSessions'
+import type { LocalCard, LocalPracticeSession } from '../db/flashcardsDB'
+import { getPracticeCards, updatePracticeCard } from '../services/flashcards/practiceCards'
+import { startPracticeSession } from '../services/flashcards/practiceSessions'
 import { isGuest } from '../utils/authUtils'
 
 interface PracticeSessionState {
@@ -89,8 +89,7 @@ export function usePracticeSession(collectionId: string) {
   const startingRef = useRef(false)
 
   async function handleGuestSessionStart(collectionId: string): Promise<LocalPracticeSession> {
-    const session = (await startPracticeSession(collectionId)) as LocalPracticeSession
-    return session
+    return await practiceSessions.startLocalPracticeSession(collectionId)
   }
 
   async function handleGuestSubmitResult(
@@ -154,10 +153,30 @@ export function usePracticeSession(collectionId: string) {
   const fetchNextPracticeCard = useMutation<FetchNextPracticeCardResult, Error, string, void>({
     mutationFn: async (sessionId: string) => {
       if (isGuest()) {
-        return await getNextLocalPracticeCard(sessionId)
+        const nextCard = await getNextLocalPracticeCard(sessionId)
+        const card: Card | undefined = nextCard
+          ? {
+              id: nextCard.id,
+              front: nextCard.front,
+              back: nextCard.back,
+              collection_id: nextCard.collectionId,
+            }
+          : undefined
+        const practiceCardResponse = card ? [{ card, is_practiced: false, is_correct: null }] : []
+        return { data: practiceCardResponse, count: practiceCardResponse.length }
       }
-      const response = await listPracticeCards(sessionId)
-      return response as PracticeCardListResponse
+      const response = await getPracticeCards(sessionId)
+      const practiceCardResponses = response.map((card) => ({
+        card: {
+          id: card.card_id,
+          front: '',
+          back: '',
+          collection_id: card.session_id,
+        },
+        is_practiced: card.is_practiced,
+        is_correct: card.is_correct,
+      }))
+      return { data: practiceCardResponses, count: practiceCardResponses.length }
     },
     onSuccess: (response) => {
       setState((prev) => ({
@@ -179,7 +198,7 @@ export function usePracticeSession(collectionId: string) {
         await updateLocalPracticeCardResult(sessionId, cardId, isCorrect)
         return { is_correct: isCorrect }
       }
-      return await updatePracticeCardResult(sessionId, cardId, isCorrect)
+      return await updatePracticeCard(sessionId, { is_correct: isCorrect }, sessionId)
     },
     onSuccess: async (response) => {
       if (isGuest()) {

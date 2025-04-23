@@ -1,20 +1,13 @@
-import { FlashcardsService } from '@/client'
-import { isGuest } from '../../utils/authUtils'
-import * as practiceSessions from '../localDB/practiceSessions'
+import type { PracticeSession } from '@/client'
+import { getPracticeSessionRepository } from '@/repositories/practiceSession/PracticeSessionRepositoryFactory'
+import { isGuest } from '@/utils/authUtils'
 
-export const startPracticeSession = async (collectionId: string) => {
-  if (isGuest()) {
-    return await practiceSessions.startLocalPracticeSession(collectionId)
-  }
-  return await FlashcardsService.startPracticeSession({
-    requestBody: { collection_id: collectionId },
-  })
+const repo = () => getPracticeSessionRepository(isGuest())
+
+export const startPracticeSession = async (collectionId: string): Promise<PracticeSession> => {
+  return repo().start(collectionId)
 }
 
-export const getPracticeSessions = async (collectionId: string) => {
-  if (isGuest()) {
-    return await practiceSessions.getLocalPracticeSessions(collectionId)
-  }
-  const res = await FlashcardsService.listPracticeSessions()
-  return res.data.filter((s) => s.collection_id === collectionId)
+export const getPracticeSessions = async (collectionId: string): Promise<PracticeSession[]> => {
+  return repo().getAll(collectionId)
 }

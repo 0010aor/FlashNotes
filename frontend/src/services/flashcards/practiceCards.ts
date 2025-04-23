@@ -1,37 +1,29 @@
-import { FlashcardsService } from '@/client'
-import { isGuest } from '../../utils/authUtils'
-import * as cards from '../localDB/cards'
-import * as practiceCards from '../localDB/practiceCards'
+import type { PracticeCard, PracticeCardResultPatch } from '@/client'
+import { getPracticeCardRepository } from '@/repositories/practiceCard/PracticeCardRepositoryFactory'
+import { isGuest } from '@/utils/authUtils'
 
-export const listPracticeCards = async (sessionId: string) => {
-  if (isGuest()) {
-    const localPracticeCards = await practiceCards.getLocalPracticeCardsForSession(sessionId)
-    const cardObjs = await Promise.all(
-      localPracticeCards.map(async (pc) => {
-        const card = await cards.getLocalCardById(pc.cardId)
-        return card ? { card, is_practiced: pc.isPracticed, is_correct: pc.isCorrect } : null
-      }),
-    )
-    return { data: cardObjs.filter(Boolean) }
-  }
-  return await FlashcardsService.listPracticeCards({
-    practiceSessionId: sessionId,
-    status: 'pending',
-    limit: 1,
-  })
+const repo = () => getPracticeCardRepository(isGuest())
+
+export const getPracticeCards = async (sessionId: string): Promise<PracticeCard[]> => {
+  return repo().getAll(sessionId)
 }
 
-export const updatePracticeCardResult = async (
-  sessionId: string,
-  cardId: string,
-  isCorrect: boolean,
-) => {
-  if (isGuest()) {
-    return { is_correct: isCorrect }
-  }
-  return await FlashcardsService.updatePracticeCardResult({
-    practiceSessionId: sessionId,
-    cardId,
-    requestBody: { is_correct: isCorrect },
-  })
+export const getPracticeCardById = async (id: string): Promise<PracticeCard | null> => {
+  return repo().getById(id)
+}
+
+export const createPracticeCard = async (sessionId: string, data: any): Promise<PracticeCard> => {
+  return repo().create(sessionId, data)
+}
+
+export const updatePracticeCard = async (
+  id: string,
+  data: PracticeCardResultPatch,
+  practiceSessionId?: string,
+): Promise<PracticeCard> => {
+  return repo().update(id, data, practiceSessionId)
+}
+
+export const deletePracticeCard = async (id: string): Promise<void> => {
+  return repo().delete(id)
 }

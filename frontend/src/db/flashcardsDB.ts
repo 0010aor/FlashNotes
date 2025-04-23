@@ -28,6 +28,9 @@ export interface LocalPracticeSession {
   totalCards: number
   cardsPracticed: number
   correctAnswers: number
+  createdAt: number
+  updatedAt: number
+  practiceCards: string[]
   synced?: boolean
 }
 

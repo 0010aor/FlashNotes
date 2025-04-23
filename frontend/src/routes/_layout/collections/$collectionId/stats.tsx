@@ -5,7 +5,7 @@ import LoadingState from '@/components/commonUI/LoadingState'
 import StatsGrids from '@/components/stats/StatsGrids'
 import StatsSummaryGrid from '@/components/stats/StatsSummaryGrid'
 
-import { getLocalCollectionStats } from '@/services/localDB/stats'
+import { getLocalCollectionStats } from '@/data/localDB/stats'
 import { isGuest } from '@/utils/authUtils'
 import { Box, Container, Heading, Stack, Text } from '@chakra-ui/react'
 import { useQuery } from '@tanstack/react-query'
