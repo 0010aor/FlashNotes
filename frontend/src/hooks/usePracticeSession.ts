@@ -11,8 +11,7 @@ import {
   updateLocalPracticeCardResult,
 } from '../services/localDB/practiceCards'
 import * as practiceSessions from '../services/localDB/practiceSessions'
-
-const isGuest = () => localStorage.getItem('guest_mode') === 'true'
+import { isGuest } from '../utils/authUtils'
 
 interface PracticeSessionState {
   sessionId: string | null

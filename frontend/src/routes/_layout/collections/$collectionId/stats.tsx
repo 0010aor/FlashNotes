@@ -10,8 +10,7 @@ import { Box, Container, Heading, Stack, Text } from '@chakra-ui/react'
 import { useQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
-
-const isGuest = () => localStorage.getItem('guest_mode') === 'true'
+import { isGuest } from '../../../../utils/authUtils'
 
 export const Route = createFileRoute('/_layout/collections/$collectionId/stats')({
   component: StatsPage,

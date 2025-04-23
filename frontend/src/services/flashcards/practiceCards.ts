@@ -1,5 +1,5 @@
 import { FlashcardsService } from '@/client'
-const isGuest = () => localStorage.getItem('guest_mode') === 'true'
+import { isGuest } from '../../utils/authUtils'
 import * as cards from '../localDB/cards'
 import * as practiceCards from '../localDB/practiceCards'
 

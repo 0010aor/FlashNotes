@@ -20,6 +20,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { VscAdd } from 'react-icons/vsc'
+import { isGuest } from '../../../utils/authUtils'
 
 export type CollectionListItemType = Collection | (LocalCollection & { cards: LocalCard[] })
 
@@ -87,8 +88,6 @@ function Collections() {
       console.error(error)
     }
   }
-
-  const isGuest = () => localStorage.getItem('guest_mode') === 'true'
 
   if (isLoading) return <ListSkeleton count={5} />
   if (error) return <ErrorState error={error} />
