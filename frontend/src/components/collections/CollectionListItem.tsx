@@ -1,4 +1,4 @@
-import type { Collection } from '@/client'
+import type { Collection } from '@/client/types.gen'
 import { Box, HStack, Text } from '@chakra-ui/react'
 import { Link } from '@tanstack/react-router'
 import { useState } from 'react'

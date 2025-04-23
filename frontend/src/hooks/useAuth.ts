@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useAuthContext } from './useAuthContext'
 
 import { toaster } from '@/components/ui/toaster'
 import { AxiosError } from 'axios'
@@ -17,10 +18,7 @@ interface ErrorResponse {
   body: {
     detail?: string
   }
-}
-
-const isLoggedIn = () => {
-  return localStorage.getItem('access_token') !== null
+  status?: number
 }
 
 const useAuth = () => {
@@ -28,10 +26,11 @@ const useAuth = () => {
   const [error, setError] = useState<string | null>(null)
   const navigate = useNavigate()
   const queryClient = useQueryClient()
+  const { isGuest, isLoggedIn, logout } = useAuthContext()
   const { data: user, isLoading } = useQuery<UserPublic | null, Error>({
     queryKey: ['currentUser'],
     queryFn: UsersService.readUserMe,
-    enabled: isLoggedIn(),
+    enabled: isLoggedIn && !isGuest,
   })
 
   const signUpMutation = useMutation({
@@ -57,10 +56,9 @@ const useAuth = () => {
         description: errDetail,
         type: 'error',
       })
-      if (err.status === 409) {
-        setError(
-          t('general.errors.emailAlreadyInUse') || t('general.errors.somethingWentWrong')
-        )
+      const status = (err as AxiosError).status ?? (err as ErrorResponse).status
+      if (status === 409) {
+        setError(t('general.errors.emailAlreadyInUse') || t('general.errors.somethingWentWrong'))
       } else {
         setError(errDetail)
       }
@@ -103,11 +101,6 @@ const useAuth = () => {
     },
   })
 
-  const logout = () => {
-    localStorage.removeItem('access_token')
-    navigate({ to: '/' })
-  }
-
   return {
     signUpMutation,
     loginMutation,
@@ -119,5 +112,4 @@ const useAuth = () => {
   }
 }
 
-export { isLoggedIn }
 export default useAuth

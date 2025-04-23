@@ -1,4 +1,4 @@
-import type { Card } from '@/client'
+import type { Card } from '@/client/types.gen'
 import { stripHtml } from '@/utils/text'
 import { Box, HStack, IconButton, Text } from '@chakra-ui/react'
 import { Link } from '@tanstack/react-router'
@@ -23,7 +23,10 @@ function CardListItem({ card, onDelete }: CardListItemProps) {
       <Box p="1rem" flex="1" overflow="hidden" asChild>
         <Link
           to="/collections/$collectionId/cards/$cardId"
-          params={{ collectionId: card.collection_id, cardId: card.id }}
+          params={{
+            collectionId: card.collection_id,
+            cardId: card.id,
+          }}
         >
           <Text fontSize="md" color="fg.DEFAULT" truncate>
             {stripHtml(card.front)}

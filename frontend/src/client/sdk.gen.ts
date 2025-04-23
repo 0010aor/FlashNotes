@@ -4,34 +4,34 @@ import type { CancelablePromise } from './core/CancelablePromise'
 import { OpenAPI } from './core/OpenAPI'
 import { request as __request } from './core/request'
 import type {
-  FlashcardsReadCollectionsData,
-  FlashcardsReadCollectionsResponse,
-  FlashcardsCreateCollectionData,
-  FlashcardsCreateCollectionResponse,
-  FlashcardsReadCollectionData,
-  FlashcardsReadCollectionResponse,
-  FlashcardsUpdateCollectionData,
-  FlashcardsUpdateCollectionResponse,
-  FlashcardsDeleteCollectionData,
-  FlashcardsDeleteCollectionResponse,
-  FlashcardsReadCardsData,
-  FlashcardsReadCardsResponse,
   FlashcardsCreateCardData,
   FlashcardsCreateCardResponse,
-  FlashcardsReadCardData,
-  FlashcardsReadCardResponse,
-  FlashcardsUpdateCardData,
-  FlashcardsUpdateCardResponse,
+  FlashcardsCreateCollectionData,
+  FlashcardsCreateCollectionResponse,
   FlashcardsDeleteCardData,
   FlashcardsDeleteCardResponse,
-  FlashcardsStartPracticeSessionData,
-  FlashcardsStartPracticeSessionResponse,
-  FlashcardsListPracticeSessionsData,
-  FlashcardsListPracticeSessionsResponse,
+  FlashcardsDeleteCollectionData,
+  FlashcardsDeleteCollectionResponse,
   FlashcardsGetPracticeSessionStatusData,
   FlashcardsGetPracticeSessionStatusResponse,
   FlashcardsListPracticeCardsData,
   FlashcardsListPracticeCardsResponse,
+  FlashcardsListPracticeSessionsData,
+  FlashcardsListPracticeSessionsResponse,
+  FlashcardsReadCardData,
+  FlashcardsReadCardResponse,
+  FlashcardsReadCardsData,
+  FlashcardsReadCardsResponse,
+  FlashcardsReadCollectionData,
+  FlashcardsReadCollectionResponse,
+  FlashcardsReadCollectionsData,
+  FlashcardsReadCollectionsResponse,
+  FlashcardsStartPracticeSessionData,
+  FlashcardsStartPracticeSessionResponse,
+  FlashcardsUpdateCardData,
+  FlashcardsUpdateCardResponse,
+  FlashcardsUpdateCollectionData,
+  FlashcardsUpdateCollectionResponse,
   FlashcardsUpdatePracticeCardResultData,
   FlashcardsUpdatePracticeCardResultResponse,
   LoginLoginAccessTokenData,
@@ -444,7 +444,7 @@ export class StatsService {
    * Get Collection Statistics Endpoint
    * @param data The data for the request.
    * @param data.collectionId
-   * @param data.days Number of days of history to include
+   * @param data.limit Maximum number of recent sessions to return
    * @returns CollectionStats Successful Response
    * @throws ApiError
    */
@@ -458,7 +458,7 @@ export class StatsService {
         collection_id: data.collectionId,
       },
       query: {
-        days: data.days,
+        limit: data.limit,
       },
       errors: {
         422: 'Validation Error',

@@ -20,33 +20,60 @@
     - [**React**](https://react.dev) with TypeScript, hooks, and Vite for a modern frontend stack.
         - [Chakra UI](https://chakra-ui.com) for UI components.
         - Generated client for consuming the backend API.
+    - [Dexie.js](https://dexie.org/) and IndexedDB for offline/guest mode support and local data storage.
 - **Authentication:**
     - JWT (JSON Web Token) authentication.
+- **Guest Mode & Offline Support:**
+    - Users can try the app instantly as a guest, with all data stored locally in the browser (IndexedDB).
+    - Guest Mode users can create, edit, and practice flashcards, but data will not sync across devices.
 - **Testing:**
     - [Pytest](https://pytest.org) for backend testing.
 
 Explore the API documentation at [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs).
 
-## How to Run it!
+## Frontend (`/frontend`)
 
-## Project Structure
+```plaintext
+frontend/
+├── public/                  # Static assets and translations (i18n)
+├── src/
+│   ├── assets/              # Images, SVGs, and static media
+│   ├── client/              # Generated API client (OpenAPI)
+│   ├── components/          # Reusable UI components (cards, collections, stats, etc.)
+│   ├── db/                  # IndexedDB (Dexie.js) setup for offline/guest mode
+│   ├── data/localDB/        # Local DB logic for guest/offline mode (CRUD, stats, etc.)
+│   ├── hooks/               # Custom React hooks (auth, data fetching, etc.)
+│   ├── repositories/        # Data access layer (API/local switch for cards, collections, stats)
+│   ├── routes/              # Application routes (pages, layouts)
+│   ├── services/            # Business logic for cards, collections, practice, stats
+│   ├── utils/               # Utility functions (auth, stats, etc.)
+│   └── main.tsx             # App entry point
+├── package.json             # Frontend dependencies and scripts
+├── pnpm-lock.yaml           # Lockfile for reproducible installs
+├── tsconfig*.json           # TypeScript configuration
+├── vite.config.ts           # Vite build configuration
+└── index.html               # Main HTML template
 ```
-.
-├── backend/
-│   ├── src/
-│   │   ├── auth/         # Authentication logic
-│   │   ├── core/         # Core configurations
-│   │   ├── flashcards/   # Flashcard related endpoints
-│   │   ├── users/        # User management
-│   │   └── main.py       # Application entry point
-│   └── tests/            # Backend tests
-└── frontend/
-    ├── src/
-    │   ├── components/   # Reusable UI components
-    │   ├── hooks/        # Custom React hooks
-    │   ├── routes/       # Application routes
-    │   └── client/       # Generated API client
-    └── public/           # Static assets
+
+## Backend (`/backend`)
+
+```plaintext
+backend/
+├── src/
+│   ├── api/                 # FastAPI route definitions
+│   ├── core/                # Core logic (auth, config, security)
+│   ├── db/                  # Database models and access (SQLAlchemy)
+│   ├── schemas/             # Pydantic models (request/response)
+│   ├── services/            # Business logic (users, flashcards, etc.)
+│   └── main.py              # FastAPI app entry point
+├── tests/                   # Backend tests (pytest)
+├── pyproject.toml           # Python dependencies and project config
+├── uv.lock                  # Poetry/uv lockfile for reproducible installs
+├── Dockerfile               # Production Docker build
+├── Dockerfile.pip           # Alternative Docker build (pip)
+├── entrypoint.sh            # Docker entrypoint script
+├── prestart.sh              # Pre-start script (migrations, etc.)
+└── alembic.ini              # Alembic DB migration config
 ```
 
 ## Setup Instructions

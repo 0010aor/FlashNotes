@@ -25,7 +25,7 @@ class Card(SQLModel, table=True):
     id: uuid.UUID | None = Field(default_factory=uuid.uuid4, primary_key=True)
     front: str = Field(max_length=3000)
     back: str = Field(max_length=3000)
-    collection_id: uuid.UUID = Field(foreign_key="collection.id")
+    collection_id: uuid.UUID = Field(foreign_key="collection.id", index=True)
     collection: Collection = Relationship(back_populates="cards")
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
@@ -36,14 +36,16 @@ class Card(SQLModel, table=True):
 
 class PracticeSession(SQLModel, table=True):
     id: uuid.UUID | None = Field(default_factory=uuid.uuid4, primary_key=True)
-    collection_id: uuid.UUID = Field(foreign_key="collection.id")
+    collection_id: uuid.UUID = Field(foreign_key="collection.id", index=True)
     user_id: uuid.UUID = Field(foreign_key="user.id", index=True, ondelete="CASCADE")
     user: "User" = Relationship(back_populates="practice_sessions")
     is_completed: bool = Field(default=False)
     total_cards: int = Field(default=0)
     cards_practiced: int = Field(default=0)
     correct_answers: int = Field(default=0)
-    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    created_at: datetime = Field(
+        default_factory=lambda: datetime.now(timezone.utc), index=True
+    )
     updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     collection: Collection = Relationship(back_populates="practice_sessions")
     practice_cards: list["PracticeCard"] = Relationship(
@@ -53,8 +55,8 @@ class PracticeSession(SQLModel, table=True):
 
 class PracticeCard(SQLModel, table=True):
     id: uuid.UUID | None = Field(default_factory=uuid.uuid4, primary_key=True)
-    session_id: uuid.UUID = Field(foreign_key="practicesession.id")
-    card_id: uuid.UUID = Field(foreign_key="card.id")
+    session_id: uuid.UUID = Field(foreign_key="practicesession.id", index=True)
+    card_id: uuid.UUID = Field(foreign_key="card.id", index=True)
     is_correct: bool | None = Field(default=None)
     is_practiced: bool = Field(default=False)
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))

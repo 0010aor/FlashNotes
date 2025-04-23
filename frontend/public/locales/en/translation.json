@@ -34,17 +34,17 @@
       "performanceOverTime": "Performance Over Time",
       "correctRate": "Correct Rate",
       "cardsPracticed": "Cards Practiced",
-      "latestSessionBreakdown": "Latest Session Breakdown",
-      "recentPracticeSessions": "Recent Practice Sessions",
+      "latestSessionBreakdown": "Latest Completed Session Breakdown",
+      "recentPracticeSessions": "Recent Completed Practice Sessions",
       "correctAnswers": "Correct Answers",
       "incorrectAnswers": "Incorrect Answers",
       "session": "Session",
       "mostFailedCards": "Most Failed Cards",
       "failedOutOfAttempts": "Failed {{failed}} out of {{total}} attempts",
       "practiceTheseCards": "Focus on practicing these cards to improve your results",
-      "practiceSessions": "Practice Sessions",
+      "practiceSessions": "Completed Practice Sessions",
       "averageAccuracy": "Average Accuracy",
-      "allSessions": "all sessions",
+      "allSessions": "all completed sessions",
       "successRate": "Success Rate",
       "studyStreak": "Study Streak",
       "days": "days",
@@ -56,10 +56,15 @@
       "lastSession": "Last session",
       "noRecentSessions": "No recent sessions",
       "learningTrend": "Learning Trend",
-      "comparedToPrevious": "compared to previous",
+      "comparedToPrevious": "compared to first trial",
       "notEnoughData": "not enough data",
       "successRateTooltip": "Percentage of correct answers in your most recent session",
-      "learningTrendTooltip": "Change in success rate between your two most recent sessions"
+      "learningTrendTooltip": "Change in success rate between your two most recent sessions",
+      "guestStatsBlur": "Sign in to see detailed statistics."
+    },
+    "guestModeNotice": {
+      "message": "You are currently offline.",
+      "messageWithAction": "You are offline. Data may be lost. Log in to save your progress."
     }
   },
   "general": {
@@ -78,7 +83,6 @@
       "deleteCard": "Delete Card",
       "doNotKnow": "Don't know",
       "repeatPassword": "Repeat Password",
-      "getStarted": "Get started",
       "goHome": "Go Home",
       "login": "Log In",
       "loading": "Loading",
@@ -92,9 +96,8 @@
       "startPracticing": "Start Practicing",
       "toggleColorMode": "Toggle color mode",
       "rename": "Rename",
-      "editCard": "Edit Card",
       "practice": "Practice",
-      "viewStats": "View Statistics"
+      "tryOffline": "Try Offline"
     },
     "errors": {
       "collectionNotFound": "Collection not found",
@@ -161,8 +164,8 @@
       "index": {
         "title": "Learn Better with FlashNotes",
         "description": "A simple flashcard app that helps you learn. Create cards,practice regularly, and remember what matters.",
-        "simpleDesign": "Simple Design",
-        "simpleDesignDescription": "A clean interface that helps you focus on learning.",
+        "offlineMode": "Offline Mode",
+        "offlineModeDescription": "Use FlashNotes anywhere, even without an internet connection. Guest mode and all your data work fully offline!",
         "aiGeneration": "AI Generation",
         "aiGenerationDescription": "Create flashcards automatically with AI to save time and enhance learning.",
         "responsiveDesign": "Responsive Design",

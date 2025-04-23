@@ -34,17 +34,17 @@
       "performanceOverTime": "Rendimiento a lo Largo del Tiempo",
       "correctRate": "Tasa de Aciertos",
       "cardsPracticed": "Tarjetas Practicadas",
-      "latestSessionBreakdown": "Desglose Última Sesión",
-      "recentPracticeSessions": "Sesiones de Práctica Recientes",
+      "latestSessionBreakdown": "Desglose de la Última Sesión Completada",
+      "recentPracticeSessions": "Sesiones de Práctica Completadas Recientes",
       "correctAnswers": "Respuestas Correctas",
       "incorrectAnswers": "Respuestas Incorrectas",
       "session": "Sesión",
       "mostFailedCards": "Tarjetas con Más Fallos",
       "failedOutOfAttempts": "Fallaste {{failed}} de {{total}} intentos",
       "practiceTheseCards": "Concéntrate en practicar estas tarjetas para mejorar tus resultados",
-      "practiceSessions": "Sesiones de Práctica",
+      "practiceSessions": "Sesiones de Práctica Completadas",
       "averageAccuracy": "Precisión Promedio",
-      "allSessions": "todas las sesiones",
+      "allSessions": "todas las sesiones completadas",
       "successRate": "Tasa de Éxito",
       "studyStreak": "Racha de Estudio",
       "days": "días",
@@ -56,10 +56,15 @@
       "lastSession": "Última sesión",
       "noRecentSessions": "Sin sesiones recientes",
       "learningTrend": "Tendencia de Aprendizaje",
-      "comparedToPrevious": "comparado con anterior",
+      "comparedToPrevious": "comparado con el primer intento",
       "notEnoughData": "datos insuficientes",
       "successRateTooltip": "Porcentaje de respuestas correctas en tu sesión más reciente",
-      "learningTrendTooltip": "Cambio en la tasa de éxito entre tus dos sesiones más recientes"
+      "learningTrendTooltip": "Cambio en la tasa de éxito entre tus dos sesiones más recientes",
+      "guestStatsBlur": "Inicia sesión para ver estadísticas detalladas."
+    },
+    "guestModeNotice": {
+      "message": "Actualmente estás sin conexión.",
+      "messageWithAction": "Estás sin conexión. Los datos pueden perderse. Inicia sesión para guardar tu progreso."
     }
   },
   "general": {
@@ -78,7 +83,6 @@
       "deleteCard": "Eliminar Tarjeta",
       "doNotKnow": "No sé",
       "repeatPassword": "Repetir Contraseña",
-      "getStarted": "Empezar",
       "goHome": "Ir a Inicio",
       "login": "Iniciar Sesión",
       "loading": "Cargando",
@@ -92,7 +96,8 @@
       "startPracticing": "Comenzar a Practicar",
       "toggleColorMode": "Cambiar modo de color",
       "rename": "Renombrar",
-      "practice": "Practicar"
+      "practice": "Practicar",
+      "tryOffline": "Probar sin conexión"
     },
     "errors": {
       "collectionNotFound": "Colección no encontrada",
@@ -159,8 +164,8 @@
       "index": {
         "title": "Aprende Mejor con FlashNotes",
         "description": "Una aplicación de tarjetas de memoria simple que te ayuda a aprender. Crea tarjetas, practica regularmente y recuerda lo que importa.",
-        "simpleDesign": "Diseño Simple",
-        "simpleDesignDescription": "Una interfaz limpia que te ayuda a concentrarte en aprender.",
+        "offlineMode": "Modo sin conexión",
+        "offlineModeDescription": "Usa FlashNotes en cualquier lugar, incluso sin conexión a internet. ¡El modo invitado y todos tus datos funcionan completamente sin conexión!",
         "aiGeneration": "Generación con IA",
         "aiGenerationDescription": "Crea tarjetas de memoria automáticamente con IA para ahorrar tiempo y mejorar el aprendizaje.",
         "responsiveDesign": "Diseño Responsivo",

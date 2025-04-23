@@ -1,12 +1,11 @@
-import { StatsService } from '@/client'
+import type { CollectionStats } from '@/client/types.gen'
 import ErrorState from '@/components/commonUI/ErrorState'
 import LoadingState from '@/components/commonUI/LoadingState'
-import MasteryDonutChart from '@/components/stats/MasteryDonutChart'
-import MostFailedCards from '@/components/stats/MostFailedCards'
-import PerformanceChart from '@/components/stats/PerformanceChart'
-import PracticeBarChart from '@/components/stats/PracticeBarChart'
+import StatsGrids from '@/components/stats/StatsGrids'
 import StatsSummaryGrid from '@/components/stats/StatsSummaryGrid'
-import { Container, Heading, SimpleGrid, Stack } from '@chakra-ui/react'
+import { getCollectionStats } from '@/services/stats'
+import { isGuest } from '@/utils/authUtils'
+import { Box, Container, Heading, Stack, Text } from '@chakra-ui/react'
 import { useQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
@@ -23,13 +22,9 @@ function StatsPage() {
     data: stats,
     isLoading,
     error,
-  } = useQuery({
-    queryKey: ['collectionStats', collectionId, 7],
-    queryFn: () =>
-      StatsService.getCollectionStatisticsEndpoint({
-        collectionId,
-        days: 7,
-      }),
+  } = useQuery<CollectionStats>({
+    queryKey: ['collectionStats', collectionId, 30],
+    queryFn: () => getCollectionStats(collectionId, 30),
   })
 
   if (isLoading) return <LoadingState />
@@ -48,19 +43,41 @@ function StatsPage() {
           recentSessions={stats.recent_sessions}
         />
 
-        <SimpleGrid columns={{ base: 1, md: 2 }} gap={6}>
-          <PracticeBarChart sessions={stats.recent_sessions} />
-          <PerformanceChart sessions={stats.recent_sessions} />
-        </SimpleGrid>
-
-        <SimpleGrid columns={{ base: 1, md: 2 }} gap={6}>
-          <MasteryDonutChart
-            recentSessions={stats.recent_sessions}
-            collectionInfo={stats.collection_info}
-            title={t('components.stats.latestSessionBreakdown')}
-          />
-          <MostFailedCards cards={stats.difficult_cards} />
-        </SimpleGrid>
+        {isGuest() ? (
+          <Box position="relative">
+            <Box
+              style={{
+                filter: 'blur(6px)',
+                pointerEvents: 'none',
+                userSelect: 'none',
+              }}
+            >
+              <StatsGrids stats={stats} />
+            </Box>
+            <Box
+              position="absolute"
+              top={0}
+              left={0}
+              right={0}
+              bottom={0}
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              zIndex={1}
+              bg="bg.100"
+              opacity={0.85}
+              borderRadius="lg"
+              borderWidth="1px"
+              borderColor="bg.200"
+            >
+              <Text fontWeight="bold" color="fg.DEFAULT" fontSize="lg" textAlign="center" px={4}>
+                {t('components.stats.guestStatsBlur')}
+              </Text>
+            </Box>
+          </Box>
+        ) : (
+          <StatsGrids stats={stats} />
+        )}
       </Stack>
     </Container>
   )

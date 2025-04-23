@@ -33,14 +33,19 @@ function PracticeComponent() {
   }, [start])
 
   if (isLoading) return <CardSkeleton />
-  if (error) return <ErrorState error={error} />
+  if (error) return <ErrorState error={typeof error === 'string' ? new Error(error) : error} />
   if (isComplete) return <PracticeComplete stats={progress} onReset={reset} />
   if (!currentCard) return <CardSkeleton />
 
   return (
     <VStack gap={4} h="calc(100dvh - 8rem)" width="100%">
       <PracticeHeader cardId={currentCard.id} progress={progress} collectionId={collectionId} />
-      <PracticeCard card={currentCard} isFlipped={isFlipped} onFlip={handleFlip} />
+      <PracticeCard
+        key={currentCard.id}
+        card={currentCard}
+        isFlipped={isFlipped}
+        onFlip={handleFlip}
+      />
       <PracticeControls isFlipped={isFlipped} onFlip={handleFlip} onAnswer={handleAnswer} />
     </VStack>
   )

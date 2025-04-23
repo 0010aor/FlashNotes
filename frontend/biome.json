@@ -8,7 +8,7 @@
   },
   "linter": {
     "enabled": true,
-    "ignore": ["src/components/ui"],
+    "ignore": ["src/components/ui", "src/client/*"],
     "rules": {
       "recommended": true,
       "suspicious": {

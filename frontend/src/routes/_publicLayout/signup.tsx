@@ -1,17 +1,21 @@
 import Logo from '@/assets/Logo.svg'
+import useAuth from '@/hooks/useAuth'
 import { Button, Container, Field, Fieldset, Image, Text } from '@chakra-ui/react'
 import { Link, createFileRoute, redirect } from '@tanstack/react-router'
 import { type SubmitHandler, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import type { UserRegister } from '../../client'
 import { DefaultInput } from '../../components/commonUI/Input'
-import useAuth, { isLoggedIn } from '../../hooks/useAuth'
 import { confirmPasswordRules, emailPattern, passwordRules } from '../../utils'
 
 export const Route = createFileRoute('/_publicLayout/signup')({
   component: SignUp,
   beforeLoad: async () => {
-    if (isLoggedIn()) {
+    // NOTE: Direct localStorage access is used here because React context is not available in router guards.
+    // For all React components, use useAuthContext() from './hooks/useAuthContext' instead.
+    const isGuest = localStorage.getItem('guest_mode') === 'true'
+    const isLoggedIn = Boolean(localStorage.getItem('access_token')) || isGuest
+    if (isLoggedIn) {
       throw redirect({
         to: '/',
       })

@@ -1,10 +1,10 @@
-import useAuth from '@/hooks/useAuth'
 import { Button, Text, VStack } from '@chakra-ui/react'
+import { useNavigate } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 
 function ErrorState({ error, onRetry }: { error?: Error; onRetry?: () => void }) {
   const { t } = useTranslation()
-  const { logout } = useAuth()
+  const navigate = useNavigate()
 
   return (
     <VStack gap={4} p={8} textAlign="center">
@@ -14,7 +14,9 @@ function ErrorState({ error, onRetry }: { error?: Error; onRetry?: () => void })
       {onRetry ? (
         <Button onClick={onRetry}>{t('general.errors.tryAgain')}</Button>
       ) : (
-        <Button onClick={() => logout()}>{t('general.actions.goHome')}</Button>
+        <Button onClick={() => navigate({ to: '/collections' })}>
+          {t('general.actions.goHome')}
+        </Button>
       )}
     </VStack>
   )

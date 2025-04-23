@@ -27,6 +27,7 @@ export interface SpeedDialActionItem {
   onClick: () => void
   bgColor?: string
   color?: string
+  disabled?: boolean
 }
 
 interface SpeedDialProps {
@@ -58,7 +59,15 @@ const SpeedDial: React.FC<SpeedDialProps> = ({
             align="center"
           >
             {actions.map(
-              ({ id, icon, label, onClick, bgColor = 'fbuttons.blue', color = 'white' }) => (
+              ({
+                id,
+                icon,
+                label,
+                onClick,
+                bgColor = 'fbuttons.blue',
+                color = 'white',
+                disabled = false,
+              }) => (
                 <Tooltip key={id} content={label} showArrow positioning={{ placement: 'left' }}>
                   <IconButton
                     aria-label={label}
@@ -67,12 +76,15 @@ const SpeedDial: React.FC<SpeedDialProps> = ({
                     bgColor={bgColor}
                     color={color}
                     onClick={() => {
-                      onClick()
-                      onClose()
+                      if (!disabled) {
+                        onClick()
+                        onClose()
+                      }
                     }}
                     animation={`${fadeIn} 0.2s ease-out forwards`}
                     _hover={{ transform: 'scale(1.1)' }}
                     _active={{ transform: 'scale(0.95)' }}
+                    disabled={disabled}
                   >
                     {icon}
                   </IconButton>

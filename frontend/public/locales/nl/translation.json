@@ -34,25 +34,26 @@
       "performanceOverTime": "Prestaties Over Tijd",
       "correctRate": "Correctheid (%)",
       "cardsPracticed": "Kaarten Geoefend",
-      "latestSessionBreakdown": "Uitsplitsing Laatste Sessie",
-      "recentPracticeSessions": "Recente Oefensessies",
+      "latestSessionBreakdown": "Uitsplitsing Laatst Voltooide Sessie",
+      "recentPracticeSessions": "Recente Voltooide Oefensessies",
       "correctAnswers": "Juiste Antwoorden",
       "incorrectAnswers": "Onjuiste Antwoorden",
       "session": "Sessie",
       "mostFailedCards": "Meest Gemiste Kaarten",
       "failedOutOfAttempts": "{{failed}} van de {{total}} pogingen gemist",
       "practiceTheseCards": "Focus op het oefenen van deze kaarten om je resultaten te verbeteren",
-      "practiceSessions": "Oefensessies",
+      "practiceSessions": "Voltooide Oefensessies",
       "averageAccuracy": "Gemiddelde Nauwkeurigheid",
-      "allSessions": "alle sessies",
+      "allSessions": "alle voltooide sessies",
       "successRate": "Succespercentage",
       "studyStreak": "Studiereeks",
       "days": "dagen",
       "learningTrend": "Leertrend",
-      "comparedToPrevious": "vergeleken met vorige",
+      "comparedToPrevious": "vergeleken met eerste poging",
       "notEnoughData": "niet genoeg gegevens",
       "successRateTooltip": "Percentage juiste antwoorden in je meest recente sessie",
       "learningTrendTooltip": "Verandering in succespercentage tussen je twee meest recente sessies",
+      "guestStatsBlur": "Log in om gedetailleerde statistieken te bekijken.",
       "correct": "Correct",
       "incorrect": "Onjuist",
       "notPracticedInSession": "Niet Geoefend",
@@ -60,6 +61,10 @@
       "noDataAvailable": "Geen gegevens beschikbaar voor deze grafiek",
       "lastSession": "Laatste sessie",
       "noRecentSessions": "Geen recente sessies"
+    },
+    "guestModeNotice": {
+      "message": "Je bent momenteel offline.",
+      "messageWithAction": "Je bent offline. Gegevens kunnen verloren gaan. Log in om je voortgang op te slaan."
     }
   },
   "general": {
@@ -78,7 +83,6 @@
       "deleteCard": "Kaart Verwijderen",
       "doNotKnow": "Weet het niet",
       "repeatPassword": "Herhaal Wachtwoord",
-      "getStarted": "Beginnen",
       "goHome": "Ga naar Start",
       "login": "Inloggen",
       "loading": "Laden",
@@ -92,7 +96,8 @@
       "startPracticing": "Begin met Oefenen",
       "toggleColorMode": "Kleurmodus Wisselen",
       "rename": "Hernoemen",
-      "practice": "Oefenen"
+      "practice": "Oefenen",
+      "tryOffline": "Probeer Offline"
     },
     "errors": {
       "collectionNotFound": "Collectie niet gevonden",
@@ -159,8 +164,8 @@
       "index": {
         "title": "Beter Leren met FlashNotes",
         "description": "Een eenvoudige flashcard-app die je helpt te leren. Maak kaarten, oefen regelmatig en onthoud wat belangrijk is.",
-        "simpleDesign": "Eenvoudig Ontwerp",
-        "simpleDesignDescription": "Een schone interface die je helpt je te concentreren op leren.",
+        "offlineMode": "Offline Modus",
+        "offlineModeDescription": "Gebruik FlashNotes overal, zelfs zonder internetverbinding. Gastmodus en al je gegevens werken volledig offline!",
         "aiGeneration": "AI Generatie",
         "aiGenerationDescription": "Maak automatisch flashcards met AI om tijd te besparen en het leren te verbeteren.",
         "responsiveDesign": "Responsief Ontwerp",
