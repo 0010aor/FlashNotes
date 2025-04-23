@@ -3,12 +3,13 @@ import { Box, Flex, IconButton, Image } from '@chakra-ui/react'
 import { Link } from '@tanstack/react-router'
 import { useState } from 'react'
 import { FiMenu } from 'react-icons/fi'
-import { isGuest } from '../../hooks/useAuth'
+import { useAuthContext } from '../../hooks/useAuthContext'
 import Drawer from './Drawer'
 import GuestModeNotice from './GuestModeNotice'
 
 function Navbar() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+  const { isGuest } = useAuthContext()
 
   return (
     <>
@@ -32,7 +33,7 @@ function Navbar() {
 
         <Box flex={{ base: 0, md: 1 }} />
 
-        {isGuest() && (
+        {isGuest && (
           <Box
             flex={{ base: 1, md: 'none' }}
             display="flex"

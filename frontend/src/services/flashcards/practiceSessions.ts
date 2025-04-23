@@ -1,5 +1,5 @@
 import { FlashcardsService } from '@/client'
-import { isGuest } from '../../hooks/useAuth'
+const isGuest = () => localStorage.getItem('guest_mode') === 'true'
 import * as practiceSessions from '../localDB/practiceSessions'
 
 export const startPracticeSession = async (collectionId: string) => {

@@ -4,7 +4,7 @@ import { useColorMode } from '@/components/ui/color-mode'
 import { Container, Heading, Image, Stack, Text, VStack } from '@chakra-ui/react'
 import { Link, createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
-import { isLoggedIn, setGuestMode } from '../../hooks/useAuth'
+import { useAuthContext } from '../../hooks/useAuthContext'
 
 export const Route = createFileRoute('/_publicLayout/')({
   component: LandingPage,
@@ -12,7 +12,7 @@ export const Route = createFileRoute('/_publicLayout/')({
 
 function LandingPage() {
   const { t } = useTranslation()
-  const isAuthenticated = isLoggedIn()
+  const { isLoggedIn, setGuestMode } = useAuthContext()
   const { colorMode } = useColorMode()
   const navigate = useNavigate()
 
@@ -46,7 +46,7 @@ function LandingPage() {
             {t('routes.publicLayout.index.description')}
           </Text>
           <Stack direction="row" gap={4}>
-            {isAuthenticated ? (
+            {isLoggedIn ? (
               <Link to="/collections">
                 <BlueButton size="lg">{t('general.actions.letsStudy')}!</BlueButton>
               </Link>

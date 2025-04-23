@@ -6,13 +6,17 @@ import { useTranslation } from 'react-i18next'
 import type { Body_login_login_access_token as AccessToken } from '../../client'
 import { DefaultButton } from '../../components/commonUI/Button'
 import { DefaultInput } from '../../components/commonUI/Input'
-import useAuth, { isLoggedIn } from '../../hooks/useAuth'
+import useAuth from '../../hooks/useAuth'
 import { emailPattern } from '../../utils'
 
 export const Route = createFileRoute('/_publicLayout/login')({
   component: Login,
   beforeLoad: async () => {
-    if (isLoggedIn()) {
+    // NOTE: Direct localStorage access is used here because React context is not available in router guards.
+    // For all React components, use useAuthContext() from './hooks/useAuthContext' instead.
+    const isGuest = localStorage.getItem('guest_mode') === 'true'
+    const isLoggedIn = Boolean(localStorage.getItem('access_token')) || isGuest
+    if (isLoggedIn) {
       throw redirect({
         to: '/collections',
       })

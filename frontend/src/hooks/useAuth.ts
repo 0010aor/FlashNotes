@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useAuthContext } from './useAuthContext'
 
 import { toaster } from '@/components/ui/toaster'
 import { AxiosError } from 'axios'
@@ -17,24 +18,7 @@ interface ErrorResponse {
   body: {
     detail?: string
   }
-}
-
-const GUEST_MODE_KEY = 'guest_mode'
-
-const setGuestMode = (value: boolean) => {
-  if (value) {
-    localStorage.setItem(GUEST_MODE_KEY, 'true')
-  } else {
-    localStorage.removeItem(GUEST_MODE_KEY)
-  }
-}
-
-const isGuest = () => {
-  return localStorage.getItem(GUEST_MODE_KEY) === 'true'
-}
-
-const isLoggedIn = () => {
-  return localStorage.getItem('access_token') !== null || isGuest()
+  status?: number
 }
 
 const useAuth = () => {
@@ -42,10 +26,11 @@ const useAuth = () => {
   const [error, setError] = useState<string | null>(null)
   const navigate = useNavigate()
   const queryClient = useQueryClient()
+  const { isGuest, isLoggedIn, logout } = useAuthContext()
   const { data: user, isLoading } = useQuery<UserPublic | null, Error>({
     queryKey: ['currentUser'],
     queryFn: UsersService.readUserMe,
-    enabled: isLoggedIn() && !isGuest(),
+    enabled: isLoggedIn && !isGuest,
   })
 
   const signUpMutation = useMutation({
@@ -71,7 +56,8 @@ const useAuth = () => {
         description: errDetail,
         type: 'error',
       })
-      if (err.status === 409) {
+      const status = (err as AxiosError).status ?? (err as ErrorResponse).status
+      if (status === 409) {
         setError(t('general.errors.emailAlreadyInUse') || t('general.errors.somethingWentWrong'))
       } else {
         setError(errDetail)
@@ -115,12 +101,6 @@ const useAuth = () => {
     },
   })
 
-  const logout = () => {
-    localStorage.removeItem('access_token')
-    setGuestMode(false)
-    navigate({ to: '/' })
-  }
-
   return {
     signUpMutation,
     loginMutation,
@@ -132,5 +112,4 @@ const useAuth = () => {
   }
 }
 
-export { isLoggedIn, setGuestMode, isGuest }
 export default useAuth

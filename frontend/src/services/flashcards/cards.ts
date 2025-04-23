@@ -1,5 +1,5 @@
 import { FlashcardsService } from '@/client'
-import { isGuest } from '../../hooks/useAuth'
+const isGuest = () => localStorage.getItem('guest_mode') === 'true'
 import * as cards from '../localDB/cards'
 
 export const getCards = async (collectionId: string) => {
