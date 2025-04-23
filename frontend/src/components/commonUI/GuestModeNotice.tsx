@@ -1,7 +1,7 @@
+import { useAuthContext } from '@/hooks/useAuthContext'
 import { HStack, Text } from '@chakra-ui/react'
 import { useNavigate } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
-import { useAuthContext } from '../../hooks/useAuthContext'
 import { DefaultButton } from './Button'
 
 export default function GuestModeNotice() {
