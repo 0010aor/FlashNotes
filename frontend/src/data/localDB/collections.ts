@@ -43,9 +43,10 @@ export const updateLocalCollection = async (
 export const deleteLocalCollection = async (id: string): Promise<void> => {
   await db.cards.where('collectionId').equals(id).delete()
   const sessions = await db.practice_sessions.where('collectionId').equals(id).toArray()
-  for (const session of sessions) {
-    await db.practice_cards.where('sessionId').equals(session.id).delete()
-    await db.practice_sessions.delete(session.id)
+  const sessionIds = sessions.map((session) => session.id)
+  if (sessionIds.length > 0) {
+    await db.practice_cards.where('sessionId').anyOf(sessionIds).delete()
+    await db.practice_sessions.bulkDelete(sessionIds)
   }
   await db.collections.delete(id)
 }
