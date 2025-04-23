@@ -1,4 +1,4 @@
-import type { PracticeSession } from '@/client'
+import type { PracticeCardResponse, PracticeSession } from '@/client'
 import { getPracticeSessionRepository } from '@/repositories/practiceSession/PracticeSessionRepositoryFactory'
 import { isGuest } from '@/utils/authUtils'
 
@@ -8,6 +8,16 @@ export const startPracticeSession = async (collectionId: string): Promise<Practi
   return repo().start(collectionId)
 }
 
-export const getPracticeSessions = async (collectionId: string): Promise<PracticeSession[]> => {
-  return repo().getAll(collectionId)
+export const getNextPracticeCard = async (
+  sessionId: string,
+): Promise<PracticeCardResponse | null> => {
+  return repo().getNextCard(sessionId)
+}
+
+export const submitPracticeCardResult = async (
+  sessionId: string,
+  cardId: string,
+  isCorrect: boolean,
+): Promise<void> => {
+  await repo().submitCardResult(sessionId, cardId, isCorrect)
 }

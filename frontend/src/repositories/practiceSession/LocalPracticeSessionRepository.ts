@@ -1,4 +1,5 @@
-import type { PracticeSession } from '@/client'
+import type { PracticeCardResponse, PracticeSession } from '@/client'
+import * as practiceCards from '@/data/localDB/practiceCards'
 import * as practiceSessions from '@/data/localDB/practiceSessions'
 import type { LocalPracticeSession } from '@/db/flashcardsDB'
 import type { PracticeSessionRepository } from './PracticeSessionRepository'
@@ -24,8 +25,22 @@ export class LocalPracticeSessionRepository implements PracticeSessionRepository
     return toPracticeSession(local)
   }
 
-  async getAll(collectionId: string): Promise<PracticeSession[]> {
-    const locals = await practiceSessions.getLocalPracticeSessions(collectionId)
-    return locals.map(toPracticeSession)
+  async getNextCard(sessionId: string): Promise<PracticeCardResponse | null> {
+    const localCard = await practiceCards.getNextLocalPracticeCard(sessionId)
+    if (!localCard) return null
+    return {
+      card: {
+        id: localCard.id,
+        front: localCard.front,
+        back: localCard.back,
+        collection_id: localCard.collectionId,
+      },
+      is_practiced: false,
+      is_correct: null,
+    } as PracticeCardResponse
+  }
+
+  async submitCardResult(sessionId: string, cardId: string, isCorrect: boolean): Promise<void> {
+    await practiceCards.updateLocalPracticeCardResult(sessionId, cardId, isCorrect)
   }
 }

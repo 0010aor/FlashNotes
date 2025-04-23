@@ -74,7 +74,7 @@ export const startLocalPracticeSession = async (
 ): Promise<LocalPracticeSession> => {
   const now = Date.now()
   const newSession: LocalPracticeSession = {
-    id: crypto.randomUUID(),
+    id: uuidv4(),
     collectionId,
     startedAt: now,
     isCompleted: false,

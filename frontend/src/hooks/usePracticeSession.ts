@@ -1,26 +1,14 @@
-import { useMutation } from '@tanstack/react-query'
-import type { UseMutationResult } from '@tanstack/react-query'
-import { useCallback, useRef, useState } from 'react'
-import type { Dispatch, SetStateAction } from 'react'
-import type { Card, PracticeCardListResponse, PracticeSession } from '../client/types.gen'
+import type { PracticeCardResponse } from '@/client'
 import {
-  getNextLocalPracticeCard,
-  updateLocalPracticeCardResult,
-} from '../data/localDB/practiceCards'
-import * as practiceSessions from '../data/localDB/practiceSessions'
-import type { LocalCard, LocalPracticeSession } from '../db/flashcardsDB'
-import { getPracticeCards, updatePracticeCard } from '../services/flashcards/practiceCards'
-import { startPracticeSession } from '../services/flashcards/practiceSessions'
-import { isGuest } from '../utils/authUtils'
+  getNextPracticeCard,
+  startPracticeSession,
+  submitPracticeCardResult,
+} from '@/services/flashcards/practiceSessions'
+import { useCallback, useRef, useState } from 'react'
 
 interface PracticeSessionState {
   sessionId: string | null
-  currentCard: {
-    id: string
-    front: string
-    back: string
-    collection_id: string
-  } | null
+  currentCard: PracticeCardResponse['card'] | null
   isFlipped: boolean
   progress: {
     correct: number
@@ -28,49 +16,6 @@ interface PracticeSessionState {
     total: number
   }
   isComplete: boolean
-}
-
-type SessionType = PracticeSession | LocalPracticeSession
-
-type FetchNextPracticeCardResult =
-  | (LocalCard & { collection_id: string })
-  | PracticeCardListResponse
-  | null
-
-type SubmitResultResponse = { is_correct: boolean } | { is_correct: boolean | null }
-
-function normalizeSession(session: PracticeSession | LocalPracticeSession) {
-  if ('is_completed' in session) {
-    return {
-      id: session.id,
-      isComplete: session.is_completed,
-      progress: {
-        correct: session.correct_answers,
-        incorrect: session.cards_practiced - session.correct_answers,
-        total: session.total_cards,
-      },
-    }
-  }
-
-  return {
-    id: session.id,
-    isComplete: session.isCompleted,
-    progress: {
-      correct: session.correctAnswers,
-      incorrect: session.cardsPracticed - session.correctAnswers,
-      total: session.totalCards,
-    },
-  }
-}
-
-function extractCurrentCard(response: FetchNextPracticeCardResult): any {
-  if (!response) return null
-  if ('collection_id' in response) return response
-  if ('data' in response && Array.isArray(response.data)) {
-    const nextCardData = response.data[0]
-    return nextCardData ? nextCardData.card : null
-  }
-  return null
 }
 
 export function usePracticeSession(collectionId: string) {
@@ -88,159 +33,65 @@ export function usePracticeSession(collectionId: string) {
 
   const startingRef = useRef(false)
 
-  async function handleGuestSessionStart(collectionId: string): Promise<LocalPracticeSession> {
-    return await practiceSessions.startLocalPracticeSession(collectionId)
-  }
-
-  async function handleGuestSubmitResult(
-    state: PracticeSessionState,
-    fetchNextPracticeCard: UseMutationResult<FetchNextPracticeCardResult, Error, string, void>,
-    setState: Dispatch<SetStateAction<PracticeSessionState>>,
-  ) {
-    if (!state.sessionId) return
-    const session = await practiceSessions.getLocalPracticeSessionById(state.sessionId)
-    if (!session) return
-    const normalized = normalizeSession(session)
-    setState((prev: PracticeSessionState) => ({
-      ...prev,
-      progress: normalized.progress,
-      isComplete: normalized.isComplete,
-    }))
-    if (!normalized.isComplete) {
-      fetchNextPracticeCard.mutate(state.sessionId)
-    }
-  }
-
-  const startSession = useMutation<SessionType | null, Error, void, void>({
-    mutationFn: async () => {
-      if (startingRef.current || state.sessionId) return null
-      startingRef.current = true
-      try {
-        if (isGuest()) {
-          return await handleGuestSessionStart(collectionId)
-        }
-        return (await startPracticeSession(collectionId)) as PracticeSession
-      } finally {
-        startingRef.current = false
-      }
-    },
-    onSuccess: async (session) => {
-      if (!session) return
-      const normalized = normalizeSession(session)
-      if (isGuest()) {
-        const nextCard = await getNextLocalPracticeCard(normalized.id)
-        setState((prev) => ({
-          ...prev,
-          sessionId: normalized.id,
-          isComplete: normalized.isComplete,
-          progress: normalized.progress,
-          currentCard: nextCard,
-        }))
-      } else {
-        setState((prev) => ({
-          ...prev,
-          sessionId: normalized.id,
-          isComplete: normalized.isComplete,
-          progress: normalized.progress,
-        }))
-        if (!normalized.isComplete) {
-          fetchNextPracticeCard.mutate(normalized.id)
-        }
-      }
-    },
-  })
-
-  const fetchNextPracticeCard = useMutation<FetchNextPracticeCardResult, Error, string, void>({
-    mutationFn: async (sessionId: string) => {
-      if (isGuest()) {
-        const nextCard = await getNextLocalPracticeCard(sessionId)
-        const card: Card | undefined = nextCard
-          ? {
-              id: nextCard.id,
-              front: nextCard.front,
-              back: nextCard.back,
-              collection_id: nextCard.collectionId,
-            }
-          : undefined
-        const practiceCardResponse = card ? [{ card, is_practiced: false, is_correct: null }] : []
-        return { data: practiceCardResponse, count: practiceCardResponse.length }
-      }
-      const response = await getPracticeCards(sessionId)
-      const practiceCardResponses = response.map((card) => ({
-        card: {
-          id: card.card_id,
-          front: '',
-          back: '',
-          collection_id: card.session_id,
-        },
-        is_practiced: card.is_practiced,
-        is_correct: card.is_correct,
-      }))
-      return { data: practiceCardResponses, count: practiceCardResponses.length }
-    },
-    onSuccess: (response) => {
+  const start = useCallback(async () => {
+    if (startingRef.current || state.sessionId) return
+    startingRef.current = true
+    try {
+      const session = await startPracticeSession(collectionId)
       setState((prev) => ({
         ...prev,
-        currentCard: extractCurrentCard(response),
-        isFlipped: false,
+        sessionId: session.id,
+        isComplete: session.is_completed,
+        progress: {
+          correct: session.correct_answers,
+          incorrect: session.cards_practiced - session.correct_answers,
+          total: session.total_cards,
+        },
       }))
-    },
-  })
-
-  const submitResult = useMutation<
-    SubmitResultResponse,
-    Error,
-    { sessionId: string; cardId: string; isCorrect: boolean },
-    void
-  >({
-    mutationFn: async ({ sessionId, cardId, isCorrect }) => {
-      if (isGuest()) {
-        await updateLocalPracticeCardResult(sessionId, cardId, isCorrect)
-        return { is_correct: isCorrect }
+      if (!session.is_completed) {
+        const nextCardData = await getNextPracticeCard(session.id)
+        setState((prev) => ({
+          ...prev,
+          currentCard: nextCardData ? nextCardData.card : null,
+          isFlipped: false,
+        }))
       }
-      return await updatePracticeCard(sessionId, { is_correct: isCorrect }, sessionId)
-    },
-    onSuccess: async (response) => {
-      if (isGuest()) {
-        await handleGuestSubmitResult(state, fetchNextPracticeCard, setState)
-      } else {
-        setState((prev) => {
-          const newProgress = {
-            ...prev.progress,
-            correct: prev.progress.correct + (response.is_correct ? 1 : 0),
-            incorrect: prev.progress.incorrect + (response.is_correct ? 0 : 1),
-          }
-          const isComplete = newProgress.correct + newProgress.incorrect >= prev.progress.total
-
-          if (state.sessionId && !isComplete) {
-            fetchNextPracticeCard.mutate(state.sessionId)
-          }
-
-          return {
-            ...prev,
-            progress: newProgress,
-            isComplete,
-          }
-        })
-      }
-    },
-  })
+    } finally {
+      startingRef.current = false
+    }
+  }, [collectionId, state.sessionId])
 
   const handleFlip = useCallback(() => {
     setState((prev) => ({ ...prev, isFlipped: !prev.isFlipped }))
   }, [])
 
   const handleAnswer = useCallback(
-    (isCorrect: boolean) => {
+    async (isCorrect: boolean) => {
       if (!state.sessionId || !state.currentCard) return
-
-      submitResult.mutate({
-        sessionId: state.sessionId,
-        cardId: state.currentCard.id,
-        isCorrect,
+      await submitPracticeCardResult(state.sessionId, state.currentCard.id, isCorrect)
+      setState((prev) => {
+        const newProgress = {
+          ...prev.progress,
+          correct: prev.progress.correct + (isCorrect ? 1 : 0),
+          incorrect: prev.progress.incorrect + (isCorrect ? 0 : 1),
+        }
+        const isComplete = newProgress.correct + newProgress.incorrect >= prev.progress.total
+        return {
+          ...prev,
+          progress: newProgress,
+          isComplete,
+        }
       })
+      if (state.sessionId) {
+        const nextCardData = await getNextPracticeCard(state.sessionId)
+        setState((prev) => ({
+          ...prev,
+          currentCard: nextCardData ? nextCardData.card : null,
+          isFlipped: false,
+        }))
+      }
     },
-    [state.sessionId, state.currentCard, submitResult],
+    [state.sessionId, state.currentCard],
   )
 
   const reset = useCallback(() => {
@@ -255,16 +106,16 @@ export function usePracticeSession(collectionId: string) {
       },
       isComplete: false,
     })
-    startSession.mutate()
-  }, [startSession])
+    start()
+  }, [start])
 
   return {
     ...state,
-    isLoading: startSession.isPending || fetchNextPracticeCard.isPending || submitResult.isPending,
-    error: startSession.error || fetchNextPracticeCard.error || submitResult.error,
+    isLoading: false,
+    error: null,
     handleFlip,
     handleAnswer,
     reset,
-    start: startSession.mutate,
+    start,
   }
 }

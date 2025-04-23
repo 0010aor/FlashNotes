@@ -1,29 +1,29 @@
-import type { PracticeCard, PracticeCardResultPatch } from '@/client'
-import { getPracticeCardRepository } from '@/repositories/practiceCard/PracticeCardRepositoryFactory'
+import type { Card, CardCreate, CardUpdate } from '@/client'
+import { getCardRepository } from '@/repositories/card/CardRepositoryFactory'
 import { isGuest } from '@/utils/authUtils'
 
-const repo = () => getPracticeCardRepository(isGuest())
+const repo = () => getCardRepository(isGuest())
 
-export const getPracticeCards = async (sessionId: string): Promise<PracticeCard[]> => {
+export const getPracticeCards = async (sessionId: string): Promise<Card[]> => {
   return repo().getAll(sessionId)
 }
 
-export const getPracticeCardById = async (id: string): Promise<PracticeCard | null> => {
-  return repo().getById(id)
+export const getPracticeCardById = async (id: string, sessionId: string): Promise<Card | null> => {
+  return repo().getById(id, sessionId)
 }
 
-export const createPracticeCard = async (sessionId: string, data: any): Promise<PracticeCard> => {
+export const createPracticeCard = async (sessionId: string, data: CardCreate): Promise<Card> => {
   return repo().create(sessionId, data)
 }
 
 export const updatePracticeCard = async (
+  sessionId: string,
   id: string,
-  data: PracticeCardResultPatch,
-  practiceSessionId?: string,
-): Promise<PracticeCard> => {
-  return repo().update(id, data, practiceSessionId)
+  data: CardUpdate,
+): Promise<Card> => {
+  return repo().update(sessionId, id, data)
 }
 
-export const deletePracticeCard = async (id: string): Promise<void> => {
-  return repo().delete(id)
+export const deletePracticeCard = async (id: string, sessionId: string): Promise<void> => {
+  return repo().delete(id, sessionId)
 }
