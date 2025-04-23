@@ -14,7 +14,9 @@ function ErrorState({ error, onRetry }: { error?: Error; onRetry?: () => void })
       {onRetry ? (
         <Button onClick={onRetry}>{t('general.errors.tryAgain')}</Button>
       ) : (
-        <Button onClick={() => navigate({ to: '/' })}>{t('general.actions.goHome')}</Button>
+        <Button onClick={() => navigate({ to: '/collections' })}>
+          {t('general.actions.goHome')}
+        </Button>
       )}
     </VStack>
   )
