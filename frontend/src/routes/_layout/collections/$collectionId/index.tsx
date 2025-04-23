@@ -6,12 +6,14 @@ import ErrorState from '@/components/commonUI/ErrorState'
 import FloatingActionButton from '@/components/commonUI/FloatingActionButton'
 import ListSkeleton from '@/components/commonUI/ListSkeleton'
 import ScrollableContainer from '@/components/commonUI/ScrollableContainer'
-import { Stack } from '@chakra-ui/react'
+import SpeedDial, { SpeedDialActionItem } from '@/components/commonUI/SpeedDial'
+import { Stack, Text } from '@chakra-ui/react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { MdSchool } from 'react-icons/md'
 import { VscAdd } from 'react-icons/vsc'
+import { useState } from 'react'
 
 function getCardsQueryOptions(collectionId: string) {
   return {
@@ -26,6 +28,7 @@ export const Route = createFileRoute('/_layout/collections/$collectionId/')({
 
 function CollectionComponent() {
   const { t } = useTranslation()
+  const [isSpeedDialLoading, setIsSpeedDialLoading] = useState(false)
   const navigate = useNavigate()
   const queryClient = useQueryClient()
   const { collectionId } = Route.useParams()
@@ -49,6 +52,26 @@ function CollectionComponent() {
 
   if (isLoading) return <ListSkeleton />
   if (error) return <ErrorState error={error} />
+
+  const speedDialActions: SpeedDialActionItem[] = [
+    {
+      id: 'add',
+      icon: <VscAdd />,
+      label: t('general.actions.addCard'),
+      onClick: () => navigate({ to: `/collections/${collectionId}/cards/new` }),
+    },
+    {
+      id: 'ai',
+      icon: (
+        <Text as="span" fontSize="sm" fontWeight="bold">
+          AI
+        </Text>
+      ),
+      label: "Crear con AI",
+      onClick: () => alert("clicked ai"),
+      bgColor: 'fbuttons.orange',
+    },
+  ]
 
   return (
     <>
@@ -76,6 +99,8 @@ function CollectionComponent() {
           onClick={() => navigate({ to: `/collections/${collectionId}/practice` })}
         />
       )}
+
+      <SpeedDial actions={speedDialActions} isLoading={isSpeedDialLoading} />
 
       <FloatingActionButton
         icon={<VscAdd color="white" />}
