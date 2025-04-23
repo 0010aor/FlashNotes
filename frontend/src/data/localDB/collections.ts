@@ -49,11 +49,3 @@ export const deleteLocalCollection = async (id: string): Promise<void> => {
   }
   await db.collections.delete(id)
 }
-
-export const markCollectionAsSynced = async (id: string): Promise<number> => {
-  return await db.collections.update(id, { synced: true })
-}
-
-export const getUnsyncedCollections = async (): Promise<LocalCollection[]> => {
-  return await db.collections.where('synced').equals(0).toArray()
-}

@@ -1,27 +1,34 @@
-import type { Collection, CollectionCreate, CollectionUpdate } from '@/client'
+import type { Card, Collection, CollectionCreate, CollectionUpdate } from '@/client'
+import * as cards from '@/data/localDB/cards'
 import * as collections from '@/data/localDB/collections'
 import type { LocalCollection } from '@/db/flashcardsDB'
 import type { CollectionRepository } from './CollectionRepository'
 
-function toCollection(local: LocalCollection): Collection {
+async function toCollection(local: LocalCollection): Promise<Collection> {
+  const localCards = await cards.getLocalCardsForCollection(local.id)
   return {
     id: local.id,
     name: local.name,
     user_id: '',
-    cards: [],
-  } as Collection
+    cards: localCards.map((card) => ({
+      id: card.id,
+      collection_id: card.collectionId,
+      front: card.front,
+      back: card.back,
+    })) as Card[],
+  }
 }
 
 export class LocalCollectionRepository implements CollectionRepository {
   async getAll(): Promise<Collection[]> {
     const locals = await collections.getLocalCollections()
-    return locals.map(toCollection)
+    return Promise.all(locals.map(toCollection))
   }
 
   async getById(id: string): Promise<Collection | null> {
     try {
       const local = await collections.getLocalCollectionById(id)
-      return toCollection(local)
+      return await toCollection(local)
     } catch (e) {
       return null
     }
@@ -29,15 +36,13 @@ export class LocalCollectionRepository implements CollectionRepository {
 
   async create(data: CollectionCreate): Promise<Collection> {
     const local = await collections.addLocalCollection(data.name, data.prompt)
-    return toCollection(local)
+    return await toCollection(local)
   }
 
   async update(id: string, data: CollectionUpdate): Promise<Collection> {
-    const filteredData: Partial<Pick<LocalCollection, 'name'>> = {}
-    if (typeof data.name !== 'undefined' && data.name !== null) filteredData.name = data.name
-    await collections.updateLocalCollection(id, filteredData)
+    await collections.updateLocalCollection(id, { name: data.name ?? undefined })
     const updated = await collections.getLocalCollectionById(id)
-    return toCollection(updated)
+    return await toCollection(updated)
   }
 
   async delete(id: string): Promise<void> {

@@ -1,20 +1,4 @@
-import { v4 as uuidv4 } from 'uuid'
 import { type LocalPracticeCard, db } from '../../db/flashcardsDB'
-
-export const addLocalPracticeCard = async (
-  sessionId: string,
-  cardId: string,
-): Promise<LocalPracticeCard> => {
-  const newPracticeCard: LocalPracticeCard = {
-    id: uuidv4(),
-    sessionId,
-    cardId,
-    isPracticed: false,
-    synced: false,
-  }
-  await db.practice_cards.add(newPracticeCard)
-  return newPracticeCard
-}
 
 export const getLocalPracticeCardsForSession = async (
   sessionId: string,
@@ -28,16 +12,16 @@ export const getLocalPracticeCardById = async (id: string): Promise<LocalPractic
   return card
 }
 
-export const updateLocalPracticeCard = async (
-  id: string,
-  updates: Partial<Omit<LocalPracticeCard, 'id' | 'sessionId' | 'cardId'>>,
-): Promise<number> => {
-  const card = await db.practice_cards.get(id)
-  if (!card) throw new Error('Practice card not found for update')
-  return await db.practice_cards.update(id, {
-    ...updates,
-    synced: false,
-  })
+export async function updateLocalPracticeCard(
+  sessionId: string,
+  cardId: string,
+  isCorrect: boolean,
+) {
+  const practiceCardList = await db.practice_cards.where('sessionId').equals(sessionId).toArray()
+  const practiceCard = practiceCardList.find((c) => c.cardId === cardId)
+  if (!practiceCard) throw new Error('Practice card not found for update')
+  await markPracticeCardAsPracticed(practiceCard.id, isCorrect)
+  await updatePracticeSessionStats(sessionId, isCorrect)
 }
 
 export const deleteLocalPracticeCard = async (id: string): Promise<void> => {
@@ -56,14 +40,18 @@ export const getUnsyncedPracticeCardsForSession = async (
 
 export async function getNextLocalPracticeCard(sessionId: string) {
   const practiceCardList = await db.practice_cards.where('sessionId').equals(sessionId).toArray()
-
   const next = practiceCardList.find((c) => !c.isPracticed)
   if (!next) return null
-
   const card = await db.cards.get(next.cardId)
   if (!card) throw new Error('Card not found for next practice')
-
-  return { ...card, collection_id: card.collectionId }
+  return {
+    ...next,
+    front: card.front,
+    back: card.back,
+    collectionId: card.collectionId,
+    createdAt: card.createdAt,
+    updatedAt: card.updatedAt,
+  }
 }
 
 async function markPracticeCardAsPracticed(practiceCardId: string, isCorrect: boolean) {
@@ -88,16 +76,4 @@ async function updatePracticeSessionStats(sessionId: string, isCorrect: boolean)
     completedAt: isCompleted ? Date.now() : undefined,
     synced: false,
   })
-}
-
-export async function updateLocalPracticeCardResult(
-  sessionId: string,
-  cardId: string,
-  isCorrect: boolean,
-) {
-  const practiceCardList = await db.practice_cards.where('sessionId').equals(sessionId).toArray()
-  const practiceCard = practiceCardList.find((c) => c.cardId === cardId)
-  if (!practiceCard) throw new Error('Practice card not found for update')
-  await markPracticeCardAsPracticed(practiceCard.id, isCorrect)
-  await updatePracticeSessionStats(sessionId, isCorrect)
 }

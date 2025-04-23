@@ -70,18 +70,3 @@ export const deleteLocalCard = async (id: string): Promise<void> => {
     synced: false,
   })
 }
-
-export const markCardAsSynced = async (id: string): Promise<number> => {
-  return await db.cards.update(id, { synced: true })
-}
-
-export const getUnsyncedCardsForCollection = async (collectionId: string): Promise<LocalCard[]> => {
-  return await db.cards.where({ collectionId: collectionId, synced: 0 }).toArray()
-}
-
-export const getLocalCardsForCollections = async (
-  collectionIds: string[],
-): Promise<LocalCard[]> => {
-  if (!collectionIds.length) return []
-  return await db.cards.where('collectionId').anyOf(collectionIds).toArray()
-}

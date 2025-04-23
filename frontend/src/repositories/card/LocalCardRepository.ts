@@ -9,7 +9,7 @@ function toCard(local: LocalCard): Card {
     collection_id: local.collectionId,
     front: local.front,
     back: local.back,
-  } as Card
+  }
 }
 
 export class LocalCardRepository implements CardRepository {
@@ -33,10 +33,10 @@ export class LocalCardRepository implements CardRepository {
   }
 
   async update(collectionId: string, id: string, data: CardUpdate): Promise<Card> {
-    const filteredData: Partial<Pick<LocalCard, 'front' | 'back'>> = {}
-    if (typeof data.front !== 'undefined' && data.front !== null) filteredData.front = data.front
-    if (typeof data.back !== 'undefined' && data.back !== null) filteredData.back = data.back
-    await cards.updateLocalCard(id, filteredData)
+    await cards.updateLocalCard(id, {
+      front: data.front ?? undefined,
+      back: data.back ?? undefined,
+    })
     const updated = await cards.getLocalCardById(id)
     return toCard(updated)
   }
