@@ -84,3 +84,10 @@ export const deleteLocalCard = async (id: string): Promise<void> => {
   })
   await removeIncompletePracticeSessionsForCollection(card.collectionId)
 }
+
+export const getLocalCardsForCollections = async (
+  collectionIds: string[],
+): Promise<LocalCard[]> => {
+  if (!collectionIds.length) return []
+  return await db.cards.where('collectionId').anyOf(collectionIds).toArray()
+}
