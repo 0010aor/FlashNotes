@@ -3,7 +3,7 @@ import { ChakraProvider } from '@chakra-ui/react'
 import { MutationCache, QueryCache, QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { RouterProvider, createRouter } from '@tanstack/react-router'
 import { PostHogProvider } from 'posthog-js/react'
-import { StrictMode, useState } from 'react'
+import { useState } from 'react'
 import {  OpenAPI } from './client'
 import { ApiError } from './client'
 import { AuthProvider } from './hooks/useAuthContext'
@@ -54,24 +54,22 @@ const App = () => {
         setIsPosthogEnabled(status)
     }
     return (
-        <StrictMode>
-            <AuthProvider>
-                <ChakraProvider value={system}>
-                <ColorModeProvider>
-                    <QueryClientProvider client={queryClient}>
-                    <CookieConsent consented={isPosthogEnabled} onConsent={onConsent} />
-                    {isPosthogEnabled && posthogConfig.enabled ? (
-                        <PostHogProvider apiKey={posthogApiKey} options={posthogConfig.options}>
-                        <RouterProvider router={router} />
-                        </PostHogProvider>
-                    ) : (
-                        <RouterProvider router={router} />
-                    )}
-                    </QueryClientProvider>
-                </ColorModeProvider>
-                </ChakraProvider>
-            </AuthProvider>
-        </StrictMode>
+        <AuthProvider>
+            <ChakraProvider value={system}>
+            <ColorModeProvider>
+                <QueryClientProvider client={queryClient}>
+                <CookieConsent consented={isPosthogEnabled} onConsent={onConsent} />
+                {isPosthogEnabled && posthogConfig.enabled ? (
+                    <PostHogProvider apiKey={posthogApiKey} options={posthogConfig.options}>
+                    <RouterProvider router={router} />
+                    </PostHogProvider>
+                ) : (
+                    <RouterProvider router={router} />
+                )}
+                </QueryClientProvider>
+            </ColorModeProvider>
+            </ChakraProvider>
+        </AuthProvider>
     );
 };
 
