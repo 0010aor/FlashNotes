@@ -106,7 +106,6 @@
       "errorCreatingAccount": "Error al crear la cuenta",
       "errorLoadingCard": "Error al cargar la tarjeta",
       "errorSavingCard": "Error al guardar la tarjeta",
-      "fullNameIsRequired": "Nombre completo es requerido",
       "invalidCredentials": "Credenciales inválidas",
       "invalidName": "Nombre inválido",
       "invalidEmail": "Dirección de correo electrónico inválida",

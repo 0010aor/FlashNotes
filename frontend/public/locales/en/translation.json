@@ -106,7 +106,6 @@
       "errorCreatingAccount": "Error creating account",
       "errorLoadingCard": "Error loading card",
       "errorSavingCard": "Error saving card",
-      "fullNameIsRequired": "Full name is required",
       "invalidCredentials": "Invalid credentials",
       "invalidName": "Invalid name",
       "invalidEmail": "Invalid email address",

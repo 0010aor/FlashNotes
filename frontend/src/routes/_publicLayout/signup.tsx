@@ -40,7 +40,6 @@ function SignUp() {
     criteriaMode: 'all',
     defaultValues: {
       email: '',
-      full_name: '',
       password: '',
       confirm_password: '',
     },
@@ -65,23 +64,6 @@ function SignUp() {
       <form onSubmit={handleSubmit(onSubmit)}>
         <Fieldset.Root maxW="sm">
           <Fieldset.Content>
-            <Field.Root>
-              <Field.Label>{t('general.words.fullName')}</Field.Label>
-              <DefaultInput
-                placeholder={t('general.words.fullName')}
-                type="text"
-                minLength={3}
-                {...register('full_name', {
-                  required: t('general.errors.fullNameIsRequired'),
-                })}
-              />
-              {errors.full_name && (
-                <Text color="red.500" fontSize="sm">
-                  {errors.full_name.message}
-                </Text>
-              )}
-            </Field.Root>
-
             <Field.Root>
               <Field.Label>{t('general.words.email')}</Field.Label>
               <DefaultInput
