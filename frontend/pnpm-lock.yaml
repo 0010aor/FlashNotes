@@ -71,6 +71,9 @@ importers:
       tiptap-markdown:
         specifier: ^0.8.10
         version: 0.8.10(@tiptap/core@2.11.5(@tiptap/pm@2.11.5))
+      uuid:
+        specifier: ^11.1.0
+        version: 11.1.0
     devDependencies:
       '@biomejs/biome':
         specifier: ^1.9.4
@@ -2216,6 +2219,10 @@ packages:
     resolution: {integrity: sha512-9WXSPC5fMv61vaupRkCKCxsPxBocVnwakBEkMIHHpkTTg6icbJtg6jzgtLDm4bl3cSHAca52rYWih0k4K3PfHw==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+
+  uuid@11.1.0:
+    resolution: {integrity: sha512-0/A9rDy9P7cJ+8w1c9WD9V//9Wj15Ce2MPz8Ri6032usz+NfePxx5AcN3bN+r6ZL6jEo066/yNYB3tn4pQEx+A==}
+    hasBin: true
 
   victory-vendor@36.9.2:
     resolution: {integrity: sha512-PnpQQMuxlwYdocC8fIJqVXvkeViHYzotI+NJrCuav0ZYFoq912ZHBk3mCeuj+5/VpodOjPe1z0Fk2ihgzlXqjQ==}
@@ -4630,6 +4637,8 @@ snapshots:
   use-sync-external-store@1.4.0(react@19.0.0):
     dependencies:
       react: 19.0.0
+
+  uuid@11.1.0: {}
 
   victory-vendor@36.9.2:
     dependencies:
