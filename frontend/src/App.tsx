@@ -49,28 +49,30 @@ declare module '@tanstack/react-router' {
 }
 
 const App = () => {
-  const [isPosthogEnabled, setIsPosthogEnabled] = useState(posthogConfig.enabled);
-
-  return (
-    <StrictMode>
-      <AuthProvider>
-        <ChakraProvider value={system}>
-          <ColorModeProvider>
-            <QueryClientProvider client={queryClient}>
-              <CookieConsent />
-              {isPosthogEnabled ? (
-                <PostHogProvider apiKey={posthogApiKey} options={posthogConfig.options}>
-                  <RouterProvider router={router} />
-                </PostHogProvider>
-              ) : (
-                <RouterProvider router={router} />
-              )}
-            </QueryClientProvider>
-          </ColorModeProvider>
-        </ChakraProvider>
-      </AuthProvider>
-    </StrictMode>
-  );
+    const [isPosthogEnabled, setIsPosthogEnabled] = useState(false);
+    const onConsent=(status:boolean)=>{
+        setIsPosthogEnabled(status)
+    }
+    return (
+        <StrictMode>
+            <AuthProvider>
+                <ChakraProvider value={system}>
+                <ColorModeProvider>
+                    <QueryClientProvider client={queryClient}>
+                    <CookieConsent consented={isPosthogEnabled} onConsent={onConsent} />
+                    {isPosthogEnabled && posthogConfig.enabled ? (
+                        <PostHogProvider apiKey={posthogApiKey} options={posthogConfig.options}>
+                        <RouterProvider router={router} />
+                        </PostHogProvider>
+                    ) : (
+                        <RouterProvider router={router} />
+                    )}
+                    </QueryClientProvider>
+                </ColorModeProvider>
+                </ChakraProvider>
+            </AuthProvider>
+        </StrictMode>
+    );
 };
 
 export default App;

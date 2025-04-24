@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
     Box,
     Button,
@@ -10,15 +10,21 @@ import {
 } from "@chakra-ui/react";
 
 import { FaTimes as CloseIcon } from "react-icons/fa";
-const CookieConsent = () => {
-    const [hasConsented, setHasConsented] = useState(false);
+
+interface CookieConsentProps{
+    consented:boolean
+    onConsent:(status:boolean)=>void
+}
+
+const CookieConsent:React.FC<CookieConsentProps> = ({consented,onConsent}) => {
     const [isVisible, setIsVisible] = useState(false);
     useEffect(() => {
         const consent = localStorage.getItem("cookie-consent");
-        if (consent) {
-            setHasConsented(true);
+        if (consent==="all") {
+            onConsent(true);
         } else {
             const timer = setTimeout(() => {
+                onConsent(false)
                 setIsVisible(true);
             }, 300);
             return () => clearTimeout(timer);
@@ -28,20 +34,20 @@ const CookieConsent = () => {
     const handleAcceptAll = () => {
         localStorage.setItem("cookie-consent", "all");
         setIsVisible(false);
-        setTimeout(() => setHasConsented(true), 300);
+        setTimeout(() => onConsent(true), 300);
     };
 
     const handleAcceptNecessary = () => {
-        localStorage.setItem("cookie-consent", "necessary");
+        localStorage.setItem("cookie-consent", "deny");
         setIsVisible(false);
-        setTimeout(() => setHasConsented(true), 300);
+        setTimeout(() => onConsent(false), 300);
     };
 
     const handleClose = () => {
         setIsVisible(false);
     };
 
-    if (hasConsented) return null;
+    if (consented) return null;
     return (
         <Box
             position="fixed"
