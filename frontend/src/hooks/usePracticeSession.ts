@@ -60,8 +60,9 @@ export function usePracticeSession(collectionId: string) {
           isFlipped: false,
         }))
       }
-    } catch (err: any) {
-      setError(err.message || 'Failed to start session')
+    } catch (err: unknown) {
+      console.error(err)
+      setError('Failed to start session')
     } finally {
       setIsLoading(false)
       startingRef.current = false
@@ -95,8 +96,9 @@ export function usePracticeSession(collectionId: string) {
             isFlipped: false,
           }
         })
-      } catch (err: any) {
-        setError(err.message || 'Failed to submit answer')
+      } catch (err: unknown) {
+        console.error(err)
+        setError('Failed to submit answer')
       } finally {
         setIsLoading(false)
       }

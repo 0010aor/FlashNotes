@@ -1,7 +1,7 @@
 import type { PracticeCardResponse } from '@/client/types.gen'
 import { v4 as uuidv4 } from 'uuid'
 import { type LocalPracticeSession, db } from '../../db/flashcardsDB'
-import type { LocalPracticeCard } from '../../db/flashcardsDB'
+import type { LocalCard, LocalPracticeCard } from '../../db/flashcardsDB'
 
 export const getLocalPracticeSessions = async (
   collectionId: string,
@@ -53,7 +53,7 @@ async function createPracticeSession(
   return newSession
 }
 
-async function createPracticeCardsForSession(sessionId: string, cards: any[]) {
+async function createPracticeCardsForSession(sessionId: string, cards: LocalCard[]) {
   const practiceCards: LocalPracticeCard[] = cards.map((card) => ({
     id: uuidv4(),
     sessionId,

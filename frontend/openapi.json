@@ -1006,11 +1006,7 @@
       "UserRegister": {
         "properties": {
           "email": { "type": "string", "maxLength": 255, "format": "email", "title": "Email" },
-          "password": { "type": "string", "maxLength": 40, "minLength": 8, "title": "Password" },
-          "full_name": {
-            "anyOf": [{ "type": "string", "maxLength": 255 }, { "type": "null" }],
-            "title": "Full Name"
-          }
+          "password": { "type": "string", "maxLength": 40, "minLength": 8, "title": "Password" }
         },
         "type": "object",
         "required": ["email", "password"],
