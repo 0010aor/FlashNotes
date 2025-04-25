@@ -65,6 +65,12 @@
     "guestModeNotice": {
       "message": "Je bent momenteel offline.",
       "messageWithAction": "Je bent offline. Gegevens kunnen verloren gaan. Log in om je voortgang op te slaan."
+    },
+    "analyticsConsent": {
+      "title": "Wij gebruiken cookies",
+      "description": "We gebruiken cookies om je ervaring te verbeteren en het gebruik van de site te analyseren. Accepteer of weiger cookies om FlashNotes te blijven gebruiken.",
+      "accept": "Accepteren",
+      "decline": "Weigeren"
     }
   },
   "general": {

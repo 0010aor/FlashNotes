@@ -65,6 +65,12 @@
     "guestModeNotice": {
       "message": "You are currently offline.",
       "messageWithAction": "You are offline. Data may be lost. Log in to save your progress."
+    },
+    "analyticsConsent": {
+      "title": "We use cookies",
+      "description": "We use cookies to improve your experience and analyze site usage. Please accept or decline cookies to continue using FlashNotes.",
+      "accept": "Accept",
+      "decline": "Decline"
     }
   },
   "general": {

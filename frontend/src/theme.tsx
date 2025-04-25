@@ -75,6 +75,12 @@ const config = defineConfig({
           'green.dark': {
             value: '#2E493F',
           },
+          'purple.light': {
+            value: '#D8B4FC',
+          },
+          'purple.dark': {
+            value: '#D1A6F7',
+          },
         },
         stat: {
           positive: {

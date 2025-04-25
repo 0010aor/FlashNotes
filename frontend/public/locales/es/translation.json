@@ -65,6 +65,12 @@
     "guestModeNotice": {
       "message": "Actualmente estás sin conexión.",
       "messageWithAction": "Estás sin conexión. Los datos pueden perderse. Inicia sesión para guardar tu progreso."
+    },
+    "analyticsConsent": {
+      "title": "Usamos cookies",
+      "description": "Usamos cookies para mejorar tu experiencia y analizar el uso del sitio. Por favor, acepta o rechaza las cookies para continuar usando FlashNotes.",
+      "accept": "Aceptar",
+      "decline": "Rechazar"
     }
   },
   "general": {
