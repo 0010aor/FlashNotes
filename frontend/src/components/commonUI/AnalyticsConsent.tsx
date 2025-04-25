@@ -1,4 +1,4 @@
-import { Box, Button, Flex, IconButton, Text, useDisclosure } from '@chakra-ui/react'
+import { Box, Button, Flex, IconButton, Text } from '@chakra-ui/react'
 import posthog from 'posthog-js'
 import type { FC } from 'react'
 import { useEffect, useState } from 'react'
@@ -8,19 +8,22 @@ import { FaTimes as CloseIcon } from 'react-icons/fa'
 const CONSENT_KEY = 'analytics_consent'
 
 const AnalyticsConsent: FC = () => {
-  const [consentGiven, setConsentGiven] = useState<boolean | null>(null)
-  const { open, onClose } = useDisclosure({ defaultOpen: true })
+  const [, setAcceptConsent] = useState<boolean>(false)
+  const [showConsent, setShowConsent] = useState<boolean>(false)
   const { t } = useTranslation()
 
   useEffect(() => {
     const storedConsent = localStorage.getItem(CONSENT_KEY)
     if (storedConsent === 'true') {
-      setConsentGiven(true)
+      setAcceptConsent(true)
+      setShowConsent(false)
       initializeAnalytics()
     } else if (storedConsent === 'false') {
-      setConsentGiven(false)
+      setAcceptConsent(false)
+      setShowConsent(false)
     } else {
-      setConsentGiven(null)
+      setAcceptConsent(false)
+      setShowConsent(true)
     }
   }, [])
 
@@ -38,18 +41,22 @@ const AnalyticsConsent: FC = () => {
 
   const handleAccept = () => {
     localStorage.setItem(CONSENT_KEY, 'true')
-    setConsentGiven(true)
+    setAcceptConsent(true)
+    setShowConsent(false)
     initializeAnalytics()
-    onClose()
   }
 
   const handleDecline = () => {
     localStorage.setItem(CONSENT_KEY, 'false')
-    setConsentGiven(false)
-    onClose()
+    setAcceptConsent(false)
+    setShowConsent(false)
   }
 
-  if (consentGiven !== null || !open) {
+  const handleClose = () => {
+    setShowConsent(false)
+  }
+
+  if (!showConsent) {
     return null
   }
 
@@ -93,7 +100,7 @@ const AnalyticsConsent: FC = () => {
           position="absolute"
           top={2}
           right={2}
-          onClick={onClose}
+          onClick={handleClose}
           _hover={{ bg: 'bg.50' }}
         >
           <CloseIcon />
