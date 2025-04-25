@@ -30,7 +30,6 @@ const AnalyticsConsent: FC = () => {
       import.meta.env.VITE_POSTHOG_API_KEY &&
       import.meta.env.VITE_POSTHOG_HOST
     ) {
-      console.log('ini')
       posthog.init(import.meta.env.VITE_POSTHOG_API_KEY, {
         api_host: import.meta.env.VITE_POSTHOG_HOST,
       })
