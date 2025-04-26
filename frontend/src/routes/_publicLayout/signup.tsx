@@ -6,6 +6,7 @@ import { type SubmitHandler, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import type { UserRegister } from '../../client'
 import { DefaultInput } from '../../components/commonUI/Input'
+import PasswordInput from '../../components/commonUI/PasswordInput'
 import { confirmPasswordRules, emailPattern, passwordRules } from '../../utils'
 
 export const Route = createFileRoute('/_publicLayout/signup')({
@@ -88,9 +89,8 @@ function SignUp() {
 
             <Field.Root>
               <Field.Label>{t('general.words.password')}</Field.Label>
-              <DefaultInput
+              <PasswordInput
                 placeholder={t('general.words.password')}
-                type="password"
                 {...register('password', passwordRules())}
               />
               {errors.password && (
@@ -102,9 +102,8 @@ function SignUp() {
 
             <Field.Root>
               <Field.Label>{t('general.actions.confirmPassword')}</Field.Label>
-              <DefaultInput
+              <PasswordInput
                 placeholder={t('general.actions.repeatPassword')}
-                type="password"
                 {...register('confirm_password', confirmPasswordRules(getValues))}
               />
               {errors.confirm_password && (
