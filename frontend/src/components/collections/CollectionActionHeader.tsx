@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { IoStatsChart } from 'react-icons/io5'
 import { MdSchool } from 'react-icons/md'
 import { VscAdd } from 'react-icons/vsc'
+import { PiSparkle } from "react-icons/pi";
 
 interface CollectionActionHeaderProps {
   collectionId: string
@@ -25,6 +26,20 @@ function CollectionActionHeader({ collectionId, cardCount }: CollectionActionHea
         <VscAdd />
         <Box as="span" ml={2} display={{ base: 'none', md: 'inline' }}>
           {t('general.actions.addCard')}
+        </Box>
+      </Button>
+      <Button
+        variant="ghost"
+        _hover={{ bg: 'bg.50' }}
+        onClick={() => navigate({
+          to: `/collections/${collectionId}`,
+          state: { openAiDialog: true },
+        })}
+        aria-label={t('general.actions.generateAiCard')}
+      >
+        <PiSparkle />
+        <Box as="span" ml={2} display={{ base: 'none', md: 'inline' }}>
+          {t('general.actions.generateAiCard')}
         </Box>
       </Button>
       <Button

@@ -78,6 +78,7 @@
   "general": {
     "actions": {
       "addCard": "Kaart Toevoegen",
+      "generateAiCard": "Kaart toevoegen met AI",
       "addCollection": "Collectie Toevoegen",
       "backToCollection": "Terug naar Collectie",
       "cancel": "Annuleren",

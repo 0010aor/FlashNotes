@@ -78,6 +78,7 @@
   "general": {
     "actions": {
       "addCard": "Add Card",
+      "generateAiCard": "Add Card with AI",
       "addCollection": "Add Collection",
       "backToCollection": "Back to Collection",
       "cancel": "Cancel",

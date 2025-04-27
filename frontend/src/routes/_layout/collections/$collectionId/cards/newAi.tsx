@@ -2,11 +2,10 @@ import CardEditor from '@/components/cards/CardEditor'
 import CardHeader from '@/components/cards/CardHeader'
 import { useRichTextEditor } from '@/components/commonUI/RichText/useRichTextEditor'
 import { useCard } from '@/hooks/useCard'
-import { HStack, VStack } from '@chakra-ui/react'
+import { Button, HStack, VStack } from '@chakra-ui/react'
 import { createFileRoute, useNavigate, useLocation } from '@tanstack/react-router'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import ActionButton from '@/components/commonUI/ActionButton'
 import { FaCheckCircle } from "react-icons/fa"
 import { FaDeleteLeft } from "react-icons/fa6";
 
@@ -62,18 +61,20 @@ function NewCardAi() {
         backEditor={backEditor}
       />
       <HStack width="100%" justify="center" pt={4}>
-        <ActionButton
-          colorPalette="red"
-          onClick={handleRetry}
-        >
-          <FaDeleteLeft /> {t('components.editorFooter.rejectAiSuggestion')}
-        </ActionButton>
-        <ActionButton
-          colorPalette="green"
-          onClick={handleClose}
-        >
-          <FaCheckCircle /> {t('components.editorFooter.acceptAiSuggestion')}
-        </ActionButton>
+      <Button
+        colorPalette="red"
+        onClick={handleRetry}
+        size="lg"
+      >
+        <FaDeleteLeft /> {t('components.editorFooter.rejectAiSuggestion')}
+      </Button>
+      <Button
+        colorPalette="green"
+        onClick={handleClose}
+        size="lg"
+      >
+        <FaCheckCircle /> {t('components.editorFooter.acceptAiSuggestion')}
+      </Button>
       </HStack>
     </VStack>
   )
