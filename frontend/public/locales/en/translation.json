@@ -1,5 +1,9 @@
 {
   "components": {
+    "AiCardDialog": {
+      "placeholder": "Enter a single word or concept",
+      "title": "Create a flashcard with AI"
+    },
     "AiCollectionDialog": {
       "placeholder": "Enter a topic or concept (e.g., 'Quantum Physics', 'Spanish Verbs')",
       "title": "Create a collection with AI"
@@ -21,6 +25,10 @@
       "inlineCode": "Inline Code",
       "numberedList": "Numbered List",
       "bulletList": "Bullet List"
+    },
+    "editorFooter": {
+      "acceptAiSuggestion": "Accept and create",
+      "rejectAiSuggestion": "Reject and reprompt"
     },
     "practiceComplete": {
       "cardsCorrect": "You got {{correct}} out of {{total}} cards correct",

@@ -1,5 +1,9 @@
 {
   "components": {
+    "AiCardDialog": {
+      "placeholder": "Introduce una palabra o concepto",
+      "title": "Crea una tarjeta (frente y reverso) con IA"
+    },
     "AiCollectionDialog": {
       "placeholder": "Introduce un tema o concepto (por ejemplo, 'Física Cuántica', 'Verbos en Inglés')",
       "title": "Crear una colección con IA"
@@ -21,6 +25,10 @@
       "inlineCode": "Código en Línea",
       "numberedList": "Lista Numerada",
       "bulletList": "Lista con Viñetas"
+    },
+    "editorFooter": {
+      "acceptAiSuggestion": "Aceptar y crear",
+      "rejectAiSuggestion": "Rechazar y reintentar prompt"
     },
     "practiceComplete": {
       "cardsCorrect": "Has acertado {{correct}} de {{total}} tarjetas",

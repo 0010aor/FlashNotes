@@ -5,6 +5,7 @@ import { useCard } from '@/hooks/useCard'
 import { HStack, VStack } from '@chakra-ui/react'
 import { createFileRoute, useNavigate, useLocation } from '@tanstack/react-router'
 import { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import ActionButton from '@/components/commonUI/ActionButton'
 import { FaCheckCircle } from "react-icons/fa"
 import { FaDeleteLeft } from "react-icons/fa6";
@@ -16,6 +17,7 @@ export const Route = createFileRoute(
 })
 
 function NewCardAi() {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const location = useLocation()
   const { collectionId } = Route.useParams()
@@ -64,13 +66,13 @@ function NewCardAi() {
           colorPalette="red"
           onClick={handleRetry}
         >
-          <FaDeleteLeft /> RECHAZAR Y REINTENTAR PROMPT
+          <FaDeleteLeft /> {t('components.editorFooter.rejectAiSuggestion')}
         </ActionButton>
         <ActionButton
           colorPalette="green"
           onClick={handleClose}
         >
-          <FaCheckCircle /> ACEPTAR Y CERRAR
+          <FaCheckCircle /> {t('components.editorFooter.acceptAiSuggestion')}
         </ActionButton>
       </HStack>
     </VStack>

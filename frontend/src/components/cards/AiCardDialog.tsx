@@ -57,12 +57,12 @@ const AiCardDialog: React.FC<AiCardDialogProps> = ({
     >
       <DialogContent bg="bg.50">
         <DialogHeader>
-          <DialogTitle color="fg.DEFAULT">Crear tarjeta con IA</DialogTitle>
+          <DialogTitle color="fg.DEFAULT">{t('components.AiCardDialog.title')}</DialogTitle>
         </DialogHeader>
         <DialogBody>
           <DefaultInput
             disabled={isLoading}
-            placeholder={'Prompt de IA'}
+            placeholder={t('components.AiCardDialog.placeholder')}
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
             maxLength={MAX_CHARS}

@@ -1,5 +1,9 @@
 {
   "components": {
+    "AiCardDialog": {
+      "placeholder": "Voer een enkel woord of begrip in",
+      "title": "Maak een flashcard met AI"
+    },
     "AiCollectionDialog": {
       "placeholder": "Voer een onderwerp of concept in (bijv. 'Kwantumfysica', 'Spaanse Werkwoorden')",
       "title": "Maak een collectie met AI"
@@ -21,6 +25,10 @@
       "inlineCode": "Inline Code",
       "numberedList": "Genummerde Lijst",
       "bulletList": "Lijst met Opsommingstekens"
+    },
+    "editorFooter": {
+      "acceptAiSuggestion": "Accepteren en aanmaken",
+      "rejectAiSuggestion": "Afwijzen en opnieuw vragen"
     },
     "practiceComplete": {
       "cardsCorrect": "Je hebt {{correct}} van de {{total}} kaarten goed",
