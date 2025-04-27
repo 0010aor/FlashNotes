@@ -34,7 +34,7 @@ const AiCardDialog: React.FC<AiCardDialogProps> = ({ isOpen, onClose, onSubmit, 
     setPrompt('')
   }
 
-  if (!isOpen && prompt !== '') {
+  if (!isOpen && !!prompt) {
     setPrompt('')
   }
 
