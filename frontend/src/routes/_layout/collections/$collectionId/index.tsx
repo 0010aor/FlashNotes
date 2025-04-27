@@ -96,7 +96,7 @@ function CollectionComponent() {
           AI
         </Text>
       ),
-      label: "Crear con AI",
+      label: t('general.actions.generateAiCard'),
       onClick: () => setIsAiDialogOpen(true),
       bgColor: 'fbuttons.orange',
     },
