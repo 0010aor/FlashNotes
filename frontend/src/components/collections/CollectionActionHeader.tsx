@@ -9,9 +9,10 @@ import { PiSparkle } from "react-icons/pi";
 interface CollectionActionHeaderProps {
   collectionId: string
   cardCount: number
+  onGenerateAICard: () => void
 }
 
-function CollectionActionHeader({ collectionId, cardCount }: CollectionActionHeaderProps) {
+function CollectionActionHeader({ collectionId, cardCount, onGenerateAICard }: CollectionActionHeaderProps) {
   const { t } = useTranslation()
   const navigate = useNavigate()
 
@@ -31,10 +32,7 @@ function CollectionActionHeader({ collectionId, cardCount }: CollectionActionHea
       <Button
         variant="ghost"
         _hover={{ bg: 'bg.50' }}
-        onClick={() => navigate({
-          to: `/collections/${collectionId}`,
-          state: { openAiDialog: true },
-        })}
+        onClick={onGenerateAICard}
         aria-label={t('general.actions.generateAiCard')}
       >
         <PiSparkle />

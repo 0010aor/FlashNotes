@@ -104,7 +104,10 @@ function CollectionComponent() {
 
   return (
     <>
-      <CollectionActionHeader collectionId={collectionId} cardCount={cards.length} />
+      <CollectionActionHeader 
+        collectionId={collectionId}
+        cardCount={cards.length}
+        onGenerateAICard={() => setIsAiDialogOpen(true)} />
 
       <ScrollableContainer>
         <Stack gap="4">
