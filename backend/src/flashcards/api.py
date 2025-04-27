@@ -130,7 +130,7 @@ def read_cards(
 
 
 @router.post("/collections/{collection_id}/cards/", response_model=Card)
-async def create_card(
+def create_card(
     session: SessionDep,
     current_user: CurrentUser,
     collection_id: uuid.UUID,
@@ -138,10 +138,8 @@ async def create_card(
 ) -> Any:
     if not services.check_collection_access(session, collection_id, current_user.id):
         raise HTTPException(status_code=404, detail="Collection not found")
-    return await asyncio.to_thread(
-        lambda: services.create_card(
-            session=session, collection_id=collection_id, card_in=card_in
-        )
+    return services.create_card(
+        session=session, collection_id=collection_id, card_in=card_in
     )
 
 
