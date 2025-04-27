@@ -1,4 +1,5 @@
 import type { Card } from '@/client/types.gen'
+import AiCardDialog from '@/components/cards/AiCardDialog'
 import CardListItem from '@/components/cards/CardIListtem'
 import CollectionActionHeader from '@/components/collections/CollectionActionHeader'
 import EmptyState from '@/components/commonUI/EmptyState'
@@ -6,17 +7,16 @@ import ErrorState from '@/components/commonUI/ErrorState'
 import FloatingActionButton from '@/components/commonUI/FloatingActionButton'
 import ListSkeleton from '@/components/commonUI/ListSkeleton'
 import ScrollableContainer from '@/components/commonUI/ScrollableContainer'
-import SpeedDial, { SpeedDialActionItem } from '@/components/commonUI/SpeedDial'
-import { Stack, Text } from '@chakra-ui/react'
+import SpeedDial, { type SpeedDialActionItem } from '@/components/commonUI/SpeedDial'
 import { deleteCard, getCards } from '@/services/cards'
+import { generateAICard } from '@/services/cards'
+import { Stack, Text } from '@chakra-ui/react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { createFileRoute, useNavigate, useLocation } from '@tanstack/react-router'
+import { createFileRoute, useLocation, useNavigate } from '@tanstack/react-router'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { MdSchool } from 'react-icons/md'
 import { VscAdd } from 'react-icons/vsc'
-import { useState, useEffect } from 'react'
-import AiCardDialog from '@/components/cards/AiCardDialog'
-import { generateAICard } from '@/services/cards'
 
 export const Route = createFileRoute('/_layout/collections/$collectionId/')({
   component: CollectionComponent,
@@ -34,9 +34,9 @@ function CollectionComponent() {
 
   useEffect(() => {
     if (location.state?.openAiDialog) {
-      setIsAiDialogOpen(true);
+      setIsAiDialogOpen(true)
     }
-  }, [location.state]);
+  }, [location.state])
 
   const { data, error, isLoading } = useQuery<Card[]>({
     queryKey: ['collections', collectionId, 'cards'],
@@ -65,12 +65,12 @@ function CollectionComponent() {
       const generatedCard = await generateAICard({
         front: '',
         back: '',
-        ai_prompt: prompt
+        ai_prompt: prompt,
       })
       navigate({
         to: `/collections/${collectionId}/cards/newAi`,
         state: { generatedCard },
-      });
+      })
     } catch (error) {
       console.error(error)
     } finally {
@@ -104,10 +104,11 @@ function CollectionComponent() {
 
   return (
     <>
-      <CollectionActionHeader 
+      <CollectionActionHeader
         collectionId={collectionId}
         cardCount={cards.length}
-        onGenerateAICard={() => setIsAiDialogOpen(true)} />
+        onGenerateAICard={() => setIsAiDialogOpen(true)}
+      />
 
       <ScrollableContainer>
         <Stack gap="4">

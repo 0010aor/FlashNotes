@@ -3,8 +3,8 @@ import { useNavigate } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { IoStatsChart } from 'react-icons/io5'
 import { MdSchool } from 'react-icons/md'
+import { PiSparkle } from 'react-icons/pi'
 import { VscAdd } from 'react-icons/vsc'
-import { PiSparkle } from "react-icons/pi";
 
 interface CollectionActionHeaderProps {
   collectionId: string
@@ -12,7 +12,11 @@ interface CollectionActionHeaderProps {
   onGenerateAICard: () => void
 }
 
-function CollectionActionHeader({ collectionId, cardCount, onGenerateAICard }: CollectionActionHeaderProps) {
+function CollectionActionHeader({
+  collectionId,
+  cardCount,
+  onGenerateAICard,
+}: CollectionActionHeaderProps) {
   const { t } = useTranslation()
   const navigate = useNavigate()
 

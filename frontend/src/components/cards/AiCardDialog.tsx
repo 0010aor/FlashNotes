@@ -20,15 +20,10 @@ interface AiCardDialogProps {
   onSubmit: (prompt: string) => void
   isLoading: boolean
 }
-  
+
 const MAX_CHARS = 50
 
-const AiCardDialog: React.FC<AiCardDialogProps> = ({
-  isOpen,
-  onClose,
-  onSubmit,
-  isLoading,
-}) => {
+const AiCardDialog: React.FC<AiCardDialogProps> = ({ isOpen, onClose, onSubmit, isLoading }) => {
   const { t } = useTranslation()
   const [prompt, setPrompt] = useState('')
   const closeButtonRef = useRef<HTMLButtonElement>(null)
