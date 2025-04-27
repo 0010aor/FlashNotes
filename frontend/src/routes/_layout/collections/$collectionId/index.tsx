@@ -8,14 +8,15 @@ import ListSkeleton from '@/components/commonUI/ListSkeleton'
 import ScrollableContainer from '@/components/commonUI/ScrollableContainer'
 import SpeedDial, { SpeedDialActionItem } from '@/components/commonUI/SpeedDial'
 import { Stack, Text } from '@chakra-ui/react'
-import { deleteCard, getCards, createCard } from '@/services/cards'
+import { deleteCard, getCards } from '@/services/cards'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { createFileRoute, useNavigate } from '@tanstack/react-router'
+import { createFileRoute, useNavigate, useLocation } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { MdSchool } from 'react-icons/md'
 import { VscAdd } from 'react-icons/vsc'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import AiCardDialog from '@/components/cards/AiCardDialog'
+import { generateAICard } from '@/services/cards'
 
 export const Route = createFileRoute('/_layout/collections/$collectionId/')({
   component: CollectionComponent,
@@ -29,6 +30,13 @@ function CollectionComponent() {
   const navigate = useNavigate()
   const queryClient = useQueryClient()
   const { collectionId } = Route.useParams()
+  const location = useLocation()
+
+  useEffect(() => {
+    if (location.state?.openAiDialog) {
+      setIsAiDialogOpen(true);
+    }
+  }, [location.state]);
 
   const { data, error, isLoading } = useQuery<Card[]>({
     queryKey: ['collections', collectionId, 'cards'],
@@ -54,19 +62,14 @@ function CollectionComponent() {
       setIsCreatingAiCard(true)
       setIsSpeedDialLoading(true)
       setIsAiDialogOpen(false)
-      // Call post service with card data as: front: '', back: '', ai_prompt: prompt (how? new function in useCard? or fetch directly from here since state is not needed)
-      // redirect to new view but with populated card data front and back ($cardId wont be suitable because thats a function that expects card id from an existing card)
-      // this new view reuses components of new but with added buttons like ACCEPT and REJECT and reprompt
-      // the new view also lets edit the content, both closing and clicking on ACCEPT will save the card
-
-      // Use an existing type for this, interface CardData
-      const cardData = {
-        front: "Example front",
-        back: "Example back"
-      }
+      const generatedCard = await generateAICard({
+        front: '',
+        back: '',
+        ai_prompt: prompt
+      })
       navigate({
         to: `/collections/${collectionId}/cards/newAi`,
-        state: { cardData },
+        state: { generatedCard },
       });
     } catch (error) {
       console.error(error)

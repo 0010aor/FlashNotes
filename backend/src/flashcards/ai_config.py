@@ -29,7 +29,10 @@ def collection_response_schema(schema_type):
                     "name": schema_type.Schema(
                         type=schema_type.Type.STRING,
                     ),
-                    "cards": card_response_schema(schema_type),
+                    "cards": schema_type.Schema(
+                        type=schema_type.Type.ARRAY,
+                        items=card_response_schema(schema_type)
+                    )
                 },
             ),
         },

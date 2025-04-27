@@ -146,7 +146,6 @@ export type UserPublic = {
   email: string
   is_active?: boolean
   is_superuser?: boolean
-  full_name?: string | null
   id: string
 }
 
@@ -206,7 +205,13 @@ export type FlashcardsCreateCardData = {
   requestBody: CardCreate
 }
 
-export type FlashcardsCreateCardResponse = Card | CardBase
+export type FlashcardsCreateCardResponse = Card
+
+export type FlashcardsGenerateCardAiData = {
+  requestBody: CardCreate
+}
+
+export type FlashcardsGenerateCardAiResponse = CardBase
 
 export type FlashcardsReadCardData = {
   cardId: string

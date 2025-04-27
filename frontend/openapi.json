@@ -304,17 +304,7 @@
         "responses": {
           "200": {
             "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "anyOf": [
-                    { "$ref": "#/components/schemas/Card" },
-                    { "$ref": "#/components/schemas/CardBase" }
-                  ],
-                  "title": "Response Flashcards-Create Card"
-                }
-              }
-            }
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Card" } } }
           },
           "422": {
             "description": "Validation Error",
@@ -325,6 +315,36 @@
             }
           }
         }
+      }
+    },
+    "/api/v1/collections/cards/ai_gen": {
+      "post": {
+        "tags": ["flashcards"],
+        "summary": "Generate Card Ai",
+        "operationId": "flashcards-generate_card_ai",
+        "requestBody": {
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/CardCreate" } }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/CardBase" } }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        },
+        "security": [{ "OAuth2PasswordBearer": [] }]
       }
     },
     "/api/v1/collections/{collection_id}/cards/{card_id}": {
@@ -1013,10 +1033,6 @@
           "email": { "type": "string", "maxLength": 255, "format": "email", "title": "Email" },
           "is_active": { "type": "boolean", "title": "Is Active", "default": true },
           "is_superuser": { "type": "boolean", "title": "Is Superuser", "default": false },
-          "full_name": {
-            "anyOf": [{ "type": "string", "maxLength": 255 }, { "type": "null" }],
-            "title": "Full Name"
-          },
           "id": { "type": "string", "format": "uuid", "title": "Id" }
         },
         "type": "object",
