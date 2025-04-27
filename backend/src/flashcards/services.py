@@ -10,10 +10,7 @@ from sqlmodel import Session, func, select
 
 from src.ai_models.gemini.exceptions import AIGenerationError
 
-from .ai_config import (
-    get_flashcard_config, 
-    get_card_config
-)
+from .ai_config import get_flashcard_config, get_card_config
 from .exceptions import EmptyCollectionError
 from .models import Card, Collection, PracticeCard, PracticeSession
 from .schemas import (
@@ -440,9 +437,8 @@ async def generate_ai_collection(
     flashcard_collection = await _generate_ai_flashcards(provider, prompt)
     return _save_ai_collection(session, user_id, flashcard_collection)
 
-async def generate_ai_flashcard(
-    prompt: str, provider
-) -> CardBase:
+
+async def generate_ai_flashcard(prompt: str, provider) -> CardBase:
     """
     Generates a flashcard using AI.
 

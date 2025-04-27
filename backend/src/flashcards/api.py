@@ -64,8 +64,8 @@ async def create_collection(
         except AIGenerationError as e:
             raise HTTPException(status_code=500, detail=str(e))
     else:
-        return await asyncio.to_thread(lambda: 
-            services.create_collection(
+        return await asyncio.to_thread(
+            lambda: services.create_collection(
                 session=session, collection_in=collection_in, user_id=current_user.id
             )
         )
@@ -134,12 +134,12 @@ async def create_card(
     session: SessionDep,
     current_user: CurrentUser,
     collection_id: uuid.UUID,
-    card_in: CardCreate
+    card_in: CardCreate,
 ) -> Any:
     if not services.check_collection_access(session, collection_id, current_user.id):
         raise HTTPException(status_code=404, detail="Collection not found")
-    return await asyncio.to_thread(lambda: 
-        services.create_card(
+    return await asyncio.to_thread(
+        lambda: services.create_card(
             session=session, collection_id=collection_id, card_in=card_in
         )
     )
@@ -147,9 +147,7 @@ async def create_card(
 
 @router.post("/collections/cards/ai_gen", response_model=CardBase)
 async def generate_card_ai(
-    current_user: CurrentUser,
-    card_in: CardCreate,
-    provider: GeminiProviderDep
+    current_user: CurrentUser, card_in: CardCreate, provider: GeminiProviderDep
 ) -> Any:
     if card_in.ai_prompt:
         return await services.generate_ai_flashcard(card_in.ai_prompt, provider)

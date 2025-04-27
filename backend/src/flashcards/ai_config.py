@@ -3,6 +3,7 @@ from google.genai import types
 from src.ai_models.gemini.config import create_content_config
 from src.core.config import settings
 
+
 def card_response_schema(schema_type):
     return schema_type.Schema(
         type=schema_type.Type.OBJECT,
@@ -14,8 +15,9 @@ def card_response_schema(schema_type):
             "back": schema_type.Schema(
                 type=schema_type.Type.STRING,
             ),
-        }
+        },
     )
+
 
 def collection_response_schema(schema_type):
     return schema_type.Schema(
@@ -31,8 +33,8 @@ def collection_response_schema(schema_type):
                     ),
                     "cards": schema_type.Schema(
                         type=schema_type.Type.ARRAY,
-                        items=card_response_schema(schema_type)
-                    )
+                        items=card_response_schema(schema_type),
+                    ),
                 },
             ),
         },
@@ -45,8 +47,9 @@ def get_flashcard_config(schema_type) -> types.GenerateContentConfig:
         system_instruction=settings.COLLECTION_GENERATION_PROMPT,
     )
 
+
 def get_card_config(schema_type) -> types.GenerateContentConfig:
     return create_content_config(
         response_schema=card_response_schema(schema_type),
-        system_instruction=settings.CARD_GENERATION_PROMPT
+        system_instruction=settings.CARD_GENERATION_PROMPT,
     )
