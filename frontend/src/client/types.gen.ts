@@ -31,7 +31,7 @@ export type CardBasicStats = {
 export type CardCreate = {
   front: string
   back: string
-  ai_prompt?: string | null
+  prompt?: string | null
 }
 
 export type CardList = {

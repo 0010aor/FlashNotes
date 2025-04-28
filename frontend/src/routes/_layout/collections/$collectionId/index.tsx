@@ -65,7 +65,7 @@ function CollectionComponent() {
       const generatedCard = await generateAICard({
         front: '',
         back: '',
-        ai_prompt: prompt,
+        prompt: prompt,
       })
       navigate({
         to: `/collections/${collectionId}/cards/newAi`,

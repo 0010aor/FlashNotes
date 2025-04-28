@@ -779,7 +779,10 @@
         "properties": {
           "front": { "type": "string", "title": "Front" },
           "back": { "type": "string", "title": "Back" },
-          "ai_prompt": { "anyOf": [{ "type": "string" }, { "type": "null" }], "title": "Ai Prompt" }
+          "prompt": {
+            "anyOf": [{ "type": "string", "maxLength": 100 }, { "type": "null" }],
+            "title": "Prompt"
+          }
         },
         "type": "object",
         "required": ["front", "back"],

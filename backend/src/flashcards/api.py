@@ -130,26 +130,26 @@ def read_cards(
 
 
 @router.post("/collections/{collection_id}/cards/", response_model=Card)
-def create_card(
+async def create_card(
     session: SessionDep,
     current_user: CurrentUser,
     collection_id: uuid.UUID,
     card_in: CardCreate,
+    provider: GeminiProviderDep
 ) -> Any:
-    if not services.check_collection_access(session, collection_id, current_user.id):
+    access_checked = await asyncio.to_thread(
+        lambda:
+            services.check_collection_access(session, collection_id, current_user.id)
+    )
+    if not access_checked:
         raise HTTPException(status_code=404, detail="Collection not found")
+    if card_in.prompt:
+        card_base = await services.generate_ai_flashcard(card_in.prompt, provider)
+        card_in.front = card_base.front
+        card_in.back = card_base.back
     return services.create_card(
         session=session, collection_id=collection_id, card_in=card_in
     )
-
-
-@router.post("/collections/cards/ai_gen", response_model=CardBase)
-async def generate_card_ai(
-    current_user: CurrentUser, card_in: CardCreate, provider: GeminiProviderDep
-) -> Any:
-    if card_in.prompt:
-        return await services.generate_ai_flashcard(card_in.prompt, provider)
-    raise HTTPException(status_code=400, detail="Prompt is needed")
 
 
 @router.get("/collections/{collection_id}/cards/{card_id}", response_model=Card)
