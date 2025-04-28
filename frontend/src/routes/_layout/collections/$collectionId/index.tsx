@@ -8,12 +8,12 @@ import FloatingActionButton from '@/components/commonUI/FloatingActionButton'
 import ListSkeleton from '@/components/commonUI/ListSkeleton'
 import ScrollableContainer from '@/components/commonUI/ScrollableContainer'
 import SpeedDial, { type SpeedDialActionItem } from '@/components/commonUI/SpeedDial'
+import { createCard } from '@/services/cards'
 import { deleteCard, getCards } from '@/services/cards'
-import { generateAICard } from '@/services/cards'
 import { Stack, Text } from '@chakra-ui/react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { createFileRoute, useLocation, useNavigate } from '@tanstack/react-router'
-import { useEffect, useState } from 'react'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { MdSchool } from 'react-icons/md'
 import { VscAdd } from 'react-icons/vsc'
@@ -30,13 +30,6 @@ function CollectionComponent() {
   const navigate = useNavigate()
   const queryClient = useQueryClient()
   const { collectionId } = Route.useParams()
-  const location = useLocation()
-
-  useEffect(() => {
-    if (location.state?.openAiDialog) {
-      setIsAiDialogOpen(true)
-    }
-  }, [location.state])
 
   const { data, error, isLoading } = useQuery<Card[]>({
     queryKey: ['collections', collectionId, 'cards'],
@@ -62,15 +55,12 @@ function CollectionComponent() {
       setIsCreatingAiCard(true)
       setIsSpeedDialLoading(true)
       setIsAiDialogOpen(false)
-      const generatedCard = await generateAICard({
+      const savedCard = await createCard(collectionId, {
         front: '',
         back: '',
-        prompt: prompt,
+        prompt: prompt
       })
-      navigate({
-        to: `/collections/${collectionId}/cards/newAi`,
-        state: { generatedCard },
-      })
+      navigate({ to: `/collections/${collectionId}/cards/${savedCard.id}` })
     } catch (error) {
       console.error(error)
     } finally {

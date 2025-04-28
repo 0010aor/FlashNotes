@@ -1,5 +1,4 @@
-import type { Card, CardBase, CardCreate, CardUpdate } from '@/client'
-import { FlashcardsService } from '@/client'
+import type { Card, CardCreate, CardUpdate } from '@/client'
 import { getCardRepository } from '@/repositories/card/CardRepositoryFactory'
 import { isGuest } from '@/utils/authUtils'
 
@@ -15,10 +14,6 @@ export const getCardById = async (collectionId: string, id: string): Promise<Car
 
 export const createCard = async (collectionId: string, data: CardCreate): Promise<Card> => {
   return repo().create(collectionId, data)
-}
-
-export const generateAICard = async (data: CardCreate): Promise<CardBase> => {
-  return FlashcardsService.generateCardAi({ requestBody: data })
 }
 
 export const updateCard = async (
