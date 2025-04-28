@@ -147,8 +147,8 @@ def create_card(
 async def generate_card_ai(
     current_user: CurrentUser, card_in: CardCreate, provider: GeminiProviderDep
 ) -> Any:
-    if card_in.ai_prompt:
-        return await services.generate_ai_flashcard(card_in.ai_prompt, provider)
+    if card_in.prompt:
+        return await services.generate_ai_flashcard(card_in.prompt, provider)
     raise HTTPException(status_code=400, detail="Prompt is needed")
 
 

@@ -24,7 +24,7 @@ class CardBase(SQLModel):
 
 
 class CardCreate(CardBase):
-    ai_prompt: str | None = None
+    prompt: str | None = Field(default=None, max_length=100)
 
 
 class CardUpdate(CardBase):
