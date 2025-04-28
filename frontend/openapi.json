@@ -317,36 +317,6 @@
         }
       }
     },
-    "/api/v1/collections/cards/ai_gen": {
-      "post": {
-        "tags": ["flashcards"],
-        "summary": "Generate Card Ai",
-        "operationId": "flashcards-generate_card_ai",
-        "requestBody": {
-          "content": {
-            "application/json": { "schema": { "$ref": "#/components/schemas/CardCreate" } }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": { "schema": { "$ref": "#/components/schemas/CardBase" } }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
-              }
-            }
-          }
-        },
-        "security": [{ "OAuth2PasswordBearer": [] }]
-      }
-    },
     "/api/v1/collections/{collection_id}/cards/{card_id}": {
       "get": {
         "tags": ["flashcards"],
@@ -754,15 +724,6 @@
         "type": "object",
         "required": ["front", "back", "id", "collection_id"],
         "title": "Card"
-      },
-      "CardBase": {
-        "properties": {
-          "front": { "type": "string", "title": "Front" },
-          "back": { "type": "string", "title": "Back" }
-        },
-        "type": "object",
-        "required": ["front", "back"],
-        "title": "CardBase"
       },
       "CardBasicStats": {
         "properties": {

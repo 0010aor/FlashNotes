@@ -12,8 +12,6 @@ import type {
   FlashcardsDeleteCardResponse,
   FlashcardsDeleteCollectionData,
   FlashcardsDeleteCollectionResponse,
-  FlashcardsGenerateCardAiData,
-  FlashcardsGenerateCardAiResponse,
   FlashcardsGetPracticeSessionStatusData,
   FlashcardsGetPracticeSessionStatusResponse,
   FlashcardsListPracticeCardsData,
@@ -205,27 +203,6 @@ export class FlashcardsService {
       path: {
         collection_id: data.collectionId,
       },
-      body: data.requestBody,
-      mediaType: 'application/json',
-      errors: {
-        422: 'Validation Error',
-      },
-    })
-  }
-
-  /**
-   * Generate Card Ai
-   * @param data The data for the request.
-   * @param data.requestBody
-   * @returns CardBase Successful Response
-   * @throws ApiError
-   */
-  public static generateCardAi(
-    data: FlashcardsGenerateCardAiData,
-  ): CancelablePromise<FlashcardsGenerateCardAiResponse> {
-    return __request(OpenAPI, {
-      method: 'POST',
-      url: '/api/v1/collections/cards/ai_gen',
       body: data.requestBody,
       mediaType: 'application/json',
       errors: {

@@ -16,11 +16,6 @@ export type Card = {
   collection_id: string
 }
 
-export type CardBase = {
-  front: string
-  back: string
-}
-
 export type CardBasicStats = {
   id: string
   front: string
@@ -206,12 +201,6 @@ export type FlashcardsCreateCardData = {
 }
 
 export type FlashcardsCreateCardResponse = Card
-
-export type FlashcardsGenerateCardAiData = {
-  requestBody: CardCreate
-}
-
-export type FlashcardsGenerateCardAiResponse = CardBase
 
 export type FlashcardsReadCardData = {
   cardId: string
