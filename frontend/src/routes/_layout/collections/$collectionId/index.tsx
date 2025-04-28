@@ -10,6 +10,7 @@ import ScrollableContainer from '@/components/commonUI/ScrollableContainer'
 import SpeedDial, { type SpeedDialActionItem } from '@/components/commonUI/SpeedDial'
 import { createCard } from '@/services/cards'
 import { deleteCard, getCards } from '@/services/cards'
+import { isGuest } from '../../../utils/authUtils'
 import { Stack, Text } from '@chakra-ui/react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
@@ -89,6 +90,7 @@ function CollectionComponent() {
       label: t('general.actions.generateAiCard'),
       onClick: () => setIsAiDialogOpen(true),
       bgColor: 'fbuttons.orange',
+      disabled: isGuest(),
     },
   ]
 
