@@ -5,6 +5,7 @@ import { IoStatsChart } from 'react-icons/io5'
 import { MdSchool } from 'react-icons/md'
 import { PiSparkle } from 'react-icons/pi'
 import { VscAdd } from 'react-icons/vsc'
+import { isGuest } from '@/utils/authUtils'
 
 interface CollectionActionHeaderProps {
   collectionId: string
@@ -38,6 +39,7 @@ function CollectionActionHeader({
         _hover={{ bg: 'bg.50' }}
         onClick={onGenerateAICard}
         aria-label={t('general.actions.generateAiCard')}
+        disabled={isGuest()}
       >
         <PiSparkle />
         <Box as="span" ml={2} display={{ base: 'none', md: 'inline' }}>
