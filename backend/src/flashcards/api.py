@@ -147,8 +147,11 @@ async def create_card(
         card_base = await services.generate_ai_flashcard(card_in.prompt, provider)
         card_in.front = card_base.front
         card_in.back = card_base.back
-    return services.create_card(
-        session=session, collection_id=collection_id, card_in=card_in
+    return await asyncio.to_thread(
+        lambda:
+            services.create_card(
+                session=session, collection_id=collection_id, card_in=card_in
+        )
     )
 
 
