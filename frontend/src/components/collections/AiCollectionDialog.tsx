@@ -13,6 +13,7 @@ import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BlueButton, RedButton } from '../commonUI/Button'
 import { DefaultInput } from '../commonUI/Input'
+import { type OpenChangeDetails } from 'node_modules/@chakra-ui/react/dist/types/components/dialog/namespace'
 
 interface AiCollectionDialogProps {
   isOpen: boolean
@@ -21,7 +22,7 @@ interface AiCollectionDialogProps {
   isLoading: boolean
 }
 
-const MAX_CHARS = 100
+const MAX_CHARS = 100 //TODO: move to const folder
 
 const AiCollectionDialog: React.FC<AiCollectionDialogProps> = ({
   isOpen,
@@ -43,17 +44,26 @@ const AiCollectionDialog: React.FC<AiCollectionDialogProps> = ({
     setPrompt('')
   }
 
+  const handleOpenChange = (detail: OpenChangeDetails) => {
+    if (!detail.open) {
+      onClose()
+    }
+  }
+  
+  const handleKeyDown = (event: { key: string; preventDefault: () => void }) => {
+    if (event.key === 'Enter' && !isLoading) {
+      event.preventDefault()
+      handleSubmit()
+    }
+  }
+
   return (
     <DialogRoot
       key="add-ai-collection-dialog"
       placement="center"
       motionPreset="slide-in-bottom"
       open={isOpen}
-      onOpenChange={(detail) => {
-        if (!detail.open) {
-          onClose()
-        }
-      }}
+      onOpenChange={handleOpenChange}
     >
       <DialogContent bg="bg.50">
         <DialogHeader>
@@ -66,12 +76,7 @@ const AiCollectionDialog: React.FC<AiCollectionDialogProps> = ({
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
             maxLength={MAX_CHARS}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' && !isLoading) {
-                e.preventDefault()
-                handleSubmit()
-              }
-            }}
+            onKeyDown={handleKeyDown}
           />
           <Text fontSize="xs" textAlign="right" color="gray.500" mt={1}>
             {prompt.length}/{MAX_CHARS}

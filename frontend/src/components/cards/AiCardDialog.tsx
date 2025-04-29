@@ -13,6 +13,7 @@ import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BlueButton, RedButton } from '../commonUI/Button'
 import { DefaultInput } from '../commonUI/Input'
+import { type OpenChangeDetails } from 'node_modules/@chakra-ui/react/dist/types/components/dialog/namespace'
 
 interface AiCardDialogProps {
   isOpen: boolean
@@ -21,7 +22,7 @@ interface AiCardDialogProps {
   isLoading: boolean
 }
 
-const MAX_CHARS = 50
+const MAX_CHARS = 50 //TODO: move to const folder
 
 const AiCardDialog: React.FC<AiCardDialogProps> = ({ isOpen, onClose, onSubmit, isLoading }) => {
   const { t } = useTranslation()
@@ -34,6 +35,19 @@ const AiCardDialog: React.FC<AiCardDialogProps> = ({ isOpen, onClose, onSubmit, 
     setPrompt('')
   }
 
+  const handleOpenChange = (detail: OpenChangeDetails) => {
+    if (!detail.open) {
+      onClose()
+    }
+  }
+
+  const handleKeyDown = (event: { key: string; preventDefault: () => void }) => {
+    if (event.key === 'Enter' && !isLoading) {
+      event.preventDefault()
+      handleSubmit()
+    }
+  }
+
   if (!isOpen && !!prompt) {
     setPrompt('')
   }
@@ -44,11 +58,7 @@ const AiCardDialog: React.FC<AiCardDialogProps> = ({ isOpen, onClose, onSubmit, 
       placement="center"
       motionPreset="slide-in-bottom"
       open={isOpen}
-      onOpenChange={(detail) => {
-        if (!detail.open) {
-          onClose()
-        }
-      }}
+      onOpenChange={handleOpenChange}
     >
       <DialogContent bg="bg.50">
         <DialogHeader>
@@ -61,12 +71,7 @@ const AiCardDialog: React.FC<AiCardDialogProps> = ({ isOpen, onClose, onSubmit, 
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
             maxLength={MAX_CHARS}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' && !isLoading) {
-                e.preventDefault()
-                handleSubmit()
-              }
-            }}
+            onKeyDown={handleKeyDown}
           />
           <Text fontSize="xs" textAlign="right" color="gray.500" mt={1}>
             {prompt.length}/{MAX_CHARS}
