@@ -1,7 +1,7 @@
 import type { Card } from '@/client/types.gen'
-import AiCardDialog from '@/components/cards/AiCardDialog'
 import CardListItem from '@/components/cards/CardIListtem'
 import CollectionActionHeader from '@/components/collections/CollectionActionHeader'
+import AiPromptDialog from '@/components/commonUI/AiPromptDialog'
 import EmptyState from '@/components/commonUI/EmptyState'
 import ErrorState from '@/components/commonUI/ErrorState'
 import FloatingActionButton from '@/components/commonUI/FloatingActionButton'
@@ -129,11 +129,13 @@ function CollectionComponent() {
 
       <SpeedDial actions={speedDialActions} isLoading={isSpeedDialLoading} />
 
-      <AiCardDialog
+      <AiPromptDialog
         isOpen={isAiDialogOpen}
         onClose={() => setIsAiDialogOpen(false)}
         onSubmit={addAiCard}
         isLoading={isCreatingAiCard}
+        title={t('components.AiCardDialog.title')}
+        placeholder={t('components.AiCardDialog.placeholder')}
       />
     </>
   )

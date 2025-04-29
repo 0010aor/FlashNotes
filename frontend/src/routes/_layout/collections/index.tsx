@@ -1,5 +1,4 @@
 import type { Collection } from '@/client/types.gen'
-import AiCollectionDialog from '@/components/collections/AiCollectionDialog'
 import CollectionDialog from '@/components/collections/CollectionDialog'
 import CollectionListItem from '@/components/collections/CollectionListItem'
 import EmptyState from '@/components/commonUI/EmptyState'
@@ -20,6 +19,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { VscAdd } from 'react-icons/vsc'
 import { isGuest } from '../../../utils/authUtils'
+import AiPromptDialog from '@/components/commonUI/AiPromptDialog'
 
 export const Route = createFileRoute('/_layout/collections/')({
   component: Collections,
@@ -139,11 +139,13 @@ function Collections() {
         onClose={() => setIsAddDialogOpen(false)}
         onSubmit={addCollection}
       />
-      <AiCollectionDialog
+      <AiPromptDialog
         isOpen={isAiDialogOpen}
         onClose={() => setIsAiDialogOpen(false)}
         onSubmit={addAiCollection}
         isLoading={isCreatingAiCollection}
+        title={t('components.AiCollectionDialog.title')}
+        placeholder={t('components.AiCollectionDialog.placeholder')}
       />
     </>
   )
