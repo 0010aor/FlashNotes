@@ -25,7 +25,7 @@ const MAX_CHARS = 50
 
 const AiCardDialog: React.FC<AiCardDialogProps> = ({ isOpen, onClose, onSubmit, isLoading }) => {
   const { t } = useTranslation()
-  const [prompt, setPrompt] = useState('')
+  const [prompt, setPrompt] = useState<string>('')
   const closeButtonRef = useRef<HTMLButtonElement>(null)
 
   const handleSubmit = () => {

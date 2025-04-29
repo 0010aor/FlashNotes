@@ -30,7 +30,7 @@ const AiCollectionDialog: React.FC<AiCollectionDialogProps> = ({
   isLoading,
 }) => {
   const { t } = useTranslation()
-  const [prompt, setPrompt] = useState('')
+  const [prompt, setPrompt] = useState<string>('')
   const closeButtonRef = useRef<HTMLButtonElement>(null)
 
   const handleSubmit = () => {

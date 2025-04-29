@@ -21,7 +21,7 @@ interface CollectionDialogProps {
 
 const CollectionDialog: React.FC<CollectionDialogProps> = ({ isOpen, onClose, onSubmit }) => {
   const { t } = useTranslation()
-  const [collectionName, setCollectionName] = useState('')
+  const [collectionName, setCollectionName] = useState<string>('')
   const closeButtonRef = useRef<HTMLButtonElement>(null)
 
   const handleSubmit = () => {
