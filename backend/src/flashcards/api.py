@@ -1,5 +1,5 @@
-import uuid
 import asyncio
+import uuid
 from typing import Any, Literal
 
 from fastapi import APIRouter, HTTPException
@@ -13,7 +13,6 @@ from .exceptions import EmptyCollectionError
 from .schemas import (
     Card,
     CardCreate,
-    CardBase,
     CardList,
     CardUpdate,
     Collection,

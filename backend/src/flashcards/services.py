@@ -10,7 +10,7 @@ from sqlmodel import Session, func, select
 
 from src.ai_models.gemini.exceptions import AIGenerationError
 
-from .ai_config import get_flashcard_config, get_card_config
+from .ai_config import get_card_config, get_flashcard_config
 from .exceptions import EmptyCollectionError
 from .models import Card, Collection, PracticeCard, PracticeSession
 from .schemas import (
