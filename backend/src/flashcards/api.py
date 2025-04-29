@@ -135,11 +135,12 @@ async def create_card(
     current_user: CurrentUser,
     collection_id: uuid.UUID,
     card_in: CardCreate,
-    provider: GeminiProviderDep
+    provider: GeminiProviderDep,
 ) -> Any:
     access_checked = await asyncio.to_thread(
-        lambda:
-            services.check_collection_access(session, collection_id, current_user.id)
+        lambda: services.check_collection_access(
+            session, collection_id, current_user.id
+        )
     )
     if not access_checked:
         raise HTTPException(status_code=404, detail="Collection not found")
@@ -148,9 +149,8 @@ async def create_card(
         card_in.front = card_base.front
         card_in.back = card_base.back
     return await asyncio.to_thread(
-        lambda:
-            services.create_card(
-                session=session, collection_id=collection_id, card_in=card_in
+        lambda: services.create_card(
+            session=session, collection_id=collection_id, card_in=card_in
         )
     )
 

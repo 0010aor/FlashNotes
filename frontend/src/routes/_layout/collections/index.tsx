@@ -1,6 +1,7 @@
 import type { Collection } from '@/client/types.gen'
 import CollectionDialog from '@/components/collections/CollectionDialog'
 import CollectionListItem from '@/components/collections/CollectionListItem'
+import AiPromptDialog from '@/components/commonUI/AiPromptDialog'
 import EmptyState from '@/components/commonUI/EmptyState'
 import ErrorState from '@/components/commonUI/ErrorState'
 import ListSkeleton from '@/components/commonUI/ListSkeleton'
@@ -19,7 +20,6 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { VscAdd } from 'react-icons/vsc'
 import { isGuest } from '../../../utils/authUtils'
-import AiPromptDialog from '@/components/commonUI/AiPromptDialog'
 
 export const Route = createFileRoute('/_layout/collections/')({
   component: Collections,

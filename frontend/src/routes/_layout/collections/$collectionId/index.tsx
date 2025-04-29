@@ -59,7 +59,7 @@ function CollectionComponent() {
       const savedCard = await createCard(collectionId, {
         front: '',
         back: '',
-        prompt: prompt
+        prompt: prompt,
       })
       navigate({ to: `/collections/${collectionId}/cards/${savedCard.id}` })
     } catch (error) {
