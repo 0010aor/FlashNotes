@@ -168,7 +168,7 @@
     "publicLayout": {
       "index": {
         "title": "Beter Leren met FlashNotes",
-        "description": "Een eenvoudige flashcard-app die je helpt te leren. Maak kaarten, oefen regelmatig en onthoud wat belangrijk is.",
+        "description": "Leg je ideeën vast, maak er flashcards van en oefen vaak zodat je meer onthoudt!",
         "offlineMode": "Offline Modus",
         "offlineModeDescription": "Gebruik FlashNotes overal, zelfs zonder internetverbinding. Gastmodus en al je gegevens werken volledig offline!",
         "aiGeneration": "AI Generatie",
@@ -181,6 +181,11 @@
       },
       "signUp": {
         "alreadyHaveAccount": "Heb je al een account?"
+      },
+      "thanks": {
+        "title": "Dank aan alle bijdragers!",
+        "description": "Dit project zou niet mogelijk zijn zonder het geweldige werk en de steun van onze bijdragers.",
+        "link": "Dank aan alle bijdragers"
       }
     }
   }

@@ -168,7 +168,7 @@
     "publicLayout": {
       "index": {
         "title": "Learn Better with FlashNotes",
-        "description": "A simple flashcard app that helps you learn. Create cards,practice regularly, and remember what matters.",
+        "description": "Capture your ideas, turn them into flashcards, and practice often so you can remember more!",
         "offlineMode": "Offline Mode",
         "offlineModeDescription": "Use FlashNotes anywhere, even without an internet connection. Guest mode and all your data work fully offline!",
         "aiGeneration": "AI Generation",
@@ -181,6 +181,11 @@
       },
       "signUp": {
         "alreadyHaveAccount": "Already have an account?"
+      },
+      "thanks": {
+        "title": "Thank You to All Contributors!",
+        "description": "This project would not be possible without the amazing work and support of our contributors.",
+        "link": "Thanks to all contributors"
       }
     }
   }

@@ -14,6 +14,7 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as PublicLayoutImport } from './routes/_publicLayout'
 import { Route as LayoutImport } from './routes/_layout'
 import { Route as PublicLayoutIndexImport } from './routes/_publicLayout/index'
+import { Route as PublicLayoutThanksImport } from './routes/_publicLayout/thanks'
 import { Route as PublicLayoutSignupImport } from './routes/_publicLayout/signup'
 import { Route as PublicLayoutLoginImport } from './routes/_publicLayout/login'
 import { Route as LayoutCollectionsIndexImport } from './routes/_layout/collections/index'
@@ -38,6 +39,12 @@ const LayoutRoute = LayoutImport.update({
 const PublicLayoutIndexRoute = PublicLayoutIndexImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => PublicLayoutRoute,
+} as any)
+
+const PublicLayoutThanksRoute = PublicLayoutThanksImport.update({
+  id: '/thanks',
+  path: '/thanks',
   getParentRoute: () => PublicLayoutRoute,
 } as any)
 
@@ -126,6 +133,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PublicLayoutSignupImport
       parentRoute: typeof PublicLayoutImport
     }
+    '/_publicLayout/thanks': {
+      id: '/_publicLayout/thanks'
+      path: '/thanks'
+      fullPath: '/thanks'
+      preLoaderRoute: typeof PublicLayoutThanksImport
+      parentRoute: typeof PublicLayoutImport
+    }
     '/_publicLayout/': {
       id: '/_publicLayout/'
       path: '/'
@@ -209,12 +223,14 @@ const LayoutRouteWithChildren =
 interface PublicLayoutRouteChildren {
   PublicLayoutLoginRoute: typeof PublicLayoutLoginRoute
   PublicLayoutSignupRoute: typeof PublicLayoutSignupRoute
+  PublicLayoutThanksRoute: typeof PublicLayoutThanksRoute
   PublicLayoutIndexRoute: typeof PublicLayoutIndexRoute
 }
 
 const PublicLayoutRouteChildren: PublicLayoutRouteChildren = {
   PublicLayoutLoginRoute: PublicLayoutLoginRoute,
   PublicLayoutSignupRoute: PublicLayoutSignupRoute,
+  PublicLayoutThanksRoute: PublicLayoutThanksRoute,
   PublicLayoutIndexRoute: PublicLayoutIndexRoute,
 }
 
@@ -226,6 +242,7 @@ export interface FileRoutesByFullPath {
   '': typeof PublicLayoutRouteWithChildren
   '/login': typeof PublicLayoutLoginRoute
   '/signup': typeof PublicLayoutSignupRoute
+  '/thanks': typeof PublicLayoutThanksRoute
   '/': typeof PublicLayoutIndexRoute
   '/collections': typeof LayoutCollectionsIndexRoute
   '/collections/$collectionId/practice': typeof LayoutCollectionsCollectionIdPracticeRoute
@@ -239,6 +256,7 @@ export interface FileRoutesByTo {
   '': typeof LayoutRouteWithChildren
   '/login': typeof PublicLayoutLoginRoute
   '/signup': typeof PublicLayoutSignupRoute
+  '/thanks': typeof PublicLayoutThanksRoute
   '/': typeof PublicLayoutIndexRoute
   '/collections': typeof LayoutCollectionsIndexRoute
   '/collections/$collectionId/practice': typeof LayoutCollectionsCollectionIdPracticeRoute
@@ -254,6 +272,7 @@ export interface FileRoutesById {
   '/_publicLayout': typeof PublicLayoutRouteWithChildren
   '/_publicLayout/login': typeof PublicLayoutLoginRoute
   '/_publicLayout/signup': typeof PublicLayoutSignupRoute
+  '/_publicLayout/thanks': typeof PublicLayoutThanksRoute
   '/_publicLayout/': typeof PublicLayoutIndexRoute
   '/_layout/collections/': typeof LayoutCollectionsIndexRoute
   '/_layout/collections/$collectionId/practice': typeof LayoutCollectionsCollectionIdPracticeRoute
@@ -269,6 +288,7 @@ export interface FileRouteTypes {
     | ''
     | '/login'
     | '/signup'
+    | '/thanks'
     | '/'
     | '/collections'
     | '/collections/$collectionId/practice'
@@ -281,6 +301,7 @@ export interface FileRouteTypes {
     | ''
     | '/login'
     | '/signup'
+    | '/thanks'
     | '/'
     | '/collections'
     | '/collections/$collectionId/practice'
@@ -294,6 +315,7 @@ export interface FileRouteTypes {
     | '/_publicLayout'
     | '/_publicLayout/login'
     | '/_publicLayout/signup'
+    | '/_publicLayout/thanks'
     | '/_publicLayout/'
     | '/_layout/collections/'
     | '/_layout/collections/$collectionId/practice'
@@ -344,6 +366,7 @@ export const routeTree = rootRoute
       "children": [
         "/_publicLayout/login",
         "/_publicLayout/signup",
+        "/_publicLayout/thanks",
         "/_publicLayout/"
       ]
     },
@@ -353,6 +376,10 @@ export const routeTree = rootRoute
     },
     "/_publicLayout/signup": {
       "filePath": "_publicLayout/signup.tsx",
+      "parent": "/_publicLayout"
+    },
+    "/_publicLayout/thanks": {
+      "filePath": "_publicLayout/thanks.tsx",
       "parent": "/_publicLayout"
     },
     "/_publicLayout/": {

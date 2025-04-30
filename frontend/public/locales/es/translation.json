@@ -168,7 +168,7 @@
     "publicLayout": {
       "index": {
         "title": "Aprende Mejor con FlashNotes",
-        "description": "Una aplicación de tarjetas de memoria simple que te ayuda a aprender. Crea tarjetas, practica regularmente y recuerda lo que importa.",
+        "description": "Captura tus ideas, conviértelas en tarjetas de memoria y practica a menudo para recordar más!",
         "offlineMode": "Modo sin conexión",
         "offlineModeDescription": "Usa FlashNotes en cualquier lugar, incluso sin conexión a internet. ¡El modo invitado y todos tus datos funcionan completamente sin conexión!",
         "aiGeneration": "Generación con IA",
@@ -181,6 +181,11 @@
       },
       "signUp": {
         "alreadyHaveAccount": "¿Ya tienes una cuenta?"
+      },
+      "thanks": {
+        "title": "¡Gracias a todos los colaboradores!",
+        "description": "Este proyecto no sería posible sin el increíble trabajo y apoyo de nuestros colaboradores.",
+        "link": "Gracias a todos los colaboradores"
       }
     }
   }
