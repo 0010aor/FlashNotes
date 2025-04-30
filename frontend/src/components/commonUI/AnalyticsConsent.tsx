@@ -1,3 +1,4 @@
+import { CONSENT_KEY } from '@/lib/const/analytics'
 import { Box, Button, Flex, IconButton, Text } from '@chakra-ui/react'
 import posthog from 'posthog-js'
 import type { FC } from 'react'
@@ -5,24 +6,18 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { FaTimes as CloseIcon } from 'react-icons/fa'
 
-const CONSENT_KEY = 'analytics_consent'
-
 const AnalyticsConsent: FC = () => {
-  const [, setAcceptConsent] = useState<boolean>(false)
   const [showConsent, setShowConsent] = useState<boolean>(false)
   const { t } = useTranslation()
 
   useEffect(() => {
     const storedConsent = localStorage.getItem(CONSENT_KEY)
     if (storedConsent === 'true') {
-      setAcceptConsent(true)
       setShowConsent(false)
       initializeAnalytics()
     } else if (storedConsent === 'false') {
-      setAcceptConsent(false)
       setShowConsent(false)
     } else {
-      setAcceptConsent(false)
       setShowConsent(true)
     }
   }, [])
@@ -41,14 +36,12 @@ const AnalyticsConsent: FC = () => {
 
   const handleAccept = () => {
     localStorage.setItem(CONSENT_KEY, 'true')
-    setAcceptConsent(true)
     setShowConsent(false)
     initializeAnalytics()
   }
 
   const handleDecline = () => {
     localStorage.setItem(CONSENT_KEY, 'false')
-    setAcceptConsent(false)
     setShowConsent(false)
   }
 
