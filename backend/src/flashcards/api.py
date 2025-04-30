@@ -47,27 +47,28 @@ async def create_collection(
     collection_in: CollectionCreate,
     provider: GeminiProviderDep,
 ) -> Any:
+    name = collection_in.name
+    cards = None
+
     if collection_in.prompt:
         try:
-            collection = await services.generate_ai_collection(
-                session=session,
-                user_id=current_user.id,
-                prompt=collection_in.prompt,
-                provider=provider,
+            flashcard_collection = await services.generate_ai_collection(
+                provider, collection_in.prompt
             )
-            return collection
+            name = flashcard_collection.name
+            cards = flashcard_collection.cards
         except EmptyCollectionError:
             raise HTTPException(
                 status_code=400, detail="Failed to generate flashcards from the prompt"
             )
         except AIGenerationError as e:
             raise HTTPException(status_code=500, detail=str(e))
-    else:
-        return await asyncio.to_thread(
-            lambda: services.create_collection(
-                session=session, collection_in=collection_in, user_id=current_user.id
-            )
+
+    return await asyncio.to_thread(
+        lambda: services.create_collection(
+            session=session, user_id=current_user.id, name=name, cards=cards
         )
+    )
 
 
 @router.get("/collections/{collection_id}", response_model=Collection)

@@ -798,7 +798,10 @@
       "CollectionCreate": {
         "properties": {
           "name": { "type": "string", "title": "Name" },
-          "prompt": { "anyOf": [{ "type": "string" }, { "type": "null" }], "title": "Prompt" }
+          "prompt": {
+            "anyOf": [{ "type": "string", "maxLength": 100 }, { "type": "null" }],
+            "title": "Prompt"
+          }
         },
         "type": "object",
         "required": ["name"],
