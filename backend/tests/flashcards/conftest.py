@@ -4,7 +4,7 @@ import pytest
 from sqlmodel import Session
 
 from src.flashcards.models import Card, Collection
-from src.flashcards.schemas import CardCreate, CollectionCreate
+from src.flashcards.schemas import CardCreate
 from src.flashcards.services import create_card, create_collection
 from src.users.schemas import UserCreate
 from src.users.services import create_user
@@ -37,13 +37,9 @@ def test_other_user(db: Session) -> dict[str, Any]:
 
 @pytest.fixture
 def test_collection(db: Session, test_user: dict[str, Any]) -> Collection:
-    collection_in = CollectionCreate(name="Test Collection")
     collection = create_collection(
-        session=db,
-        collection_in=collection_in,
-        user_id=test_user["id"],
+        session=db, user_id=test_user["id"], name="Test Collection"
     )
-
     return collection
 
 
@@ -51,17 +47,10 @@ def test_collection(db: Session, test_user: dict[str, Any]) -> Collection:
 def test_collection_with_multiple_cards(
     db: Session, test_user: dict[str, Any]
 ) -> Collection:
-    collection_in = CollectionCreate(name="Test Collection")
+    cards = [CardCreate(front=f"front {i}", back=f"back {i}") for i in range(5)]
     collection = create_collection(
-        session=db,
-        collection_in=collection_in,
-        user_id=test_user["id"],
+        session=db, user_id=test_user["id"], name="Test Collection", cards=cards
     )
-
-    for i in range(5):
-        card_in = CardCreate(front=f"front {i}", back=f"back {i}")
-        create_card(session=db, card_in=card_in, collection_id=collection.id)
-
     return collection
 
 
@@ -70,18 +59,17 @@ def test_multiple_collections(
     db: Session, test_user: dict[str, Any]
 ) -> list[Collection]:
     collections = []
-
     for i in range(5):
-        collection_in = CollectionCreate(name=f"Test Collection {i}")
+        cards = [
+            CardCreate(front=f"front {i}-{j}", back=f"back {i}-{j}") for j in range(1)
+        ]
         collection = create_collection(
             session=db,
-            collection_in=collection_in,
             user_id=test_user["id"],
+            name=f"Test Collection {i}",
+            cards=cards,
         )
-        card_in = CardCreate(front=f"front {i}", back=f"back {i}")
-        create_card(session=db, card_in=card_in, collection_id=collection.id)
         collections.append(collection)
-
     return collections
 
 

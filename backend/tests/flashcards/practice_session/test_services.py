@@ -15,9 +15,7 @@ from src.flashcards.schemas import (
     AIFlashcardCollection,
 )
 from src.flashcards.services import (
-    _generate_ai_flashcards,
     _get_collection_cards,
-    _save_ai_collection,
     generate_ai_collection,
     get_or_create_practice_session,
     get_practice_card,
@@ -292,132 +290,105 @@ def test_record_practice_card_result(
 
 @pytest.mark.asyncio
 async def test_generate_ai_collection():
-    mock_session = MagicMock()
     mock_provider = AsyncMock()
-    user_id = uuid.uuid4()
-
     test_cards = [AIFlashcard(front="Question 1", back="Answer 1")]
     ai_collection = AIFlashcardCollection(name="AI Generated", cards=test_cards)
-    db_collection = Collection(name="AI Generated", user_id=user_id)
 
-    with (
-        patch(
-            "src.flashcards.services._generate_ai_flashcards", new_callable=AsyncMock
-        ) as mock_generate,
-        patch("src.flashcards.services._save_ai_collection") as mock_save,
-    ):
-        mock_generate.return_value = ai_collection
-        mock_save.return_value = db_collection
-
-        result = await generate_ai_collection(
-            session=mock_session,
-            user_id=user_id,
-            prompt="Create pytest flashcards",
-            provider=mock_provider,
-        )
-
-        assert result == db_collection
-
-        mock_generate.assert_called_once_with(mock_provider, "Create pytest flashcards")
-        mock_save.assert_called_once_with(mock_session, user_id, ai_collection)
-
-
-def test_save_ai_collection():
-    mock_session = MagicMock()
-    user_id = uuid.uuid4()
-
-    def mock_refresh(obj):
-        if isinstance(obj, Collection) and obj.id is None:
-            obj.id = uuid.uuid4()
-
-    mock_session.refresh.side_effect = mock_refresh
-
-    test_cards = [
-        AIFlashcard(front="Question 1", back="Answer 1"),
-        AIFlashcard(front="Question 2", back="Answer 2"),
-    ]
-
-    test_collection = AIFlashcardCollection(name="Test Collection", cards=test_cards)
-
-    result = _save_ai_collection(mock_session, user_id, test_collection)
-
-    assert result.name == "Test Collection"
-    assert result.user_id == user_id
-
-    assert mock_session.add.call_count == 3  # 1 collection + 2 cards
-    assert mock_session.commit.call_count == 2
-    assert mock_session.refresh.call_count == 2  # Collection refreshed twice
-
-
-@pytest.mark.asyncio
-async def test_generate_ai_flashcards_success():
-    mock_provider = AsyncMock()
-    mock_get_config = MagicMock()
-
-    # Setup run_model return value
-    valid_json_response = json.dumps(
-        {
-            "collection": {
-                "name": "AI Collection",
-                "cards": [
-                    {"front": "Question 1", "back": "Answer 1"},
-                    {"front": "Question 2", "back": "Answer 2"},
-                ],
+    with patch("src.flashcards.services.get_flashcard_config") as mock_get_config:
+        mock_provider.run_model.return_value = json.dumps(
+            {
+                "collection": {
+                    "name": "AI Generated",
+                    "cards": [{"front": "Question 1", "back": "Answer 1"}],
+                }
             }
-        }
-    )
-    mock_provider.run_model.return_value = valid_json_response
-
-    with patch(
-        "src.flashcards.services.get_flashcard_config", return_value=mock_get_config
-    ):
-        result = await _generate_ai_flashcards(
-            mock_provider, "Create flashcards about Pytest"
         )
-
-        assert result.name == "AI Collection"
-        assert len(result.cards) == 2
+        mock_get_config.return_value = MagicMock()
+        result = await generate_ai_collection(mock_provider, "Create pytest flashcards")
+        assert result.name == ai_collection.name
+        assert len(result.cards) == 1
         assert result.cards[0].front == "Question 1"
         assert result.cards[0].back == "Answer 1"
-
-        mock_provider.run_model.assert_called_once_with(
-            mock_get_config, "Create flashcards about Pytest"
-        )
+        mock_provider.run_model.assert_called_once()
 
 
 @pytest.mark.asyncio
-async def test_generate_ai_flashcards_invalid_json():
+async def test_generate_ai_collection_invalid_json():
     mock_provider = AsyncMock()
     mock_provider.run_model.return_value = "Invalid JSON"
-
     with patch("src.flashcards.services.get_flashcard_config"):
         with pytest.raises(
             AIGenerationError, match="Failed to parse AI response as JSON"
         ):
-            await _generate_ai_flashcards(mock_provider, "Create flashcards")
+            await generate_ai_collection(mock_provider, "Create flashcards")
 
 
 @pytest.mark.asyncio
-async def test_generate_ai_flashcards_missing_collection():
+async def test_generate_ai_collection_missing_collection():
     mock_provider = AsyncMock()
     mock_provider.run_model.return_value = json.dumps({"other_field": "value"})
-
     with patch("src.flashcards.services.get_flashcard_config"):
         with pytest.raises(
             AIGenerationError, match="AI response missing 'collection' field"
         ):
-            await _generate_ai_flashcards(mock_provider, "Create flashcards")
+            await generate_ai_collection(mock_provider, "Create flashcards")
 
 
 @pytest.mark.asyncio
-async def test_generate_ai_flashcards_empty_cards():
+async def test_generate_ai_collection_empty_cards():
     mock_provider = AsyncMock()
     mock_provider.run_model.return_value = json.dumps(
         {"collection": {"name": "Empty Collection", "cards": []}}
     )
-
     with patch("src.flashcards.services.get_flashcard_config"):
         with pytest.raises(
             AIGenerationError, match="AI generated an empty collection with no cards"
         ):
-            await _generate_ai_flashcards(mock_provider, "Create flashcards")
+            await generate_ai_collection(mock_provider, "Create flashcards")
+
+
+@pytest.mark.asyncio
+async def test_generate_ai_flashcard_success():
+    mock_provider = AsyncMock()
+    mock_get_config = MagicMock()
+    valid_json_response = json.dumps(
+        {"front": "What is Pytest?", "back": "A Python testing framework."}
+    )
+    mock_provider.run_model.return_value = valid_json_response
+    with patch("src.flashcards.services.get_card_config", return_value=mock_get_config):
+        from src.flashcards.services import generate_ai_flashcard
+
+        result = await generate_ai_flashcard(
+            "Create a flashcard about Pytest", mock_provider
+        )
+        assert result.front == "What is Pytest?"
+        assert result.back == "A Python testing framework."
+        mock_provider.run_model.assert_called_once_with(
+            mock_get_config, "Create a flashcard about Pytest"
+        )
+
+
+@pytest.mark.asyncio
+async def test_generate_ai_flashcard_invalid_json():
+    mock_provider = AsyncMock()
+    mock_provider.run_model.return_value = "Invalid JSON"
+    with patch("src.flashcards.services.get_card_config"):
+        from src.flashcards.services import generate_ai_flashcard
+
+        with pytest.raises(
+            AIGenerationError, match="Failed to parse AI response as JSON"
+        ):
+            await generate_ai_flashcard("Create a flashcard", mock_provider)
+
+
+@pytest.mark.asyncio
+async def test_generate_ai_flashcard_missing_fields():
+    mock_provider = AsyncMock()
+    mock_provider.run_model.return_value = json.dumps({"front": "Only front"})
+    with patch("src.flashcards.services.get_card_config"):
+        from src.flashcards.services import generate_ai_flashcard
+
+        with pytest.raises(
+            AIGenerationError, match="AI response missing 'front' or 'back' field"
+        ):
+            await generate_ai_flashcard("Create a flashcard", mock_provider)

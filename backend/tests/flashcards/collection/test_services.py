@@ -4,7 +4,7 @@ from typing import Any
 from sqlmodel import Session
 
 from src.flashcards.models import Collection
-from src.flashcards.schemas import CollectionCreate, CollectionUpdate
+from src.flashcards.schemas import CollectionUpdate
 from src.flashcards.services import (
     check_collection_access,
     create_collection,
@@ -16,15 +16,11 @@ from src.flashcards.services import (
 
 
 def test_create_collection(db: Session, test_user: dict[str, Any]):
-    collection_in = CollectionCreate(name="Test Collection")
     collection = create_collection(
-        session=db,
-        collection_in=collection_in,
-        user_id=test_user["id"],
+        session=db, user_id=test_user["id"], name="Test Collection"
     )
-
     assert collection.id is not None
-    assert collection.name == collection_in.name
+    assert collection.name == "Test Collection"
     assert collection.user_id == test_user["id"]
     assert collection.created_at is not None
     assert collection.updated_at is not None

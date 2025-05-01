@@ -1,5 +1,6 @@
 import uuid
 from typing import Any
+from unittest.mock import ANY, AsyncMock, patch
 
 import pytest
 from fastapi.testclient import TestClient
@@ -380,3 +381,46 @@ def test_deleted_card_not_in_list(
     list_after = rsp.json()
     assert list_after["count"] == len(test_multiple_cards) - 1
     assert delete_card["id"] not in [card["id"] for card in list_after["data"]]
+
+
+def test_create_card_with_prompt_ai(
+    client: TestClient,
+    normal_user_token_headers: dict[str, str],
+    test_collection: dict[str, Any],
+):
+    collection_id = test_collection["id"]
+    prompt = "What is a closure in Python?"
+    ai_card = {"front": "What is a closure?", "back": "A closure is..."}
+    with patch(
+        "src.flashcards.services.generate_ai_flashcard", new_callable=AsyncMock
+    ) as mock_ai:
+        mock_ai.return_value = type("Card", (), ai_card)()
+        card_data = {"prompt": prompt, "front": "", "back": ""}
+        rsp = client.post(
+            f"{settings.API_V1_STR}/collections/{collection_id}/cards/",
+            json=card_data,
+            headers=normal_user_token_headers,
+        )
+        assert rsp.status_code == 200
+        content = rsp.json()
+        assert content["front"] == ai_card["front"]
+        assert content["back"] == ai_card["back"]
+        mock_ai.assert_called_once_with(prompt, ANY)
+
+
+def test_create_card_with_prompt_too_long(
+    client: TestClient,
+    normal_user_token_headers: dict[str, str],
+    test_collection: dict[str, Any],
+):
+    collection_id = test_collection["id"]
+    prompt = "x" * 101
+    card_data = {"prompt": prompt, "front": "", "back": ""}
+    rsp = client.post(
+        f"{settings.API_V1_STR}/collections/{collection_id}/cards/",
+        json=card_data,
+        headers=normal_user_token_headers,
+    )
+    assert rsp.status_code == 422
+    content = rsp.json()
+    assert "prompt" in str(content)

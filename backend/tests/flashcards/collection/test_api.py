@@ -94,7 +94,12 @@ def test_create_collection_with_prompt(
         assert rsp.status_code == 200
         content = rsp.json()
         assert content["name"] == collection_data.name
-        assert content["id"] == str(mock_collection.id)
+        assert "id" in content
+        assert isinstance(content["id"], str)
+        assert len(content["cards"]) == len(mock_collection.cards)
+        for i, card in enumerate(mock_collection.cards):
+            assert content["cards"][i]["front"] == card.front
+            assert content["cards"][i]["back"] == card.back
 
         mock_ai_generate.assert_called_once()
 
