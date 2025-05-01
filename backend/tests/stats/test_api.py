@@ -1,4 +1,9 @@
+import uuid
+from unittest.mock import patch
+
 import pytest
+from fastapi.testclient import TestClient
+from sqlmodel import Session
 
 from src.core.config import settings
 from src.flashcards.models import Collection
@@ -81,3 +86,72 @@ def test_stats_endpoint_unauthorized(client, db, collection_with_sessions):
     )
 
     assert response.status_code in (401, 403)
+
+
+def test_get_collection_statistics_with_nonexistent_collection(
+    client: TestClient, db: Session
+):
+    non_existent_collection_id = uuid.uuid4()
+    user = create_random_user(db)
+    headers = authentication_token_from_email(client=client, email=user.email, db=db)
+    response = client.get(
+        f"{settings.API_V1_STR}/collections/{non_existent_collection_id}/stats",
+        headers=headers,
+    )
+
+    assert response.status_code == 404
+    content = response.json()
+    assert "detail" in content
+    assert "not found" in content["detail"]
+
+
+def test_get_collection_statistics_with_value_error(
+    client: TestClient, db: Session, collection_with_sessions
+):
+    with (
+        patch("src.stats.api.check_collection_access") as mock_access,
+        patch("src.stats.api.get_collection_stats") as mock_stats,
+    ):
+        user = create_random_user(db)
+        headers = authentication_token_from_email(
+            client=client, email=user.email, db=db
+        )
+        collection = collection_with_sessions(user.id, num_cards=5, num_sessions=10)
+        mock_access.return_value = True
+        mock_stats.side_effect = ValueError("Error testing")
+
+        response = client.get(
+            f"{settings.API_V1_STR}/collections/{collection.id}/stats",
+            headers=headers,
+        )
+
+        assert response.status_code == 404
+        content = response.json()
+        assert "detail" in content
+        assert "Error testing" in content["detail"]
+
+
+def test_get_collection_statistics_with_exception(
+    client: TestClient, db: Session, collection_with_sessions
+):
+    with (
+        patch("src.stats.api.check_collection_access") as mock_access,
+        patch("src.stats.api.get_collection_stats") as mock_stats,
+    ):
+        user = create_random_user(db)
+        headers = authentication_token_from_email(
+            client=client, email=user.email, db=db
+        )
+        collection = collection_with_sessions(user.id, num_cards=5, num_sessions=10)
+        mock_access.return_value = True
+        mock_stats.side_effect = Exception("Exception testing")
+
+        response = client.get(
+            f"{settings.API_V1_STR}/collections/{collection.id}/stats",
+            headers=headers,
+        )
+
+        assert response.status_code == 500
+        content = response.json()
+        assert "detail" in content
+        assert "Error retrieving collection statistics" in content["detail"]

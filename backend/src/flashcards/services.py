@@ -325,23 +325,6 @@ def get_practice_cards(
     return practice_cards, count
 
 
-def get_next_card(
-    session: Session, practice_session_id: uuid.UUID
-) -> tuple[Card, PracticeCard] | None:
-    statement = (
-        select(PracticeCard, Card)
-        .join(Card, PracticeCard.card_id == Card.id)
-        .where(
-            PracticeCard.session_id == practice_session_id,
-            PracticeCard.is_practiced.is_not(True),
-        )
-        .limit(1)
-    )
-    result = session.exec(statement).first()
-    if result:
-        return result[1], result[0]
-
-
 def get_practice_card(
     session: Session,
     practice_session_id: uuid.UUID,
@@ -382,12 +365,6 @@ def record_practice_card_result(
     session.commit()
     session.refresh(practice_card)
     return practice_card
-
-
-def get_session_statistics(
-    session: Session, practice_session_id: uuid.UUID
-) -> PracticeSession:
-    return session.get(PracticeSession, practice_session_id)
 
 
 def get_card_by_id(session: Session, card_id: uuid.UUID) -> Card | None:

@@ -3,10 +3,10 @@ import { ColorModeProvider } from '@/components/ui/color-mode'
 import { ChakraProvider } from '@chakra-ui/react'
 import { MutationCache, QueryCache, QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { RouterProvider, createRouter } from '@tanstack/react-router'
-import { PostHogProvider } from 'posthog-js/react'
 import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
 import { ApiError, OpenAPI } from './client'
+import AnalyticsConsent from './components/commonUI/AnalyticsConsent'
 import { AuthProvider } from './hooks/useAuthContext'
 import { routeTree } from './routeTree.gen'
 import { system } from './theme'
@@ -38,12 +38,6 @@ declare module '@tanstack/react-router' {
   }
 }
 
-const posthogApiKey = import.meta.env.VITE_POSTHOG_API_KEY
-const posthogConfig = {
-  enabled: import.meta.env.PROD && !!posthogApiKey,
-  options: import.meta.env.VITE_POSTHOG_HOST ? { api_host: import.meta.env.VITE_POSTHOG_HOST } : {},
-}
-
 const rootElement = document.getElementById('root')
 if (rootElement && !rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement)
@@ -52,14 +46,9 @@ if (rootElement && !rootElement.innerHTML) {
       <AuthProvider>
         <ChakraProvider value={system}>
           <ColorModeProvider>
+            <AnalyticsConsent />
             <QueryClientProvider client={queryClient}>
-              {posthogConfig.enabled ? (
-                <PostHogProvider apiKey={posthogApiKey} options={posthogConfig.options}>
-                  <RouterProvider router={router} />
-                </PostHogProvider>
-              ) : (
-                <RouterProvider router={router} />
-              )}
+              <RouterProvider router={router} />
             </QueryClientProvider>
           </ColorModeProvider>
         </ChakraProvider>
