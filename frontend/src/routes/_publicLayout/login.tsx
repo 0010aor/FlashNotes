@@ -1,15 +1,6 @@
 import Logo from '@/assets/Logo.svg'
 import useAuth from '@/hooks/useAuth'
-import {
-  Container,
-  Field,
-  Fieldset,
-  HStack,
-  Image,
-  Text,
-  VStack,
-  Box,
-} from '@chakra-ui/react'
+import { Box, Container, Field, Fieldset, HStack, Image, Text, VStack } from '@chakra-ui/react'
 import { Link, createFileRoute, redirect } from '@tanstack/react-router'
 import { type SubmitHandler, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -132,8 +123,6 @@ function Login() {
         </HStack>
 
         <GoogleAuthButton action="login" onClick={handleGoogleLogin} />
-
-      
       </VStack>
       <Box pl={0} ml={0}>
         <Text textAlign="left" pl={0} ml={0}>
