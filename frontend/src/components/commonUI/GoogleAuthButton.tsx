@@ -1,6 +1,6 @@
+import GoogleIcon from '@/assets/google-icon.svg'
 import { Button, type ButtonProps, HStack, Image, Text } from '@chakra-ui/react'
 import { forwardRef } from 'react'
-import GoogleIcon from '@/assets/google-icon.svg'
 
 interface GoogleAuthButtonProps extends ButtonProps {
   action: 'login' | 'signup'
@@ -26,12 +26,10 @@ export const GoogleAuthButton = forwardRef<HTMLButtonElement, GoogleAuthButtonPr
     >
       <HStack spacing={2} width="100%" justifyContent="center">
         <Image src={GoogleIcon} alt="Google" boxSize="18px" />
-        <Text>
-          {action === 'login' ? 'Continue with Google' : 'Sign up with Google'}
-        </Text>
+        <Text>{action === 'login' ? 'Continue with Google' : 'Sign up with Google'}</Text>
       </HStack>
     </Button>
-  )
+  ),
 )
 
 GoogleAuthButton.displayName = 'GoogleAuthButton'

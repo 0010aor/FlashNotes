@@ -1,12 +1,22 @@
 import Logo from '@/assets/Logo.svg'
 import useAuth from '@/hooks/useAuth'
-import { Button, Container, Field, Fieldset, HStack, Image, Text, VStack, Box } from '@chakra-ui/react'
+import {
+  Box,
+  Button,
+  Container,
+  Field,
+  Fieldset,
+  HStack,
+  Image,
+  Text,
+  VStack,
+} from '@chakra-ui/react'
 import { Link, createFileRoute, redirect } from '@tanstack/react-router'
 import { type SubmitHandler, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import type { UserRegister } from '../../client'
-import { DefaultInput } from '../../components/commonUI/Input'
 import { GoogleAuthButton } from '../../components/commonUI/GoogleAuthButton'
+import { DefaultInput } from '../../components/commonUI/Input'
 import PasswordInput from '../../components/commonUI/PasswordInput'
 import { confirmPasswordRules, emailPattern, passwordRules } from '../../utils'
 
@@ -68,7 +78,7 @@ function SignUp() {
       centerContent
     >
       <Image src={Logo} alt="Logo" height="auto" maxW="2xs" alignSelf="center" mb={4} />
-      
+
       <VStack spacing={4} width="100%">
         <form onSubmit={handleSubmit(onSubmit)} style={{ width: '100%' }}>
           <Fieldset.Root maxW="sm">
@@ -126,7 +136,7 @@ function SignUp() {
             </Button>
           </Fieldset.Root>
         </form>
-        
+
         <HStack width="100%" my={2}>
           <Box flex="1" height="1px" bg="bg.200" />
           <Text fontSize="sm" color="fg.muted" px={2}>
@@ -134,10 +144,10 @@ function SignUp() {
           </Text>
           <Box flex="1" height="1px" bg="bg.200" />
         </HStack>
-        
+
         <GoogleAuthButton action="signup" onClick={handleGoogleSignup} />
       </VStack>
-      
+
       <Box>
         <Text>
           {t('routes.publicLayout.signUp.alreadyHaveAccount')}{' '}
