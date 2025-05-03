@@ -13,6 +13,8 @@ import { emailPattern } from '../../utils'
 export const Route = createFileRoute('/_publicLayout/login')({
   component: Login,
   beforeLoad: async () => {
+    // NOTE: Direct localStorage access is used here because React context is not available in router guards.
+    // For all React components, use useAuthContext() from './hooks/useAuthContext' instead.
     const isGuest = localStorage.getItem('guest_mode') === 'true'
     const isLoggedIn = Boolean(localStorage.getItem('access_token')) || isGuest
     if (isLoggedIn) {
