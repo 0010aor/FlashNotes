@@ -6,7 +6,6 @@ from starlette.middleware.sessions import SessionMiddleware
 
 from src.core.config import settings
 from src.routers import api_router
-from src.routes import auth, user
 
 
 def custom_generate_unique_id(route: APIRoute) -> str:
@@ -41,6 +40,4 @@ app.add_middleware(
 )
 
 app.include_router(api_router, prefix=settings.API_V1_STR)
-app.include_router(auth.router)
-app.include_router(user.router)
 add_pagination(app)
