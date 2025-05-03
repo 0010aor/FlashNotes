@@ -27,7 +27,7 @@ def get_auth0_service() -> Auth0Service:
 
 
 async def get_token_from_header(
-    credentials: Annotated[HTTPAuthorizationCredentials, Depends(security)]
+    credentials: Annotated[HTTPAuthorizationCredentials, Depends(security)],
 ) -> str:
     """
     Extract and return the JWT token from Authorization header.
@@ -37,7 +37,7 @@ async def get_token_from_header(
 
 async def get_current_user_claims(
     token: Annotated[str, Depends(get_token_from_header)],
-    auth_service: Annotated[Auth0Service, Depends(get_auth0_service)]
+    auth_service: Annotated[Auth0Service, Depends(get_auth0_service)],
 ) -> dict[str, Any]:
     """
     Validate token and return the user claims.
@@ -51,12 +51,12 @@ async def get_current_user_info(
     request: Request,
     token: Annotated[str, Depends(get_token_from_header)],
     claims: Annotated[dict[str, Any], Depends(get_current_user_claims)],
-    auth_service: Annotated[Auth0Service, Depends(get_auth0_service)]
+    auth_service: Annotated[Auth0Service, Depends(get_auth0_service)],
 ) -> UserInfo:
     """
     Get user information from Auth0.
     """
-    # Access token should be available in the request's session 
+    # Access token should be available in the request's session
     # after the callback flow
     access_token = request.session.get("access_token")
     if not access_token:
@@ -69,7 +69,7 @@ async def get_current_user_info(
 async def get_current_user(
     request: Request,
     session: Annotated[Session, Depends(get_db)],
-    user_info: Annotated[UserInfo, Depends(get_current_user_info)]
+    user_info: Annotated[UserInfo, Depends(get_current_user_info)],
 ) -> User:
     """
     Get the current user from the database.
@@ -104,6 +104,5 @@ async def get_current_user(
 
     except Exception as e:
         raise HTTPException(
-            status_code=401,
-            detail=f"User integration failed: {str(e)}"
+            status_code=401, detail=f"User integration failed: {str(e)}"
         )
