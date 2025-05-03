@@ -49,9 +49,10 @@ class Settings(BaseSettings):
     # Auth0 Configuration
     AUTH0_CLIENT_ID: str
     AUTH0_CLIENT_SECRET: str
-    AUTH0_ISSUER: str
+    AUTH0_DOMAIN: str
+    AUTH0_ISSUER: str = ""  # Default empty string to make it optional
     AUTH0_CALLBACK_URL: str
-    AUTH0_LOGOUT_URL: str
+    AUTH0_LOGOUT_URL: str = ""  # Default empty string to make it optional
     AUTH0_AUDIENCE: str
 
     # Session Configuration
