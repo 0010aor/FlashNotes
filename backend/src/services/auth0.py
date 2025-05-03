@@ -30,16 +30,15 @@ class Auth0Service:
     def __init__(self):
         self.oauth = OAuth()
         self.oauth.register(
-            'auth0',
+            "auth0",
             client_id=settings.AUTH0_CLIENT_ID,
             client_secret=settings.AUTH0_CLIENT_SECRET,
             server_metadata_url=(
-                f'https://{settings.AUTH0_DOMAIN}/'
-                '.well-known/openid-configuration'
+                f"https://{settings.AUTH0_DOMAIN}/.well-known/openid-configuration"
             ),
             client_kwargs={
-                'scope': 'openid profile email',
-                'audience': settings.AUTH0_AUDIENCE,
+                "scope": "openid profile email",
+                "audience": settings.AUTH0_AUDIENCE,
             },
         )
         self._jwks = None
@@ -47,9 +46,7 @@ class Auth0Service:
     async def _get_jwks(self) -> dict[str, Any]:
         if self._jwks is None:
             try:
-                jwks_url = (
-                    f"https://{settings.AUTH0_DOMAIN}/.well-known/jwks.json"
-                )
+                jwks_url = f"https://{settings.AUTH0_DOMAIN}/.well-known/jwks.json"
                 async with httpx.AsyncClient() as client:
                     response = await client.get(jwks_url)
                     response.raise_for_status()
@@ -58,8 +55,7 @@ class Auth0Service:
             except Exception as e:
                 logger.error(f"Failed to fetch JWKS: {str(e)}")
                 raise HTTPException(
-                    status_code=500, 
-                    detail="Authentication configuration error"
+                    status_code=500, detail="Authentication configuration error"
                 )
         return self._jwks
 
@@ -73,8 +69,7 @@ class Auth0Service:
         except Exception as e:
             logger.error(f"Failed to initiate login: {str(e)}")
             raise HTTPException(
-                status_code=500,
-                detail="Failed to initiate login. Please try again."
+                status_code=500, detail="Failed to initiate login. Please try again."
             )
 
     async def callback(self, request: Request) -> TokenResponse:
@@ -85,8 +80,7 @@ class Auth0Service:
         except Exception as e:
             logger.error(f"Failed to exchange code for token: {str(e)}")
             raise HTTPException(
-                status_code=401,
-                detail="Authentication failed. Please try again."
+                status_code=401, detail="Authentication failed. Please try again."
             )
 
     async def validate_token(self, token: str) -> dict[str, Any]:
@@ -100,52 +94,36 @@ class Auth0Service:
                 jwks,
                 claims_options={
                     "iss": {"essential": True, "value": settings.AUTH0_ISSUER},
-                    "aud": {
-                        "essential": True,
-                        "value": settings.AUTH0_AUDIENCE
-                    },
+                    "aud": {"essential": True, "value": settings.AUTH0_AUDIENCE},
                     "exp": {"essential": True},
-                }
+                },
             )
             jwt.validate_claims(
                 claims,
                 {
                     "iss": {"essential": True, "value": settings.AUTH0_ISSUER},
-                    "aud": {
-                        "essential": True,
-                        "value": settings.AUTH0_AUDIENCE
-                    },
+                    "aud": {"essential": True, "value": settings.AUTH0_AUDIENCE},
                     "exp": {"essential": True},
-                }
+                },
             )
 
             # Additional validation
-            if not claims.get('sub'):
+            if not claims.get("sub"):
                 logger.warning("Token validation failed: missing subject")
                 raise HTTPException(
-                    status_code=401,
-                    detail="Invalid token: missing subject"
+                    status_code=401, detail="Invalid token: missing subject"
                 )
 
             return claims
         except jwt.ExpiredTokenError:
             logger.warning("Token has expired")
-            raise HTTPException(
-                status_code=401,
-                detail="Token has expired"
-            )
+            raise HTTPException(status_code=401, detail="Token has expired")
         except jwt.InvalidTokenError as e:
             logger.warning(f"Invalid token: {str(e)}")
-            raise HTTPException(
-                status_code=401,
-                detail="Invalid token"
-            )
+            raise HTTPException(status_code=401, detail="Invalid token")
         except Exception as e:
             logger.error(f"Token validation failed: {str(e)}")
-            raise HTTPException(
-                status_code=401,
-                detail="Invalid token"
-            )
+            raise HTTPException(status_code=401, detail="Invalid token")
 
     async def get_user_info(self, access_token: str) -> UserInfo:
         try:
@@ -156,8 +134,7 @@ class Auth0Service:
         except Exception as e:
             logger.error(f"Failed to get user info: {str(e)}")
             raise HTTPException(
-                status_code=401,
-                detail="Failed to retrieve user information"
+                status_code=401, detail="Failed to retrieve user information"
             )
 
     def logout(self) -> RedirectResponse:
