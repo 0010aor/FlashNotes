@@ -46,6 +46,17 @@ class Settings(BaseSettings):
     POSTGRES_PASSWORD: str
     POSTGRES_DB: str = ""
 
+    # Auth0 Configuration
+    AUTH0_CLIENT_ID: str
+    AUTH0_CLIENT_SECRET: str
+    AUTH0_ISSUER: str
+    AUTH0_CALLBACK_URL: str
+    AUTH0_LOGOUT_URL: str
+    AUTH0_AUDIENCE: str
+
+    # Session Configuration
+    SESSION_MAX_AGE: int = 60 * 60 * 24 * 7  # 7 days
+
     @computed_field  # type: ignore[misc]
     @property
     def SQLALCHEMY_DATABASE_URI(self) -> PostgresDsn:
@@ -91,8 +102,33 @@ class Settings(BaseSettings):
         self._check_default_secret(
             "FIRST_SUPERUSER_PASSWORD", self.FIRST_SUPERUSER_PASSWORD
         )
+        self._check_default_secret("AUTH0_CLIENT_SECRET", self.AUTH0_CLIENT_SECRET)
 
         return self
+
+    @computed_field  # type: ignore[prop-decorator]
+    @property
+    def auth0_jwks_url(self) -> str:
+        """Get the JWKS URL for token validation."""
+        return f"https://{self.AUTH0_DOMAIN}/.well-known/jwks.json"
+
+    @computed_field  # type: ignore[prop-decorator]
+    @property
+    def auth0_authorization_url(self) -> str:
+        """Get the authorization URL for login."""
+        return f"https://{self.AUTH0_DOMAIN}/authorize"
+
+    @computed_field  # type: ignore[prop-decorator]
+    @property
+    def auth0_token_url(self) -> str:
+        """Get the token URL for token exchange."""
+        return f"https://{self.AUTH0_DOMAIN}/oauth/token"
+
+    @computed_field  # type: ignore[prop-decorator]
+    @property
+    def auth0_userinfo_url(self) -> str:
+        """Get the userinfo URL for fetching user data."""
+        return f"https://{self.AUTH0_DOMAIN}/userinfo"
 
 
 settings = Settings()  # type: ignore
