@@ -1,3 +1,4 @@
+from functools import lru_cache
 from typing import Annotated, Any
 
 from fastapi import Depends, HTTPException, Request
@@ -9,15 +10,13 @@ from src.services.auth0 import Auth0Service, UserInfo
 from src.users.auth0 import get_or_create_user_from_auth0, get_user_by_auth0_id
 from src.users.models import User
 
-from functools import lru_cache
-
 security = HTTPBearer()
 
 
 # Initialize Auth0Service
 # This is a singleton instance of Auth0Service
 # to be reused across requests.
-@lru_cache()
+@lru_cache
 def get_auth0_service() -> Auth0Service:
     """
     Provides a singleton Auth0Service instance using lru_cache.
@@ -50,7 +49,6 @@ async def get_current_user_claims(
 async def get_current_user_info(
     request: Request,
     token: Annotated[str, Depends(get_token_from_header)],
-    claims: Annotated[dict[str, Any], Depends(get_current_user_claims)],
     auth_service: Annotated[Auth0Service, Depends(get_auth0_service)],
 ) -> UserInfo:
     """

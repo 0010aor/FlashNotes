@@ -1,11 +1,11 @@
-from typing import Any, TypedDict
 import logging
+from typing import Any, TypedDict
 
+import httpx
 from authlib.integrations.starlette_client import OAuth
 from authlib.jose import jwt
 from fastapi import HTTPException, Request
 from starlette.responses import RedirectResponse
-import httpx
 
 from src.core.config import settings
 
