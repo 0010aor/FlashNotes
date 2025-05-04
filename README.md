@@ -31,6 +31,12 @@
 
 Explore the API documentation at [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs).
 
+## Running GitHub Actions Locally
+
+To test your GitHub Actions workflows locally before pushing to GitHub, you can use [`nektos/act`](https://github.com/nektos/act). This tool allows you to simulate GitHub Actions workflows using Docker.
+
+Here is a simple guide for how to do this [here](./docs/how-to-run-github-action-locally.md).
+
 ## Setup Instructions
 
 ### Backend Setup
