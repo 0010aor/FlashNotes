@@ -67,6 +67,5 @@ class PracticeCard(SQLModel, table=True):
 class AIUsageQuota(SQLModel, table=True):
     id: uuid.UUID | None = Field(default_factory=uuid.uuid4, primary_key=True)
     user_id: uuid.UUID = Field(foreign_key="user.id", index=True, ondelete="CASCADE")
-    user: "User" = Relationship(back_populates="collections")
     usage_count: int = Field(default=0)
     last_reset_time: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
