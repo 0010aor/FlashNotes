@@ -1,7 +1,7 @@
 import json
 import random
 import uuid
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from typing import Literal
 
 from google import genai
@@ -9,10 +9,17 @@ from pydantic import ValidationError
 from sqlmodel import Session, func, select
 
 from src.ai_models.gemini.exceptions import AIGenerationError
+from src.core.config import settings
 
 from .ai_config import get_card_config, get_flashcard_config
 from .exceptions import EmptyCollectionError
-from .models import Card, Collection, PracticeCard, PracticeSession
+from .models import (
+    AIUsageQuota,
+    Card, 
+    Collection,
+    PracticeCard,
+    PracticeSession
+)
 from .schemas import (
     AIFlashcardCollection,
     CardBase,
@@ -408,3 +415,30 @@ async def generate_ai_flashcard(prompt: str, provider) -> CardBase:
         raise AIGenerationError(f"Invalid AI response format: {str(e)}")
     except Exception as e:
         raise AIGenerationError(f"Error processing AI response: {str(e)}")
+
+
+def is_within_ai_usage_quota(session: Session, user_id: uuid.UUID) -> bool:
+    if _has_exceeded_usage_quota(session, user_id):
+        return False
+    _increase_usage_quota(session, user_id)
+    return True
+
+def _has_exceeded_usage_quota(session: Session, user_id: uuid.UUID) -> bool:
+    statement = select(AIUsageQuota).filter_by(user_id=user_id)
+    quota = session.exec(statement).first()
+    if not quota:
+        return False
+    return quota.usage_count >= settings.AI_MAX_USAGE_QUOTA
+
+
+def _increase_usage_quota(session: Session, user_id: uuid.UUID):
+    statement = select(AIUsageQuota).filter_by(user_id=user_id)
+    quota = session.exec(statement).first()
+    if not quota:
+        quota = AIUsageQuota(user_id=user_id)
+        session.add(quota)
+    if datetime.now() - quota.last_reset_time > timedelta(days=settings.AI_QUOTA_TIME_RANGE_DAYS):
+        quota.usage_count = 0
+        quota.last_reset_time = datetime.now()
+    quota.usage_count += 1
+    session.commit()
