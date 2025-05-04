@@ -13,20 +13,16 @@ from src.core.config import settings
 
 from .ai_config import get_card_config, get_flashcard_config
 from .exceptions import EmptyCollectionError
-from .models import (
-    AIUsageQuota,
-    Card, 
-    Collection,
-    PracticeCard,
-    PracticeSession
-)
+from .models import AIUsageQuota, Card, Collection, PracticeCard, PracticeSession
 from .schemas import (
-    AIUsageQuota as AIUsageQuotaSchema,
     AIFlashcardCollection,
     CardBase,
     CardCreate,
     CardUpdate,
     CollectionUpdate,
+)
+from .schemas import (
+    AIUsageQuota as AIUsageQuotaSchema,
 )
 
 
@@ -425,16 +421,15 @@ def get_usage_quota(session: Session, user_id: uuid.UUID) -> AIUsageQuotaSchema:
         return AIUsageQuotaSchema(
             percentage_used=0,
             reset_date=(
-                datetime.now(timezone.utc) 
+                datetime.now(timezone.utc)
                 + timedelta(days=settings.AI_QUOTA_TIME_RANGE_DAYS)
-            )
+            ),
         )
     return AIUsageQuotaSchema(
         percentage_used=int(quota.usage_count / settings.AI_MAX_USAGE_QUOTA * 100),
         reset_date=(
-            quota.last_reset_time 
-            + timedelta(days=settings.AI_QUOTA_TIME_RANGE_DAYS)
-        )
+            quota.last_reset_time + timedelta(days=settings.AI_QUOTA_TIME_RANGE_DAYS)
+        ),
     )
 
 
@@ -444,14 +439,14 @@ def is_within_ai_usage_quota(session: Session, user_id: uuid.UUID) -> bool:
     _increase_usage_quota(session, user_id)
     return True
 
+
 def _has_exceeded_usage_quota(session: Session, user_id: uuid.UUID) -> bool:
     statement = select(AIUsageQuota).filter_by(user_id=user_id)
     quota = session.exec(statement).first()
     if not quota:
         return False
-    if (
-        datetime.now(timezone.utc) - quota.last_reset_time 
-        >= timedelta(days=settings.AI_QUOTA_TIME_RANGE_DAYS)
+    if datetime.now(timezone.utc) - quota.last_reset_time >= timedelta(
+        days=settings.AI_QUOTA_TIME_RANGE_DAYS
     ):
         quota.usage_count = 0
         quota.last_reset_time = datetime.now(timezone.utc)

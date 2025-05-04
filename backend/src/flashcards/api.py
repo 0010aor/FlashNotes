@@ -25,7 +25,7 @@ from .schemas import (
     PracticeCardResultPatch,
     PracticeSession,
     PracticeSessionCreate,
-    PracticeSessionList
+    PracticeSessionList,
 )
 
 router = APIRouter()
@@ -62,7 +62,9 @@ async def create_collection(
     if collection_in.prompt:
         try:
             if not services.is_within_ai_usage_quota(session, current_user.id):
-                raise HTTPException(status_code=429, detail="Quota for AI usage is reached.")
+                raise HTTPException(
+                    status_code=429, detail="Quota for AI usage is reached."
+                )
             flashcard_collection = await services.generate_ai_collection(
                 provider, collection_in.prompt
             )
@@ -157,7 +159,9 @@ async def create_card(
         raise HTTPException(status_code=404, detail="Collection not found")
     if card_in.prompt:
         if not services.is_within_ai_usage_quota(session, current_user.id):
-            raise HTTPException(status_code=429, detail="Quota for AI usage is reached.")
+            raise HTTPException(
+                status_code=429, detail="Quota for AI usage is reached."
+            )
         card_base = await services.generate_ai_flashcard(card_in.prompt, provider)
         card_in.front = card_base.front
         card_in.back = card_base.back
