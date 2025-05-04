@@ -1,8 +1,10 @@
+from datetime import datetime, timedelta, timezone
+from unittest.mock import MagicMock, patch
 import uuid
 
 from sqlmodel import Session
 
-from src.flashcards.models import Card, Collection
+from src.flashcards.models import AIUsageQuota, Card, Collection
 from src.flashcards.schemas import CardCreate, CardUpdate
 from src.flashcards.services import (
     create_card,
@@ -12,7 +14,9 @@ from src.flashcards.services import (
     get_card_with_collection,
     get_cards,
     update_card,
+    is_within_ai_usage_quota
 )
+from src.users.models import User
 
 
 def test_create_card(db: Session, test_collection: Collection):
@@ -152,3 +156,37 @@ def test_delete_card(db: Session, test_collection: Collection, test_card: Card):
         session=db, card_id=test_card.id, user_id=test_collection.user_id
     )
     assert card is None
+
+
+def test_ai_usage_quota_not_reached_first_time(db: Session, test_user: User):
+    within_quota = is_within_ai_usage_quota(db, test_user["id"])
+    assert within_quota is True
+
+
+def test_ai_usage_quota_not_reached(db: Session, test_user: User):
+    within_quota = is_within_ai_usage_quota(db, test_user["id"])
+    assert within_quota is True
+
+
+def test_ai_usage_quota_reached(test_user: User):
+    test_session = MagicMock(spec=Session)
+    mock_quota = MagicMock(spec=AIUsageQuota)
+    mock_quota.usage_count = 3000 # exagerated for testing
+    mock_quota.last_reset_time = datetime.now(timezone.utc)
+    mock_quota.user_id = test_user["id"]
+    test_session.exec.return_value.first.return_value = mock_quota
+
+    within_quota = is_within_ai_usage_quota(test_session, test_user["id"])
+    assert within_quota is False
+
+
+def test_ai_usage_quota_reset(test_user: User):
+    test_session = MagicMock(spec=Session)
+    mock_quota = MagicMock(spec=AIUsageQuota)
+    mock_quota.usage_count = 3000 # exagerated for testing
+    # exagerated for testing
+    mock_quota.last_reset_time = datetime.now(timezone.utc) - timedelta(days=700)
+    test_session.exec.return_value.first.return_value = mock_quota
+
+    within_quota = is_within_ai_usage_quota(test_session, test_user["id"])
+    assert within_quota is True

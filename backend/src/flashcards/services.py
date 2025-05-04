@@ -428,6 +428,13 @@ def _has_exceeded_usage_quota(session: Session, user_id: uuid.UUID) -> bool:
     quota = session.exec(statement).first()
     if not quota:
         return False
+    if (
+        datetime.now(timezone.utc) - quota.last_reset_time 
+        >= timedelta(days=settings.AI_QUOTA_TIME_RANGE_DAYS)
+    ):
+        quota.usage_count = 0
+        quota.last_reset_time = datetime.now(timezone.utc)
+        session.commit()
     return quota.usage_count >= settings.AI_MAX_USAGE_QUOTA
 
 
@@ -437,8 +444,5 @@ def _increase_usage_quota(session: Session, user_id: uuid.UUID):
     if not quota:
         quota = AIUsageQuota(user_id=user_id)
         session.add(quota)
-    if datetime.now(timezone.utc) - quota.last_reset_time >= timedelta(days=settings.AI_QUOTA_TIME_RANGE_DAYS):
-        quota.usage_count = 0
-        quota.last_reset_time = datetime.now(timezone.utc)
     quota.usage_count += 1
     session.commit()
