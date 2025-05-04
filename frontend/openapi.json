@@ -80,6 +80,22 @@
         }
       }
     },
+    "/api/v1/aiquota": {
+      "get": {
+        "tags": ["flashcards"],
+        "summary": "Get Ai Usage Quota",
+        "operationId": "flashcards-get_ai_usage_quota",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/AIUsageQuota" } }
+            }
+          }
+        },
+        "security": [{ "OAuth2PasswordBearer": [] }]
+      }
+    },
     "/api/v1/collections/": {
       "get": {
         "tags": ["flashcards"],
@@ -692,6 +708,15 @@
   },
   "components": {
     "schemas": {
+      "AIUsageQuota": {
+        "properties": {
+          "percentage_used": { "type": "integer", "title": "Percentage Used" },
+          "reset_date": { "type": "string", "format": "date-time", "title": "Reset Date" }
+        },
+        "type": "object",
+        "required": ["percentage_used", "reset_date"],
+        "title": "AIUsageQuota"
+      },
       "Body_login-login_access_token": {
         "properties": {
           "grant_type": {

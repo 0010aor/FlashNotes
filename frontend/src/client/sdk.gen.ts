@@ -12,6 +12,7 @@ import type {
   FlashcardsDeleteCardResponse,
   FlashcardsDeleteCollectionData,
   FlashcardsDeleteCollectionResponse,
+  FlashcardsGetAiUsageQuotaResponse,
   FlashcardsGetPracticeSessionStatusData,
   FlashcardsGetPracticeSessionStatusResponse,
   FlashcardsListPracticeCardsData,
@@ -44,6 +45,18 @@ import type {
 } from './types.gen'
 
 export class FlashcardsService {
+  /**
+   * Get Ai Usage Quota
+   * @returns AIUsageQuota Successful Response
+   * @throws ApiError
+   */
+  public static getAiUsageQuota(): CancelablePromise<FlashcardsGetAiUsageQuotaResponse> {
+    return __request(OpenAPI, {
+      method: 'GET',
+      url: '/api/v1/aiquota',
+    })
+  }
+
   /**
    * Read Collections
    * @param data The data for the request.
