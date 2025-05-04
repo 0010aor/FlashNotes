@@ -21,6 +21,7 @@ from .models import (
     PracticeSession
 )
 from .schemas import (
+    AIUsageQuota as AIUsageQuotaSchema,
     AIFlashcardCollection,
     CardBase,
     CardCreate,
@@ -415,6 +416,26 @@ async def generate_ai_flashcard(prompt: str, provider) -> CardBase:
         raise AIGenerationError(f"Invalid AI response format: {str(e)}")
     except Exception as e:
         raise AIGenerationError(f"Error processing AI response: {str(e)}")
+
+
+def get_usage_quota(session: Session, user_id: uuid.UUID) -> AIUsageQuotaSchema:
+    statement = select(AIUsageQuota).filter_by(user_id=user_id)
+    quota = session.exec(statement).first()
+    if not quota:
+        return AIUsageQuotaSchema(
+            percentage_used=0,
+            reset_date=(
+                datetime.now(timezone.utc) 
+                + timedelta(days=settings.AI_QUOTA_TIME_RANGE_DAYS)
+            )
+        )
+    return AIUsageQuotaSchema(
+        percentage_used=int(quota.usage_count / settings.AI_MAX_USAGE_QUOTA * 100),
+        reset_date=(
+            quota.last_reset_time 
+            + timedelta(days=settings.AI_QUOTA_TIME_RANGE_DAYS)
+        )
+    )
 
 
 def is_within_ai_usage_quota(session: Session, user_id: uuid.UUID) -> bool:

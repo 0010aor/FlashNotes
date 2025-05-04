@@ -13,10 +13,12 @@ from src.flashcards.services import (
     get_card_by_id,
     get_card_with_collection,
     get_cards,
+    get_usage_quota,
+    is_within_ai_usage_quota,
     update_card,
-    is_within_ai_usage_quota
 )
 from src.users.models import User
+from src.core.config import settings
 
 
 def test_create_card(db: Session, test_collection: Collection):
@@ -190,3 +192,36 @@ def test_ai_usage_quota_reset(test_user: User):
 
     within_quota = is_within_ai_usage_quota(test_session, test_user["id"])
     assert within_quota is True
+
+
+def test_get_usage_quota_empty(test_user: User):
+    test_session = MagicMock(spec=Session)
+    test_session.exec.return_value.first.return_value = None
+
+    ai_usage_quota = get_usage_quota(test_session, test_user["id"])
+    assert ai_usage_quota.percentage_used == 0
+    assert (
+        ai_usage_quota.reset_date 
+        >= datetime.now(timezone.utc) 
+        + timedelta(days=settings.AI_QUOTA_TIME_RANGE_DAYS)
+        - timedelta(milliseconds=10) # little bit of tolerance
+    )
+
+
+def test_get_usage_quota(test_user: User):
+    test_session = MagicMock(spec=Session)
+    mock_quota = MagicMock(spec=AIUsageQuota)
+    mock_quota.usage_count = settings.AI_MAX_USAGE_QUOTA / 2
+    mock_quota.last_reset_time = (
+        datetime.now(timezone.utc) 
+        - timedelta(days=settings.AI_QUOTA_TIME_RANGE_DAYS / 2)
+    )
+    test_session.exec.return_value.first.return_value = mock_quota
+    ai_usage_quota = get_usage_quota(test_session, test_user["id"])
+    assert ai_usage_quota.percentage_used == 50
+    assert (
+        ai_usage_quota.reset_date 
+        >= datetime.now(timezone.utc) 
+        + timedelta(days=settings.AI_QUOTA_TIME_RANGE_DAYS / 2)
+        - timedelta(milliseconds=10) # little bit of tolerance
+    )

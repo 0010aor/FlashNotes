@@ -11,6 +11,7 @@ from src.auth.services import CurrentUser, SessionDep
 from . import services
 from .exceptions import EmptyCollectionError
 from .schemas import (
+    AIUsageQuota,
     Card,
     CardCreate,
     CardList,
@@ -24,10 +25,18 @@ from .schemas import (
     PracticeCardResultPatch,
     PracticeSession,
     PracticeSessionCreate,
-    PracticeSessionList,
+    PracticeSessionList
 )
 
 router = APIRouter()
+
+
+@router.get("/aiquota", response_model=AIUsageQuota)
+def get_ai_usage_quota(
+    session: SessionDep,
+    current_user: CurrentUser,
+) -> Any:
+    return services.get_usage_quota(session, current_user.id)
 
 
 @router.get("/collections/", response_model=CollectionList)
