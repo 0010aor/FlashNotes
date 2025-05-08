@@ -42,7 +42,7 @@ export function useCard(collectionId: string, cardId?: string) {
         }
       } catch (error) {
         toaster.create({
-          title: t('general.errors.errorloadingCard'),
+          title: t('general.errors.errorLoadingCard'),
           type: 'error',
         })
       } finally {
