@@ -17,6 +17,8 @@ dependencies = [
     "fastapi-pagination>=0.12.34",
     "bcrypt==4.0.1",
     "google-genai>=1.5.0",
+    "celery[redis]>=5.5.2",
+    "flower>=2.0.1",
 ]
 
 [tool.uv]
