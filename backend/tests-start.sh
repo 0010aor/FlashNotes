@@ -9,6 +9,6 @@ alembic upgrade head
 
 python tests/tests_pre_start.py
 
-coverage run --source=app -m pytest
+coverage run --source=src -m pytest
 coverage report --show-missing
 coverage html --title "${@-coverage}"
