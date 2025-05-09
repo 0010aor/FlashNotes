@@ -8,10 +8,10 @@ import {
   DialogRoot,
   DialogTitle,
 } from '@/components/ui/dialog'
+import { useAiDialog } from '@/hooks/useAiDialog'
 import { Text } from '@chakra-ui/react'
 import type { OpenChangeDetails } from 'node_modules/@chakra-ui/react/dist/types/components/dialog/namespace'
 import { useRef, useState } from 'react'
-import { useAiDialog } from '@/hooks/useAiDialog'
 import { useTranslation } from 'react-i18next'
 import { BlueButton, RedButton } from '../commonUI/Button'
 import { DefaultInput } from '../commonUI/Input'
@@ -94,7 +94,13 @@ const AiPromptDialog: React.FC<AiDialogProps> = ({
             fontSize="xs"
             textAlign="right"
             mt={1}
-            color={usageQuota.percentage_used <= 50 ? 'green.500' : usageQuota.percentage_used <= 80 ? 'yellow.500' : 'red.500'}
+            color={
+              usageQuota.percentage_used <= 50
+                ? 'green.500'
+                : usageQuota.percentage_used <= 80
+                  ? 'yellow.500'
+                  : 'red.500'
+            }
           >
             {`${t('general.actions.aiQuotaUsed')}: ${usageQuota.percentage_used}%`}
           </Text>
@@ -106,7 +112,10 @@ const AiPromptDialog: React.FC<AiDialogProps> = ({
             </RedButton>
           </DialogActionTrigger>
           <DialogActionTrigger asChild>
-            <BlueButton onClick={handleSubmit} disabled={isLoading || !prompt.trim() || usageQuota.percentage_used == 100}>
+            <BlueButton
+              onClick={handleSubmit}
+              disabled={isLoading || !prompt.trim() || usageQuota.percentage_used === 100}
+            >
               {isLoading ? `${t('general.actions.creating')}...` : t('general.actions.create')}
             </BlueButton>
           </DialogActionTrigger>
