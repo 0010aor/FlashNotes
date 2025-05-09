@@ -130,3 +130,8 @@ class PracticeCardListResponse(SQLModel):
 
 class PracticeCardResultPatch(SQLModel):
     is_correct: bool
+
+
+class AIUsageQuota(SQLModel):
+    percentage_used: int
+    reset_date: datetime

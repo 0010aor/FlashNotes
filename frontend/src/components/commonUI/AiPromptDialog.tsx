@@ -8,6 +8,7 @@ import {
   DialogRoot,
   DialogTitle,
 } from '@/components/ui/dialog'
+import { useAiDialog } from '@/hooks/useAiDialog'
 import { Text } from '@chakra-ui/react'
 import type { OpenChangeDetails } from 'node_modules/@chakra-ui/react/dist/types/components/dialog/namespace'
 import { useRef, useState } from 'react'
@@ -37,6 +38,7 @@ const AiPromptDialog: React.FC<AiDialogProps> = ({
   const { t } = useTranslation()
   const [prompt, setPrompt] = useState<string>('')
   const closeButtonRef = useRef<HTMLButtonElement>(null)
+  const { usageQuota } = useAiDialog()
 
   const handleSubmit = () => {
     if (!prompt.trim() || isLoading) return
@@ -85,6 +87,23 @@ const AiPromptDialog: React.FC<AiDialogProps> = ({
           <Text fontSize="xs" textAlign="right" color="gray.500" mt={1}>
             {prompt.length}/{MAX_CHARS}
           </Text>
+          <Text fontSize="xs" textAlign="right" color="white.500" mt={1}>
+            {`${t('general.actions.aiQuotaResetDate')}: ${new Date(usageQuota.reset_date).toLocaleDateString()}`}
+          </Text>
+          <Text
+            fontSize="xs"
+            textAlign="right"
+            mt={1}
+            color={
+              usageQuota.percentage_used <= 50
+                ? 'green.500'
+                : usageQuota.percentage_used <= 80
+                  ? 'yellow.500'
+                  : 'red.500'
+            }
+          >
+            {`${t('general.actions.aiQuotaUsed')}: ${usageQuota.percentage_used}%`}
+          </Text>
         </DialogBody>
         <DialogFooter>
           <DialogActionTrigger asChild>
@@ -93,7 +112,10 @@ const AiPromptDialog: React.FC<AiDialogProps> = ({
             </RedButton>
           </DialogActionTrigger>
           <DialogActionTrigger asChild>
-            <BlueButton onClick={handleSubmit} disabled={isLoading || !prompt.trim()}>
+            <BlueButton
+              onClick={handleSubmit}
+              disabled={isLoading || !prompt.trim() || usageQuota.percentage_used === 100}
+            >
               {isLoading ? `${t('general.actions.creating')}...` : t('general.actions.create')}
             </BlueButton>
           </DialogActionTrigger>

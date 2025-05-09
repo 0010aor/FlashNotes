@@ -11,6 +11,7 @@ from src.auth.services import CurrentUser, SessionDep
 from . import services
 from .exceptions import EmptyCollectionError
 from .schemas import (
+    AIUsageQuota,
     Card,
     CardCreate,
     CardList,
@@ -28,6 +29,14 @@ from .schemas import (
 )
 
 router = APIRouter()
+
+
+@router.get("/aiquota", response_model=AIUsageQuota)
+def get_ai_usage_quota(
+    session: SessionDep,
+    current_user: CurrentUser,
+) -> Any:
+    return services.get_usage_quota(session, current_user.id)
 
 
 @router.get("/collections/", response_model=CollectionList)
@@ -52,6 +61,10 @@ async def create_collection(
 
     if collection_in.prompt:
         try:
+            if not services.is_within_ai_usage_quota(session, current_user.id):
+                raise HTTPException(
+                    status_code=429, detail="Quota for AI usage is reached."
+                )
             flashcard_collection = await services.generate_ai_collection(
                 provider, collection_in.prompt
             )
@@ -145,6 +158,10 @@ async def create_card(
     if not access_checked:
         raise HTTPException(status_code=404, detail="Collection not found")
     if card_in.prompt:
+        if not services.is_within_ai_usage_quota(session, current_user.id):
+            raise HTTPException(
+                status_code=429, detail="Quota for AI usage is reached."
+            )
         card_base = await services.generate_ai_flashcard(card_in.prompt, provider)
         card_in.front = card_base.front
         card_in.back = card_base.back

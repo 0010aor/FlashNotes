@@ -84,6 +84,8 @@
   "general": {
     "actions": {
       "addCard": "Agregar Tarjeta",
+      "aiQuotaResetDate": "Fecha de reinicio de cuota de IA",
+      "aiQuotaUsed": "Cuota de IA usada",
       "generateAiCard": "Agregar tarjeta con IA",
       "addCollection": "Agregar Colección",
       "backToCollection": "Volver a la Colección",
@@ -120,6 +122,7 @@
       "emailIsRequired": "Correo electrónico es requerido",
       "errorCreatingAccount": "Error al crear la cuenta",
       "errorLoadingCard": "Error al cargar la tarjeta",
+      "errorLoadingAIUsageQuota": "Error al cargar cuota de uso de IA",
       "errorSavingCard": "Error al guardar la tarjeta",
       "invalidCredentials": "Credenciales inválidas",
       "invalidName": "Nombre inválido",

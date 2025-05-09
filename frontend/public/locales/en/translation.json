@@ -84,6 +84,8 @@
   "general": {
     "actions": {
       "addCard": "Add Card",
+      "aiQuotaResetDate": "AI Usage quota reset date",
+      "aiQuotaUsed": "AI Usage quota used",
       "generateAiCard": "Add Card with AI",
       "addCollection": "Add Collection",
       "backToCollection": "Back to Collection",
@@ -120,6 +122,7 @@
       "emailIsRequired": "Email is required",
       "errorCreatingAccount": "Error creating account",
       "errorLoadingCard": "Error loading card",
+      "errorLoadingAIUsageQuota": "Error loading AI usage quota",
       "errorSavingCard": "Error saving card",
       "invalidCredentials": "Invalid credentials",
       "invalidName": "Invalid name",
