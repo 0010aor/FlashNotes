@@ -106,7 +106,7 @@ const AiPromptDialog: React.FC<AiDialogProps> = ({
             </RedButton>
           </DialogActionTrigger>
           <DialogActionTrigger asChild>
-            <BlueButton onClick={handleSubmit} disabled={isLoading || !prompt.trim()}>
+            <BlueButton onClick={handleSubmit} disabled={isLoading || !prompt.trim() || usageQuota.percentage_used == 100}>
               {isLoading ? `${t('general.actions.creating')}...` : t('general.actions.create')}
             </BlueButton>
           </DialogActionTrigger>
