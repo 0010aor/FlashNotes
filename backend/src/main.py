@@ -33,7 +33,8 @@ if settings.BACKEND_CORS_ORIGINS:
 app.add_middleware(
     SessionMiddleware,
     secret_key=settings.SECRET_KEY,
-    max_age=settings.SESSION_MAX_AGE,
+    same_site="lax",  # adjust for production
+    https_only=False
 )
 
 app.include_router(api_router, prefix=settings.API_V1_STR)
