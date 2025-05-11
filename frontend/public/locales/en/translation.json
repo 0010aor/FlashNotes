@@ -14,6 +14,10 @@
     "collectionDialog": {
       "title": "Add New Collection"
     },
+    "confirmationDialog": {
+      "title": "Delete Collection",
+      "warningMessages": "Are you sure you want to delete the collection {{name}}? The action is irreversible and will also delete the associated cards."
+    },
     "editorToolbar": {
       "heading1": "Heading 1",
       "heading2": "Heading 2",
@@ -89,6 +93,7 @@
       "backToCollection": "Back to Collection",
       "cancel": "Cancel",
       "close": "Close",
+      "collectionDeletedDescription": "Collection deleted successfully",
       "comingSoon": "Coming soon",
       "confirmPassword": "Confirm Password",
       "create": "Create",
@@ -119,6 +124,7 @@
       "default": "Something went wrong",
       "emailIsRequired": "Email is required",
       "errorCreatingAccount": "Error creating account",
+      "errorDeletingCollection": "Error deleting collection",
       "errorLoadingCard": "Error loading card",
       "errorSavingCard": "Error saving card",
       "invalidCredentials": "Invalid credentials",
