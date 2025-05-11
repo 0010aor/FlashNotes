@@ -9,9 +9,15 @@ from src.users.schemas import UserCreate, UserUpdate
 
 
 def create_user(*, session: Session, user_create: UserCreate) -> User:
-    db_obj = User.model_validate(
-        user_create, update={"hashed_password": get_password_hash(user_create.password)}
-    )
+    # Prepare update data
+    update_data = {}
+    
+    # Only hash password if it's provided
+    if user_create.password:
+        update_data["hashed_password"] = get_password_hash(user_create.password)
+    
+    # Create user object
+    db_obj = User.model_validate(user_create, update=update_data)
     session.add(db_obj)
     session.commit()
     session.refresh(db_obj)

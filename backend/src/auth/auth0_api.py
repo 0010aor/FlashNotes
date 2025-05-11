@@ -1,81 +1,58 @@
-from typing import Annotated, Any
+from fastapi import APIRouter, Request
+from fastapi.responses import RedirectResponse
+from authlib.integrations.starlette_client import OAuth
+from src.core.config import settings
 
-from fastapi import APIRouter, Depends, HTTPException, Request
-from sqlmodel import Session
-from starlette.responses import RedirectResponse
+router = APIRouter(tags=["auth"])
 
-from src.core.db import get_db
-from src.dependencies.auth0 import (
-    get_auth0_service,
-    get_current_user,
-    get_current_user_claims,
+oauth = OAuth()
+oauth.register(
+    name="auth0",
+    client_id=settings.AUTH0_CLIENT_ID,
+    client_secret=settings.AUTH0_CLIENT_SECRET,
+    server_metadata_url=f"https://{settings.AUTH0_DOMAIN}/.well-known/openid-configuration",
+    client_kwargs={"scope": "openid profile email"},
 )
-from src.services.auth0 import Auth0Service
-from src.users.auth0 import get_or_create_user_from_auth0
-from src.users.models import User
-from src.users.schemas import UserPublic
-
-router = APIRouter(prefix="/auth0", tags=["auth0"])
 
 
 @router.get("/login")
-async def login(
-    request: Request, auth_service: Annotated[Auth0Service, Depends(get_auth0_service)]
-) -> RedirectResponse:
-    return await auth_service.login(request)
+async def login(request: Request):
+    redirect_uri = request.url_for("auth0_callback")
+    return await oauth.auth0.authorize_redirect(
+        request,
+        redirect_uri,
+        prompt="select_account",
+        connection="google-oauth2"
+    )
 
 
-@router.get("/callback")
-async def callback(
-    request: Request,
-    session: Annotated[Session, Depends(get_db)],
-    auth_service: Annotated[Auth0Service, Depends(get_auth0_service)],
-) -> RedirectResponse:
-    try:
-        # Exchange auth code for tokens
-        token_response = await auth_service.callback(request)
-        access_token = token_response.get("access_token")
+@router.get("/callback", name="auth0_callback")
+async def auth0_callback(request: Request):
+    token = await oauth.auth0.authorize_access_token(request)
 
-        # Store access token in session for later use
-        request.session["access_token"] = access_token
+    user = token.get("userinfo") or await oauth.auth0.userinfo(token=token)
 
-        # Get user info from Auth0
-        user_info = await auth_service.get_user_info(access_token)
+    request.session["user"] = {
+        "email": user["email"],
+        "name": user.get("name"),
+        "picture": user.get("picture"),
+        "sub": user.get("sub"),
+    }
 
-        # Get or create user in our database
-        db_user = await get_or_create_user_from_auth0(session, user_info)
-
-        # Store user ID in session
-        request.session["user_id"] = str(db_user.id)
-
-        # Redirect to the frontend after successful authentication
-        return RedirectResponse(url="/")
-    except Exception as e:
-        # Log the error and redirect to error page
-        return RedirectResponse(url=f"/auth0/error?message={str(e)}")
+    return RedirectResponse(url="http://localhost:5173/collections")
 
 
 @router.get("/logout")
-async def logout(
-    auth_service: Annotated[Auth0Service, Depends(get_auth0_service)],
-) -> RedirectResponse:
-    return auth_service.logout()
+async def logout(request: Request):
+    request.session.clear()
+    return RedirectResponse(
+        url=f"https://{settings.AUTH0_DOMAIN}/v2/logout"
+            f"?client_id={settings.AUTH0_CLIENT_ID}"
+            f"&returnTo=http://localhost:5173"
+    )
 
 
-@router.get("/me", response_model=UserPublic)
-async def read_users_me(
-    current_user: Annotated[User, Depends(get_current_user)],
-) -> User:
-    return current_user
-
-
-@router.get("/validate")
-async def validate_token(
-    claims: Annotated[dict[str, Any], Depends(get_current_user_claims)],
-) -> dict[str, Any]:
-    return claims
-
-
-@router.get("/error")
-async def auth_error(message: str = "Authentication error"):
-    raise HTTPException(status_code=401, detail=message)
+@router.get("/me")
+async def me(request: Request):
+    user = request.session.get("user")
+    return {"authenticated": bool(user), "user": user}

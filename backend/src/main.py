@@ -30,7 +30,6 @@ if settings.BACKEND_CORS_ORIGINS:
         allow_headers=["*"],
     )
 
-# Add session middleware for Auth0 authentication
 app.add_middleware(
     SessionMiddleware,
     secret_key=settings.SECRET_KEY,

@@ -6,14 +6,26 @@ import { Outlet, createFileRoute, redirect } from '@tanstack/react-router'
 export const Route = createFileRoute('/_layout')({
   component: Layout,
   beforeLoad: async () => {
-    // NOTE: Direct localStorage access is used here because React context is not available in router guards.
-    // For all React components, use useAuthContext() from './hooks/useAuthContext' instead.
-    const isGuest = localStorage.getItem('guest_mode') === 'true'
-    const isLoggedIn = Boolean(localStorage.getItem('access_token')) || isGuest
-    if (!isLoggedIn) {
-      throw redirect({
-        to: '/login',
+    // ✅ Auth check using backend session-aware endpoint
+    try {
+      const res = await fetch('http://localhost:8000/api/v1/users/me', {
+        credentials: 'include', // 🔒 Required to send session cookie
       })
+
+      console.log("res:", res)
+
+      const data = await res.json()
+      console.log("data:", data)
+      const isLoggedIn = data?.email != null
+      const isGuest = localStorage.getItem('guest_mode') === 'true'
+    
+      if (!isLoggedIn && !isGuest) {
+        console.log("Not logged in or guest")
+        throw redirect({ to: '/login' })
+      }
+    } catch (err) {
+      console.error('Failed to check auth state:', err)
+      throw redirect({ to: '/login' })
     }
   },
 })
