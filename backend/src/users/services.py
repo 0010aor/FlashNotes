@@ -1,11 +1,13 @@
 import uuid
+from datetime import datetime, timedelta, timezone
 from typing import Any
 
-from sqlmodel import Session, select
+from sqlmodel import Session, select, update
 
 from src.auth.services import get_password_hash
+from src.core.config import settings
 from src.users.models import User
-from src.users.schemas import UserCreate, UserUpdate
+from src.users.schemas import AIUsageQuota, UserCreate, UserUpdate
 
 
 def create_user(*, session: Session, user_create: UserCreate) -> User:
@@ -42,3 +44,52 @@ def get_user_by_email(*, session: Session, email: str) -> User | None:
     statement = select(User).where(User.email == email)
     session_user = session.exec(statement).first()
     return session_user
+
+
+def get_ai_usage_quota_for_user(user: User) -> AIUsageQuota:
+    quota = user.ai_usage_quota
+    if not quota:
+        return AIUsageQuota(
+            percentage_used=0,
+            reset_date=(
+                datetime.now(timezone.utc)
+                + timedelta(days=settings.AI_QUOTA_TIME_RANGE_DAYS)
+            ),
+        )
+    return AIUsageQuota(
+        percentage_used=int(quota.usage_count / settings.AI_MAX_USAGE_QUOTA * 100),
+        reset_date=(
+            quota.last_reset_time + timedelta(days=settings.AI_QUOTA_TIME_RANGE_DAYS)
+        ),
+    )
+
+
+def check_and_increment_ai_usage_quota(session: Session, user: User) -> bool:
+    quota = user.ai_usage_quota
+    now = datetime.now(timezone.utc)
+
+    # 1. If no quota record, create and allow
+    if not quota:
+        quota = AIUsageQuota(user_id=user.id, usage_count=1, last_reset_time=now)
+        session.add(quota)
+        session.commit()
+        return True
+
+    # 2. Reset if window expired
+    if now - quota.last_reset_time >= timedelta(days=settings.AI_QUOTA_TIME_RANGE_DAYS):
+        quota.usage_count = 0
+        quota.last_reset_time = now
+        session.add(quota)
+        session.commit()
+
+        # 3. Atomic check and increment
+        result = session.exec(
+            update(AIUsageQuota)
+            .where(
+                (AIUsageQuota.id == quota.id)
+                & (AIUsageQuota.usage_count < settings.AI_MAX_USAGE_QUOTA)
+            )
+            .values(usage_count=AIUsageQuota.usage_count + 1)
+        )
+        session.commit()
+        return result.rowcount > 0

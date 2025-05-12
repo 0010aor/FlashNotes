@@ -63,12 +63,3 @@ class PracticeCard(SQLModel, table=True):
     updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     session: PracticeSession = Relationship(back_populates="practice_cards")
     card: Card = Relationship(back_populates="practice_cards")
-
-
-class AIUsageQuota(SQLModel, table=True):
-    id: uuid.UUID | None = Field(default_factory=uuid.uuid4, primary_key=True)
-    user_id: uuid.UUID = Field(foreign_key="user.id", index=True, ondelete="CASCADE")
-    usage_count: int = Field(default=0)
-    last_reset_time: datetime = Field(
-        default_factory=lambda: datetime.now(timezone.utc)
-    )

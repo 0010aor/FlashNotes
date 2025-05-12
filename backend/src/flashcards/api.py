@@ -7,11 +7,11 @@ from fastapi import APIRouter, HTTPException
 from src.ai_models.gemini import GeminiProviderDep
 from src.ai_models.gemini.exceptions import AIGenerationError
 from src.auth.services import CurrentUser, SessionDep
+from src.users.services import check_and_increment_ai_usage_quota
 
 from . import services
 from .exceptions import EmptyCollectionError
 from .schemas import (
-    AIUsageQuota,
     Card,
     CardCreate,
     CardList,
@@ -29,14 +29,6 @@ from .schemas import (
 )
 
 router = APIRouter()
-
-
-@router.get("/aiquota", response_model=AIUsageQuota)
-def get_ai_usage_quota(
-    session: SessionDep,
-    current_user: CurrentUser,
-) -> Any:
-    return services.get_usage_quota(session, current_user.id)
 
 
 @router.get("/collections/", response_model=CollectionList)
@@ -61,7 +53,7 @@ async def create_collection(
 
     if collection_in.prompt:
         try:
-            if not services.is_within_ai_usage_quota(session, current_user.id):
+            if not check_and_increment_ai_usage_quota(session, current_user):
                 raise HTTPException(
                     status_code=429, detail="Quota for AI usage is reached."
                 )
@@ -158,7 +150,7 @@ async def create_card(
     if not access_checked:
         raise HTTPException(status_code=404, detail="Collection not found")
     if card_in.prompt:
-        if not services.is_within_ai_usage_quota(session, current_user.id):
+        if not check_and_increment_ai_usage_quota(session, current_user):
             raise HTTPException(
                 status_code=429, detail="Quota for AI usage is reached."
             )

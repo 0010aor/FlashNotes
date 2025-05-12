@@ -94,6 +94,13 @@ class Settings(BaseSettings):
             "FIRST_SUPERUSER_PASSWORD", self.FIRST_SUPERUSER_PASSWORD
         )
 
+        if self.AI_MAX_USAGE_QUOTA is None or self.AI_MAX_USAGE_QUOTA <= 0:
+            raise ValueError("AI_MAX_USAGE_QUOTA must be set to a positive integer.")
+        if self.AI_QUOTA_TIME_RANGE_DAYS is None or self.AI_QUOTA_TIME_RANGE_DAYS <= 0:
+            raise ValueError(
+                "AI_QUOTA_TIME_RANGE_DAYS must be set to a positive integer."
+            )
+
         return self
 
 
