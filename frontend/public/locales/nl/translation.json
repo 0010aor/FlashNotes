@@ -30,6 +30,10 @@
       "acceptAiSuggestion": "Accepteren en aanmaken",
       "rejectAiSuggestion": "Afwijzen en opnieuw vragen"
     },
+    "editorTextCounter": {
+      "title": "Beperking van tekens",
+      "description": "Overschrijd het maximum aantal tekens"
+    },
     "practiceComplete": {
       "cardsCorrect": "Je hebt {{correct}} van de {{total}} kaarten goed",
       "title": "Oefening Voltooid"

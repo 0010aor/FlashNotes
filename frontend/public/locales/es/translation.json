@@ -30,6 +30,10 @@
       "acceptAiSuggestion": "Aceptar y crear",
       "rejectAiSuggestion": "Rechazar y reintentar prompt"
     },
+    "editorTextCounter": {
+      "title": "Limitación de caracteres",
+      "description": "Superar el máximo de caracteres"
+    },
     "practiceComplete": {
       "cardsCorrect": "Has acertado {{correct}} de {{total}} tarjetas",
       "title": "Práctica Completa"

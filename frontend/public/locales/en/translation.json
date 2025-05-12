@@ -30,6 +30,10 @@
       "acceptAiSuggestion": "Accept and create",
       "rejectAiSuggestion": "Reject and reprompt"
     },
+    "editorTextCounter": {
+      "title": "Characters Limitation",
+      "description": "Exceed the maximum characters"
+    },
     "practiceComplete": {
       "cardsCorrect": "You got {{correct}} out of {{total}} cards correct",
       "title": "Practice Complete"

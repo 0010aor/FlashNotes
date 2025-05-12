@@ -1,6 +1,9 @@
 import RichTextEditor from '@/components/commonUI/RichText/RichTextEditor'
+import useTextCounter from '@/hooks/useTextCounter'
 import { Box } from '@chakra-ui/react'
 import type { Editor } from '@tiptap/react'
+import { useState } from 'react'
+import TextCounter from '../commonUI/TextCounter'
 
 export interface CardEditorProps {
   side: 'front' | 'back'
@@ -21,6 +24,12 @@ export default function CardEditor({ side, isFlipped, frontEditor, backEditor }:
     cursor: 'text',
   }
 
+  const [frontTextLength, setFrontTextLength] = useState(0)
+  const [backTextLength, setBackTextLength] = useState(0)
+
+  useTextCounter(frontEditor, setFrontTextLength)
+  useTextCounter(backEditor, setBackTextLength)
+
   return (
     <Box
       position="relative"
@@ -33,6 +42,7 @@ export default function CardEditor({ side, isFlipped, frontEditor, backEditor }:
     >
       <Box {...commonBoxStyles} bg="bg.50">
         {side === 'front' && frontEditor && <RichTextEditor editor={frontEditor} />}
+        {side === 'front' && <TextCounter textLength={frontTextLength} />}
       </Box>
 
       <Box
@@ -42,6 +52,7 @@ export default function CardEditor({ side, isFlipped, frontEditor, backEditor }:
         visibility={isFlipped ? 'visible' : 'hidden'}
       >
         {side === 'back' && backEditor && <RichTextEditor editor={backEditor} />}
+        {side === 'back' && <TextCounter textLength={backTextLength} />}
       </Box>
     </Box>
   )
