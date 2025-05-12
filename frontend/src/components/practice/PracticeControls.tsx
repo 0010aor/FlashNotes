@@ -1,22 +1,16 @@
 import { Flex, HStack, IconButton } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { FaCheck, FaTimes } from 'react-icons/fa'
-import { BlueButton } from '../commonUI/Button'
 
 interface PracticeControlsProps {
   isFlipped: boolean
-  onFlip: () => void
   onAnswer: (correct: boolean) => void
 }
 
-function PracticeControls({ isFlipped, onFlip, onAnswer }: PracticeControlsProps) {
+function PracticeControls({ isFlipped, onAnswer }: PracticeControlsProps) {
   const { t } = useTranslation()
   if (!isFlipped) {
-    return (
-      <Flex height="5rem" justifyContent="center" alignItems="center">
-        <BlueButton onClick={onFlip}>{t('general.actions.showAnswer')}</BlueButton>
-      </Flex>
-    )
+    return <Flex height="5rem" justifyContent="center" alignItems="center" />
   }
 
   return (
