@@ -30,5 +30,6 @@ class UserPublic(UserBase):
 
 
 class AIUsageQuota(SQLModel):
-    percentage_used: int
+    usage_count: int
+    max_usage_allowed: int
     reset_date: datetime

@@ -1,12 +1,14 @@
+from datetime import datetime, timedelta, timezone
+from unittest.mock import MagicMock, patch
 from fastapi.encoders import jsonable_encoder
 from sqlmodel import Session
 
 from src.auth.services import verify_password
-from src.users.models import User
+from src.users.models import AIUsageQuota, User
 from src.users.schemas import UserCreate, UserUpdate
-from src.users.services import create_user, get_user_by_email, update_user
+from src.users.services import check_and_increment_ai_usage_quota, create_user, get_ai_usage_quota_for_user, get_user_by_email, update_user
 from tests.utils.utils import random_email, random_lower_string
-
+from src.core.config import settings
 
 def test_create_user(db: Session) -> None:
     email = random_email()
@@ -83,3 +85,39 @@ def test_update_user(db: Session) -> None:
     assert user_2
     assert user.email == user_2.email
     assert verify_password(new_password, user_2.hashed_password)
+
+
+def test_get_ai_usage_quota_for_user_no_quota(test_user):
+    test_user.ai_usage_quota = None
+    with patch('src.users.services.datetime') as mock_datetime:
+        mock_datetime.now.return_value = datetime(2025, 1, 1, tzinfo=timezone.utc)
+        quota = get_ai_usage_quota_for_user(test_user)
+        assert quota.usage_count == 0
+        assert quota.reset_date == datetime(2025, 1, 31, tzinfo=timezone.utc)
+
+def test_get_ai_usage_quota_for_user_with_quota(test_user):
+    test_user.ai_usage_quota = AIUsageQuota(usage_count=50, last_reset_time=datetime(2025, 1, 1, tzinfo=timezone.utc))
+    with patch('src.users.services.settings.AI_MAX_USAGE_QUOTA', 100):
+        with patch('src.users.services.datetime') as mock_datetime:
+            mock_datetime.now.return_value = datetime(2025, 1, 1, tzinfo=timezone.utc)
+            quota = get_ai_usage_quota_for_user(test_user)
+            assert quota.usage_count == 50
+            assert quota.reset_date == datetime(2025, 1, 31, tzinfo=timezone.utc)
+
+def test_check_and_increment_ai_usage_quota_first_time(db, test_user):
+    within_quota = check_and_increment_ai_usage_quota(db, test_user)
+    assert within_quota is True
+
+def test_check_and_increment_ai_usage_quota_max_count_reached(db, test_user):
+    test_user.ai_usage_quota = AIUsageQuota(usage_count=30000, last_reset_time=datetime.now(timezone.utc))
+    within_quota = check_and_increment_ai_usage_quota(db, test_user)
+    assert within_quota is False
+
+def test_check_and_increment_ai_usage_quota_reset_count(db, test_user):
+    with patch('src.users.services.datetime') as mock_datetime:
+        mock_datetime.now.return_value = datetime(2025, 2, 1, tzinfo=timezone.utc)
+        test_user.ai_usage_quota = AIUsageQuota(usage_count=1, last_reset_time=datetime(2025, 1, 1, tzinfo=timezone.utc))
+        within_quota = check_and_increment_ai_usage_quota(db, test_user)
+        assert within_quota is True
+        assert test_user.ai_usage_quota.usage_count == 1
+        assert test_user.ai_usage_quota.last_reset_time == datetime(2025, 2, 1, tzinfo=timezone.utc)
