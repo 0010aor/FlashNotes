@@ -83,25 +83,29 @@ def test_create_collection_with_prompt(
     with patch(
         "src.flashcards.services.generate_ai_collection", new_callable=AsyncMock
     ) as mock_ai_generate:
-        mock_ai_generate.return_value = mock_collection
+        with patch(
+            "src.flashcards.api.check_and_increment_ai_usage_quota"
+        ) as mock_quota_check:
+            mock_ai_generate.return_value = mock_collection
+            mock_quota_check.return_value = True
 
-        rsp = client.post(
-            f"{settings.API_V1_STR}/collections/",
-            json=collection_data.model_dump(),
-            headers=normal_user_token_headers,
-        )
+            rsp = client.post(
+                f"{settings.API_V1_STR}/collections/",
+                json=collection_data.model_dump(),
+                headers=normal_user_token_headers,
+            )
 
-        assert rsp.status_code == 200
-        content = rsp.json()
-        assert content["name"] == collection_data.name
-        assert "id" in content
-        assert isinstance(content["id"], str)
-        assert len(content["cards"]) == len(mock_collection.cards)
-        for i, card in enumerate(mock_collection.cards):
-            assert content["cards"][i]["front"] == card.front
-            assert content["cards"][i]["back"] == card.back
+            assert rsp.status_code == 200
+            content = rsp.json()
+            assert content["name"] == collection_data.name
+            assert "id" in content
+            assert isinstance(content["id"], str)
+            assert len(content["cards"]) == len(mock_collection.cards)
+            for i, card in enumerate(mock_collection.cards):
+                assert content["cards"][i]["front"] == card.front
+                assert content["cards"][i]["back"] == card.back
 
-        mock_ai_generate.assert_called_once()
+            mock_ai_generate.assert_called_once()
 
 
 def test_create_collection_with_ai_generation_error(
@@ -114,19 +118,23 @@ def test_create_collection_with_ai_generation_error(
     with patch(
         "src.flashcards.services.generate_ai_collection", new_callable=AsyncMock
     ) as mock_ai_generate:
-        err_msg = "AI service is unavailable"
-        mock_ai_generate.side_effect = AIGenerationError(err_msg)
+        with patch(
+            "src.flashcards.api.check_and_increment_ai_usage_quota"
+        ) as mock_quota_check:
+            err_msg = "AI service is unavailable"
+            mock_ai_generate.side_effect = AIGenerationError(err_msg)
+            mock_quota_check.return_value = True
 
-        rsp = client.post(
-            f"{settings.API_V1_STR}/collections/",
-            json=collection_data.model_dump(),
-            headers=normal_user_token_headers,
-        )
+            rsp = client.post(
+                f"{settings.API_V1_STR}/collections/",
+                json=collection_data.model_dump(),
+                headers=normal_user_token_headers,
+            )
 
-        assert rsp.status_code == 500
-        content = rsp.json()
-        assert "detail" in content
-        assert err_msg in content["detail"]
+            assert rsp.status_code == 500
+            content = rsp.json()
+            assert "detail" in content
+            assert err_msg in content["detail"]
 
 
 def test_read_collection(
