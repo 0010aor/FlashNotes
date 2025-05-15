@@ -91,4 +91,3 @@ def check_and_increment_ai_usage_quota(session: Session, user: User) -> bool:
     )
     session.commit()
     return result.rowcount > 0
-
