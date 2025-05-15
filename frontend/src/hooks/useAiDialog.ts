@@ -1,20 +1,16 @@
-import { FlashcardsService } from '@/client'
+import { AIUsageQuota, UsersService } from '@/client'
 import { useEffect, useState } from 'react'
 
-interface AIUsageQuotaData {
-  reset_date: string
-  percentage_used: number
-}
-
 export function useAiDialog() {
-  const [usageQuota, setUsageQuota] = useState<AIUsageQuotaData>({
+  const [usageQuota, setUsageQuota] = useState<AIUsageQuota>({
     reset_date: '',
-    percentage_used: 0,
+    usage_count: 0,
+    max_usage_allowed: 0
   })
 
   useEffect(() => {
     const fetchUsageQuota = async () => {
-      const data = await FlashcardsService.getAiUsageQuota()
+      const data = await UsersService.getMyAiUsageQuota()
       setUsageQuota(data)
     }
     fetchUsageQuota()

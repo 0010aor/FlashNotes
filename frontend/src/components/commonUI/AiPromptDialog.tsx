@@ -94,15 +94,9 @@ const AiPromptDialog: React.FC<AiDialogProps> = ({
             fontSize="xs"
             textAlign="right"
             mt={1}
-            color={
-              usageQuota.percentage_used <= 50
-                ? 'green.500'
-                : usageQuota.percentage_used <= 80
-                  ? 'yellow.500'
-                  : 'red.500'
-            }
+            color="white.500"
           >
-            {`${t('general.actions.aiQuotaUsed')}: ${usageQuota.percentage_used}%`}
+            {`AI Usage: ${usageQuota.usage_count}/${usageQuota.max_usage_allowed}`}
           </Text>
         </DialogBody>
         <DialogFooter>
@@ -114,7 +108,7 @@ const AiPromptDialog: React.FC<AiDialogProps> = ({
           <DialogActionTrigger asChild>
             <BlueButton
               onClick={handleSubmit}
-              disabled={isLoading || !prompt.trim() || usageQuota.percentage_used === 100}
+              disabled={isLoading || !prompt.trim() || usageQuota.usage_count === usageQuota.max_usage_allowed}
             >
               {isLoading ? `${t('general.actions.creating')}...` : t('general.actions.create')}
             </BlueButton>

@@ -85,7 +85,7 @@
     "actions": {
       "addCard": "Kaart Toevoegen",
       "aiQuotaResetDate": "Datum van herstart van AI-quota",
-      "aiQuotaUsed": "Gebruikte AI-quota",
+      "aiUsageCount": "Gebruik van AI",
       "generateAiCard": "Kaart toevoegen met AI",
       "addCollection": "Collectie Toevoegen",
       "backToCollection": "Terug naar Collectie",

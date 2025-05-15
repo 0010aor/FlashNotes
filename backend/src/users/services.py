@@ -76,21 +76,19 @@ def check_and_increment_ai_usage_quota(session: Session, user: User) -> bool:
         session.commit()
         return True
 
-    if quota.usage_count > settings.AI_MAX_USAGE_QUOTA:
-        return False
-
     if now - quota.last_reset_time >= timedelta(days=settings.AI_QUOTA_TIME_RANGE_DAYS):
         quota.usage_count = 0
         quota.last_reset_time = now
         session.add(quota)
         session.commit()
-        result = session.exec(
-            update(AIUsageQuotaModel)
-            .where(
-                (AIUsageQuotaModel.id == quota.id)
-                & (AIUsageQuotaModel.usage_count < settings.AI_MAX_USAGE_QUOTA)
-            )
-            .values(usage_count=AIUsageQuotaModel.usage_count + 1)
+    result = session.exec(
+        update(AIUsageQuotaModel)
+        .where(
+            (AIUsageQuotaModel.id == quota.id)
+            & (AIUsageQuotaModel.usage_count <= settings.AI_MAX_USAGE_QUOTA)
         )
-        session.commit()
-        return result.rowcount > 0
+        .values(usage_count=AIUsageQuotaModel.usage_count + 1)
+    )
+    session.commit()
+    return result.rowcount > 0
+    

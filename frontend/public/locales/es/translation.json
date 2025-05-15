@@ -85,7 +85,7 @@
     "actions": {
       "addCard": "Agregar Tarjeta",
       "aiQuotaResetDate": "Fecha de reinicio de cuota de IA",
-      "aiQuotaUsed": "Cuota de IA usada",
+      "aiUsageCount": "Uso de IA",
       "generateAiCard": "Agregar tarjeta con IA",
       "addCollection": "Agregar Colección",
       "backToCollection": "Volver a la Colección",
