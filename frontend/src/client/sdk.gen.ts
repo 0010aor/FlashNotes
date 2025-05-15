@@ -12,7 +12,6 @@ import type {
   FlashcardsDeleteCardResponse,
   FlashcardsDeleteCollectionData,
   FlashcardsDeleteCollectionResponse,
-  FlashcardsGetAiUsageQuotaResponse,
   FlashcardsGetPracticeSessionStatusData,
   FlashcardsGetPracticeSessionStatusResponse,
   FlashcardsListPracticeCardsData,
@@ -39,24 +38,13 @@ import type {
   LoginLoginAccessTokenResponse,
   StatsGetCollectionStatisticsEndpointData,
   StatsGetCollectionStatisticsEndpointResponse,
+  UsersGetMyAiUsageQuotaResponse,
   UsersReadUserMeResponse,
   UsersRegisterUserData,
   UsersRegisterUserResponse,
 } from './types.gen'
 
 export class FlashcardsService {
-  /**
-   * Get Ai Usage Quota
-   * @returns AIUsageQuota Successful Response
-   * @throws ApiError
-   */
-  public static getAiUsageQuota(): CancelablePromise<FlashcardsGetAiUsageQuotaResponse> {
-    return __request(OpenAPI, {
-      method: 'GET',
-      url: '/api/v1/aiquota',
-    })
-  }
-
   /**
    * Read Collections
    * @param data The data for the request.
@@ -513,6 +501,18 @@ export class UsersService {
       errors: {
         422: 'Validation Error',
       },
+    })
+  }
+
+  /**
+   * Get My Ai Usage Quota
+   * @returns AIUsageQuota Successful Response
+   * @throws ApiError
+   */
+  public static getMyAiUsageQuota(): CancelablePromise<UsersGetMyAiUsageQuotaResponse> {
+    return __request(OpenAPI, {
+      method: 'GET',
+      url: '/api/v1/users/users/me/ai-usage-quota',
     })
   }
 }

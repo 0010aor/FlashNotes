@@ -80,11 +80,11 @@
         }
       }
     },
-    "/api/v1/aiquota": {
+    "/api/v1/users/users/me/ai-usage-quota": {
       "get": {
-        "tags": ["flashcards"],
-        "summary": "Get Ai Usage Quota",
-        "operationId": "flashcards-get_ai_usage_quota",
+        "tags": ["users"],
+        "summary": "Get My Ai Usage Quota",
+        "operationId": "users-get_my_ai_usage_quota",
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -710,11 +710,12 @@
     "schemas": {
       "AIUsageQuota": {
         "properties": {
-          "percentage_used": { "type": "integer", "title": "Percentage Used" },
+          "usage_count": { "type": "integer", "title": "Usage Count" },
+          "max_usage_allowed": { "type": "integer", "title": "Max Usage Allowed" },
           "reset_date": { "type": "string", "format": "date-time", "title": "Reset Date" }
         },
         "type": "object",
-        "required": ["percentage_used", "reset_date"],
+        "required": ["usage_count", "max_usage_allowed", "reset_date"],
         "title": "AIUsageQuota"
       },
       "Body_login-login_access_token": {
