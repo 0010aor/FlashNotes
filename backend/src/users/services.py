@@ -6,9 +6,9 @@ from sqlmodel import Session, select, update
 
 from src.auth.services import get_password_hash
 from src.core.config import settings
+from src.users.models import AIUsageQuota as AIUsageQuotaModel
 from src.users.models import User
 from src.users.schemas import AIUsageQuota, UserCreate, UserUpdate
-from src.users.models import AIUsageQuota as AIUsageQuotaModel
 
 
 def create_user(*, session: Session, user_create: UserCreate) -> User:
