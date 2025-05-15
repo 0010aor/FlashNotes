@@ -90,13 +90,8 @@ const AiPromptDialog: React.FC<AiDialogProps> = ({
           <Text fontSize="xs" textAlign="right" color="white.500" mt={1}>
             {`${t('general.actions.aiQuotaResetDate')}: ${new Date(usageQuota.reset_date).toLocaleDateString()}`}
           </Text>
-          <Text
-            fontSize="xs"
-            textAlign="right"
-            mt={1}
-            color="white.500"
-          >
-            {`AI Usage: ${usageQuota.usage_count}/${usageQuota.max_usage_allowed}`}
+          <Text fontSize="xs" textAlign="right" mt={1} color="white.500">
+            {`${t('general.actions.aiUsageCount')}: ${usageQuota.usage_count}/${usageQuota.max_usage_allowed}`}
           </Text>
         </DialogBody>
         <DialogFooter>
@@ -108,7 +103,11 @@ const AiPromptDialog: React.FC<AiDialogProps> = ({
           <DialogActionTrigger asChild>
             <BlueButton
               onClick={handleSubmit}
-              disabled={isLoading || !prompt.trim() || usageQuota.usage_count === usageQuota.max_usage_allowed}
+              disabled={
+                isLoading ||
+                !prompt.trim() ||
+                usageQuota.usage_count === usageQuota.max_usage_allowed
+              }
             >
               {isLoading ? `${t('general.actions.creating')}...` : t('general.actions.create')}
             </BlueButton>
