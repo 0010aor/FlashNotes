@@ -17,7 +17,8 @@ from src.users.schemas import UserPublic
 
 ALGORITHM = "HS256"
 
-reusable_oauth2 = OAuth2PasswordBearer(tokenUrl=f"{settings.API_V1_STR}/tokens")
+reusable_oauth2 = OAuth2PasswordBearer(
+    tokenUrl=f"{settings.API_V1_STR}/tokens")
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 SessionDep = Annotated[Session, Depends(get_db)]
@@ -27,9 +28,11 @@ TokenDep = Annotated[str, Depends(reusable_oauth2)]
 def get_user_from_session(request: Request, session: SessionDep) -> User:
     session_user = request.session.get("user")
     if not session_user:
-        raise HTTPException(status_code=401, detail="Not authenticated (no session)")
+        raise HTTPException(status_code=401,
+                            detail="Not authenticated (no session)")
 
-    user = session.exec(select(User).where(User.email == session_user["email"])).first()
+    user = session.exec(select(User).where(
+        User.email == session_user["email"])).first()
     if not user or not user.is_active:
         raise HTTPException(status_code=401, detail="Invalid session user")
     return UserPublic.model_validate(user)
@@ -57,7 +60,8 @@ def get_user_from_token(
 def get_current_user(
     request: Request,
     session: SessionDep,
-    token: Annotated[str | None, Depends(OAuth2PasswordBearer(tokenUrl=f"{settings.API_V1_STR}/tokens", auto_error=False))] = None,
+    token: Annotated[str | None, Depends(OAuth2PasswordBearer(
+        tokenUrl=f"{settings.API_V1_STR}/tokens", auto_error=False))] = None,
 ) -> User:
     session_user = request.session.get("user")
     if session_user:
@@ -104,7 +108,11 @@ def get_password_hash(password: str) -> str:
     return pwd_context.hash(password)
 
 
-def get_or_create_user_by_email(session: Session, email: str, defaults: dict = {}) -> User:
+def get_or_create_user_by_email(
+    session: Session,
+    email: str,
+    defaults: dict | None = None,
+) -> User:
     user = session.exec(select(User).where(User.email == email)).first()
     if user:
         return user
@@ -113,4 +121,3 @@ def get_or_create_user_by_email(session: Session, email: str, defaults: dict = {
     session.commit()
     session.refresh(user)
     return user
-

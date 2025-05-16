@@ -23,8 +23,6 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
   )
 
   useEffect(() => {
-    console.log('isLoggedIn', isLoggedIn)
-
     const checkUser = async () => {
       if (localStorage.getItem(GUEST_MODE_KEY) === 'true') {
         setIsLoggedIn(true)
