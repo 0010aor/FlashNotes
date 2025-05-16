@@ -1,3 +1,5 @@
+import { UsersService } from '@/client'
+import type { AIUsageQuota } from '@/client/types.gen'
 import {
   DialogActionTrigger,
   DialogBody,
@@ -8,8 +10,8 @@ import {
   DialogRoot,
   DialogTitle,
 } from '@/components/ui/dialog'
-import { useAiDialog } from '@/hooks/useAiDialog'
 import { Text } from '@chakra-ui/react'
+import { useQuery } from '@tanstack/react-query'
 import type { OpenChangeDetails } from 'node_modules/@chakra-ui/react/dist/types/components/dialog/namespace'
 import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -38,7 +40,16 @@ const AiPromptDialog: React.FC<AiDialogProps> = ({
   const { t } = useTranslation()
   const [prompt, setPrompt] = useState<string>('')
   const closeButtonRef = useRef<HTMLButtonElement>(null)
-  const { usageQuota } = useAiDialog()
+  const { data } = useQuery<AIUsageQuota>({
+    queryKey: ['usageQuota'],
+    queryFn: UsersService.getMyAiUsageQuota,
+    enabled: isOpen,
+  })
+  const usageQuota: AIUsageQuota = data || {
+    max_usage_allowed: 0,
+    usage_count: 0,
+    reset_date: new Date().toDateString(),
+  }
 
   const handleSubmit = () => {
     if (!prompt.trim() || isLoading) return

@@ -85,7 +85,7 @@
     "actions": {
       "addCard": "Add Card",
       "aiQuotaResetDate": "AI Usage quota reset date",
-      "aiUsageCount": "AI creation count",
+      "aiUsageCount": "AI usage count",
       "generateAiCard": "Add Card with AI",
       "addCollection": "Add Collection",
       "backToCollection": "Back to Collection",
