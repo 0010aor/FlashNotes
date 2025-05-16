@@ -102,7 +102,7 @@ const AiPromptDialog: React.FC<AiDialogProps> = ({
             {`${t('general.actions.aiQuotaResetDate')}: ${new Date(usageQuota.reset_date).toLocaleDateString()}`}
           </Text>
           <Text fontSize="xs" textAlign="right" mt={1} color="white.500">
-            {`${t('general.actions.aiUsageCount')}: ${usageQuota.usage_count}/${usageQuota.max_usage_allowed}`}
+            {`${t('general.actions.aiUsageLeft')}: ${usageQuota.max_usage_allowed - usageQuota.usage_count}`}
           </Text>
         </DialogBody>
         <DialogFooter>
