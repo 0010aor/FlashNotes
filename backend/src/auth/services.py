@@ -17,8 +17,7 @@ from src.users.schemas import UserPublic
 
 ALGORITHM = "HS256"
 
-reusable_oauth2 = OAuth2PasswordBearer(
-    tokenUrl=f"{settings.API_V1_STR}/tokens")
+reusable_oauth2 = OAuth2PasswordBearer(tokenUrl=f"{settings.API_V1_STR}/tokens")
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 SessionDep = Annotated[Session, Depends(get_db)]
@@ -28,11 +27,9 @@ TokenDep = Annotated[str, Depends(reusable_oauth2)]
 def get_user_from_session(request: Request, session: SessionDep) -> User:
     session_user = request.session.get("user")
     if not session_user:
-        raise HTTPException(status_code=401,
-                            detail="Not authenticated (no session)")
+        raise HTTPException(status_code=401, detail="Not authenticated (no session)")
 
-    user = session.exec(select(User).where(
-        User.email == session_user["email"])).first()
+    user = session.exec(select(User).where(User.email == session_user["email"])).first()
     if not user or not user.is_active:
         raise HTTPException(status_code=401, detail="Invalid session user")
     return UserPublic.model_validate(user)
