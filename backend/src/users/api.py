@@ -16,7 +16,6 @@ def read_user_me(request: Request, current_user: CurrentUser) -> Any:
     """
     Get current user.
     """
-    print("session content:", request.session)
     return current_user
 
 

@@ -9,19 +9,23 @@ import { DefaultButton } from '../../components/commonUI/Button'
 import { GoogleAuthButton } from '../../components/commonUI/GoogleAuthButton'
 import { DefaultInput } from '../../components/commonUI/Input'
 import { emailPattern } from '../../utils'
+import { UsersService } from '@/client'
 
 export const Route = createFileRoute('/_publicLayout/login')({
   component: Login,
   beforeLoad: async () => {
-    // NOTE: Direct localStorage access is used here because React context is not available in router guards.
-    // For all React components, use useAuthContext() from './hooks/useAuthContext' instead.
-    const isGuest = localStorage.getItem('guest_mode') === 'true'
-    const isLoggedIn = Boolean(localStorage.getItem('access_token')) || isGuest
-    if (isLoggedIn) {
-      throw redirect({ to: '/collections' })
+    try {
+      const user = await UsersService.readUserMe()
+      const isGuest = localStorage.getItem('guest_mode') === 'true'
+      if (user || isGuest) {
+        throw redirect({ to: '/collections' })
+      }
+    } catch (error) {
+      // Continue to login page if user is not authenticated
     }
   },
 })
+
 
 function Login() {
   const { t } = useTranslation()
@@ -50,7 +54,7 @@ function Login() {
   }
 
   const handleGoogleLogin = () => {
-    console.log('Google login clicked')
+    window.location.href = 'http://localhost:8000/api/v1/auth0/login'
   }
 
   return (
