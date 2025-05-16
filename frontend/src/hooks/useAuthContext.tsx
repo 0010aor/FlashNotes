@@ -1,6 +1,6 @@
+import { UsersService } from '@/client'
 import type React from 'react'
 import { createContext, useContext, useEffect, useState } from 'react'
-import { UsersService } from '@/client'
 
 const GUEST_MODE_KEY = 'guest_mode'
 const ACCESS_TOKEN_KEY = 'access_token'
@@ -16,12 +16,14 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isGuest, setIsGuest] = useState(() => localStorage.getItem(GUEST_MODE_KEY) === 'true')
-  const [isLoggedIn, setIsLoggedIn] = useState(() => 
-    Boolean(localStorage.getItem(ACCESS_TOKEN_KEY)) || localStorage.getItem(GUEST_MODE_KEY) === 'true'
+  const [isLoggedIn, setIsLoggedIn] = useState(
+    () =>
+      Boolean(localStorage.getItem(ACCESS_TOKEN_KEY)) ||
+      localStorage.getItem(GUEST_MODE_KEY) === 'true',
   )
 
   useEffect(() => {
-    console.log("isLoggedIn", isLoggedIn)
+    console.log('isLoggedIn', isLoggedIn)
 
     const checkUser = async () => {
       if (localStorage.getItem(GUEST_MODE_KEY) === 'true') {
@@ -49,7 +51,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
         setIsGuest(localStorage.getItem(GUEST_MODE_KEY) === 'true')
         setIsLoggedIn(
           Boolean(localStorage.getItem(ACCESS_TOKEN_KEY)) ||
-            localStorage.getItem(GUEST_MODE_KEY) === 'true'
+            localStorage.getItem(GUEST_MODE_KEY) === 'true',
         )
       }
     }

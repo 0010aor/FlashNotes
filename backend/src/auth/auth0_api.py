@@ -1,9 +1,11 @@
+from authlib.integrations.starlette_client import OAuth
 from fastapi import APIRouter, Request
 from fastapi.responses import RedirectResponse
-from authlib.integrations.starlette_client import OAuth
+
+from src.auth.services import get_or_create_user_by_email  # Fix the import path
 from src.core.config import settings
 from src.core.db import get_db
-from src.auth.services import get_or_create_user_by_email  # Fix the import path
+
 router = APIRouter(tags=["auth"])
 
 oauth = OAuth()

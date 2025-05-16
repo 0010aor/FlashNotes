@@ -1,5 +1,5 @@
 import uuid
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING
 
 from sqlmodel import Field, Relationship
 
@@ -11,8 +11,8 @@ if TYPE_CHECKING:
 
 class User(UserBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
-    auth0_id: Optional[str] = Field(default=None, index=True)
-    hashed_password: Optional[str] = Field(default=None)
+    auth0_id: str | None = Field(default=None, index=True)
+    hashed_password: str | None = Field(default=None)
     collections: list["Collection"] = Relationship(
         back_populates="user",
         cascade_delete=True,

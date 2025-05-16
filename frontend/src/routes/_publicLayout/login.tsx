@@ -1,4 +1,5 @@
 import Logo from '@/assets/Logo.svg'
+import { UsersService } from '@/client'
 import useAuth from '@/hooks/useAuth'
 import { Box, Container, Field, Fieldset, HStack, Image, Text, VStack } from '@chakra-ui/react'
 import { Link, createFileRoute, redirect } from '@tanstack/react-router'
@@ -9,7 +10,6 @@ import { DefaultButton } from '../../components/commonUI/Button'
 import { GoogleAuthButton } from '../../components/commonUI/GoogleAuthButton'
 import { DefaultInput } from '../../components/commonUI/Input'
 import { emailPattern } from '../../utils'
-import { UsersService } from '@/client'
 
 export const Route = createFileRoute('/_publicLayout/login')({
   component: Login,
@@ -25,7 +25,6 @@ export const Route = createFileRoute('/_publicLayout/login')({
     }
   },
 })
-
 
 function Login() {
   const { t } = useTranslation()
