@@ -66,6 +66,8 @@ function SignUp() {
   const handleGoogleSignup = () => {
     // This function will be implemented later when we add Auth0 integration
     console.log('Google signup clicked')
+    window.location.href = 'http://localhost:8000/api/v1/auth0/login'
+
   }
 
   return (

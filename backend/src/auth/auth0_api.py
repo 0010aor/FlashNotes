@@ -2,7 +2,8 @@ from fastapi import APIRouter, Request
 from fastapi.responses import RedirectResponse
 from authlib.integrations.starlette_client import OAuth
 from src.core.config import settings
-
+from src.core.db import get_db
+from src.auth.services import get_or_create_user_by_email  # Fix the import path
 router = APIRouter(tags=["auth"])
 
 oauth = OAuth()
@@ -15,7 +16,7 @@ oauth.register(
 )
 
 
-@router.get("/login")
+@router.get("/login", name="auth0_login")
 async def login(request: Request):
     redirect_uri = request.url_for("auth0_callback")
     return await oauth.auth0.authorize_redirect(
@@ -32,27 +33,32 @@ async def auth0_callback(request: Request):
 
     user = token.get("userinfo") or await oauth.auth0.userinfo(token=token)
 
+    # Create or get the user from database
+    db = next(get_db())
+    db_user = get_or_create_user_by_email(
+        session=db,
+        email=user["email"],
+        defaults={
+            "auth0_id": user["sub"],
+            "full_name": user.get("name"),
+            "picture": user.get("picture"),
+            "is_active": True,
+        },
+    )
+
+    # Store in session
     request.session["user"] = {
         "email": user["email"],
         "name": user.get("name"),
         "picture": user.get("picture"),
         "sub": user.get("sub"),
     }
+    request.session["user_id"] = str(db_user.id)
 
     return RedirectResponse(url="http://localhost:5173/collections")
 
 
-@router.get("/logout")
+@router.get("/logout", name="auth0_logout")
 async def logout(request: Request):
     request.session.clear()
-    return RedirectResponse(
-        url=f"https://{settings.AUTH0_DOMAIN}/v2/logout"
-            f"?client_id={settings.AUTH0_CLIENT_ID}"
-            f"&returnTo=http://localhost:5173"
-    )
-
-
-@router.get("/me")
-async def me(request: Request):
-    user = request.session.get("user")
-    return {"authenticated": bool(user), "user": user}
+    return {"detail": "Logged out"}

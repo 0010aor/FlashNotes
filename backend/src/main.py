@@ -30,11 +30,13 @@ if settings.BACKEND_CORS_ORIGINS:
         allow_headers=["*"],
     )
 
+# Setup session middleware
 app.add_middleware(
     SessionMiddleware,
     secret_key=settings.SECRET_KEY,
     same_site="lax",  # adjust for production
-    https_only=False
+    https_only=False,
+    max_age=settings.AUTH_EXPIRE_MINUTES * 60,
 )
 
 app.include_router(api_router, prefix=settings.API_V1_STR)

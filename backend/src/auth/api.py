@@ -1,7 +1,7 @@
 from datetime import timedelta
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.security import OAuth2PasswordRequestForm
 
 from src.auth.schemas import Token
@@ -15,6 +15,7 @@ router = APIRouter()
 
 @router.post("/tokens")
 def login_access_token(
+    request: Request,
     session: SessionDep, form_data: Annotated[OAuth2PasswordRequestForm, Depends()]
 ) -> Token:
     user = services.authenticate(
@@ -25,8 +26,17 @@ def login_access_token(
     elif not user.is_active:
         raise HTTPException(status_code=400, detail="Inactive user")
     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
-    return Token(
-        access_token=services.create_access_token(
-            user.id, expires_delta=access_token_expires
-        )
+
+    # Create token
+    token = services.create_access_token(
+        user.id, expires_delta=access_token_expires
     )
+
+    # Also store user in session for consistency with Auth0 flow
+    request.session["user"] = {
+        "email": user.email,
+        "id": str(user.id),
+    }
+    request.session["user_id"] = str(user.id)
+
+    return Token(access_token=token)
