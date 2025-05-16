@@ -1,5 +1,4 @@
 import uuid
-from typing import Optional
 
 from pydantic import EmailStr
 from sqlmodel import Field, SQLModel
@@ -17,8 +16,8 @@ class UserUpdate(UserBase):
 
 
 class UserCreate(UserBase):
-    password: Optional[str] = Field(default=None, min_length=8, max_length=40)
-    auth0_id: Optional[str] = None
+    password: str | None = Field(default=None, min_length=8, max_length=40)
+    auth0_id: str | None = None
 
 
 class UserRegister(SQLModel):
@@ -28,4 +27,4 @@ class UserRegister(SQLModel):
 
 class UserPublic(UserBase):
     id: uuid.UUID
-    auth0_id: Optional[str] = None
+    auth0_id: str | None = None

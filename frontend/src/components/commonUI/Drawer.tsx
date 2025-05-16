@@ -1,4 +1,5 @@
 import Logo from '@/assets/Logo.svg'
+import { UsersService } from '@/client'
 import type { Collection } from '@/client/types.gen'
 import { useColorMode } from '@/components/ui/color-mode'
 import {
@@ -17,7 +18,6 @@ import { useQuery } from '@tanstack/react-query'
 import { Link, useNavigate } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { FiLogOut, FiMoon, FiSun } from 'react-icons/fi'
-import { UsersService } from '@/client'
 import { DefaultButton } from './Button'
 import LanguageSelector from './LanguageSelector'
 
@@ -56,7 +56,7 @@ function Drawer({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: bool
   const { logout } = useAuth()
   const { colorMode, toggleColorMode } = useColorMode()
   const navigate = useNavigate()
-  
+
   const { data: currentUser } = useQuery({
     queryKey: ['currentUser'],
     queryFn: async () => {
@@ -65,7 +65,7 @@ function Drawer({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: bool
       } catch (error) {
         return null
       }
-    }
+    },
   })
 
   // Fetch collections data
