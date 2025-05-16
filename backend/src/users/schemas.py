@@ -1,4 +1,5 @@
 import uuid
+from datetime import datetime
 
 from pydantic import EmailStr
 from sqlmodel import Field, SQLModel
@@ -26,3 +27,9 @@ class UserRegister(SQLModel):
 
 class UserPublic(UserBase):
     id: uuid.UUID
+
+
+class AIUsageQuota(SQLModel):
+    usage_count: int
+    max_usage_allowed: int
+    reset_date: datetime
