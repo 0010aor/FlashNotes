@@ -60,8 +60,14 @@ def get_user_from_token(
 def get_current_user(
     request: Request,
     session: SessionDep,
-    token: Annotated[str | None, Depends(OAuth2PasswordBearer(
-        tokenUrl=f"{settings.API_V1_STR}/tokens", auto_error=False))] = None,
+    token: Annotated[
+        str | None,
+        Depends(
+            OAuth2PasswordBearer(
+                tokenUrl=f"{settings.API_V1_STR}/tokens", auto_error=False
+            )
+        ),
+    ] = None,
 ) -> User:
     session_user = request.session.get("user")
     if session_user:
