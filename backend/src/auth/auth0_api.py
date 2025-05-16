@@ -22,10 +22,7 @@ oauth.register(
 async def login(request: Request):
     redirect_uri = request.url_for("auth0_callback")
     return await oauth.auth0.authorize_redirect(
-        request,
-        redirect_uri,
-        prompt="select_account",
-        connection="google-oauth2"
+        request, redirect_uri, prompt="select_account", connection="google-oauth2"
     )
 
 
