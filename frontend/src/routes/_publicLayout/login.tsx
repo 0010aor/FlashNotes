@@ -54,7 +54,6 @@ function Login() {
 
   const handleGoogleLogin = () => {
     window.location.href = `${import.meta.env.VITE_API_URL}/api/v1/auth0/login?redirect_to=/collections`
-
   }
 
   return (

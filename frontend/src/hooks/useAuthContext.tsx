@@ -32,7 +32,6 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
       try {
         const user = await UsersService.readUserMe()
         setIsLoggedIn(Boolean(user))
-  
       } catch (error) {
         console.error('Error fetching user:', error)
       }
