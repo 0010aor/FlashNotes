@@ -67,10 +67,10 @@ def get_current_user(
     ] = None,
 ) -> User:
     session_user = request.session.get("user")
-    if session_user:
-        return get_user_from_session(request, session)
     if token:
         return get_user_from_token(session, token)
+    if session_user:
+        return get_user_from_session(request, session)
 
     raise HTTPException(status_code=401, detail="Not authenticated")
 
