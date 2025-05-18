@@ -34,6 +34,8 @@ class Settings(BaseSettings):
     DOMAIN: str = "localhost"
     ENVIRONMENT: Literal["local", "staging", "production"] = "local"
 
+    FRONTEND_URL: str
+
     BACKEND_CORS_ORIGINS: Annotated[
         list[AnyUrl] | str, BeforeValidator(parse_cors)
     ] = []
@@ -50,6 +52,10 @@ class Settings(BaseSettings):
     AUTH0_CLIENT_ID: str
     AUTH0_CLIENT_SECRET: str
     AUTH0_DOMAIN: str
+
+    ALLOWED_REDIRECT_ORIGINS: Annotated[
+        list[str] | str, BeforeValidator(parse_cors)
+    ] = []
 
     @computed_field  # type: ignore[misc]
     @property

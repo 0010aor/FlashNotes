@@ -31,9 +31,8 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
 
       try {
         const user = await UsersService.readUserMe()
-        if (user) {
-          setIsLoggedIn(true)
-        }
+        setIsLoggedIn(Boolean(user))
+  
       } catch (error) {
         console.error('Error fetching user:', error)
       }
@@ -69,7 +68,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const logout = async () => {
     try {
-      await fetch('http://localhost:8000/api/v1/auth0/logout', {
+      await fetch(`${import.meta.env.VITE_API_URL}/auth0/logout`, {
         method: 'GET',
         credentials: 'include',
       })

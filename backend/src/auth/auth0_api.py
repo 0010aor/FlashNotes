@@ -19,7 +19,8 @@ oauth.register(
 
 
 @router.get("/login", name="auth0_login")
-async def login(request: Request):
+async def login(request: Request, redirect_to: str = "/collections"):
+    request.session["redirect_to"] = redirect_to
     redirect_uri = request.url_for("auth0_callback")
     return await oauth.auth0.authorize_redirect(
         request, redirect_uri, prompt="select_account", connection="google-oauth2"
@@ -29,10 +30,8 @@ async def login(request: Request):
 @router.get("/callback", name="auth0_callback")
 async def auth0_callback(request: Request):
     token = await oauth.auth0.authorize_access_token(request)
-
     user = token.get("userinfo") or await oauth.auth0.userinfo(token=token)
 
-    # Create or get the user from database
     db = next(get_db())
     db_user = get_or_create_user_by_email(
         session=db,
@@ -45,7 +44,6 @@ async def auth0_callback(request: Request):
         },
     )
 
-    # Store in session
     request.session["user"] = {
         "email": user["email"],
         "name": user.get("name"),
@@ -54,7 +52,11 @@ async def auth0_callback(request: Request):
     }
     request.session["user_id"] = str(db_user.id)
 
-    return RedirectResponse(url="http://localhost:5173/collections")
+    frontend_url = settings.FRONTEND_URL
+    redirect_to = request.session.pop("redirect_to", "/collections")
+    redirect_url = f"{frontend_url}{redirect_to}"
+
+    return RedirectResponse(url=redirect_url)
 
 
 @router.get("/logout", name="auth0_logout")

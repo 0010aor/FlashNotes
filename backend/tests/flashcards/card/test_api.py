@@ -133,6 +133,7 @@ def test_different_user_access(
 ):
     collection_id = test_collection["id"]
     card_id = test_card["id"]
+    client.cookies.clear()
 
     rsp = client.get(
         f"{settings.API_V1_STR}/collections/{collection_id}/cards/{card_id}",

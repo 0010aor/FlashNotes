@@ -170,6 +170,7 @@ def test_different_user_access(
     normal_user_token_headers: dict[str, str],
     superuser_token_headers: dict[str, str],
 ):
+    client.cookies.clear()
     collection_data = CollectionCreate(name="User Restricted Collection")
     rsp = client.post(
         f"{settings.API_V1_STR}/collections/",
@@ -271,6 +272,7 @@ def test_different_user_update(
     superuser_token_headers: dict[str, str],
     test_collection: dict[str, Any],
 ):
+    client.cookies.clear()
     collection_id = test_collection["id"]
     update_data = CollectionUpdate(name="Cross User Collection Update")
     rsp = client.put(
@@ -338,13 +340,14 @@ def test_different_user_delete(
     test_collection: dict[str, Any],
 ):
     collection_id = test_collection["id"]
+    client.cookies.clear()
+
     rsp = client.delete(
         f"{settings.API_V1_STR}/collections/{collection_id}",
         headers=superuser_token_headers,
     )
 
     assert rsp.status_code == 404
-
     # Verity the data still exists
     verify_rsp = client.get(
         f"{settings.API_V1_STR}/collections/{collection_id}",
