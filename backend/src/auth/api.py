@@ -32,11 +32,6 @@ def login_access_token(
     # Create token
     token = services.create_access_token(user.id, expires_delta=access_token_expires)
 
-    # Also store user in session for consistency with Auth0 flow
-    request.session["user"] = {
-        "email": user.email,
-        "id": str(user.id),
-    }
     request.session["user_id"] = str(user.id)
 
     return Token(access_token=token)

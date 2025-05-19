@@ -40,9 +40,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [])
 
   useEffect(() => {
-    console.log('AuthProvider mounted')
     const handleStorage = (e: StorageEvent) => {
-      console.log('Storage event:', e.key)
       if (e.key === GUEST_MODE_KEY || e.key === ACCESS_TOKEN_KEY) {
         setIsGuest(localStorage.getItem(GUEST_MODE_KEY) === 'true')
         setIsLoggedIn(
@@ -66,15 +64,24 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   const logout = async () => {
+    const isGuest = localStorage.getItem('guest_mode') === 'true'
+    const hasToken = Boolean(localStorage.getItem('access_token'))
+
     try {
-      await fetch(`${import.meta.env.VITE_API_URL}/auth0/logout`, {
+      if (isGuest) {
+        localStorage.removeItem('guest_mode')
+      } else if (hasToken) {
+        localStorage.removeItem('access_token')
+      }
+
+      await fetch(`${import.meta.env.VITE_API_URL}/api/v1/auth0/logout`, {
         method: 'GET',
         credentials: 'include',
       })
     } catch (e) {
       console.error('Logout request failed', e)
     }
-    localStorage.removeItem(ACCESS_TOKEN_KEY)
+
     setGuestMode(false)
     setIsLoggedIn(false)
   }

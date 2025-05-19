@@ -25,14 +25,21 @@ TokenDep = Annotated[str, Depends(reusable_oauth2)]
 
 
 def get_user_from_session(request: Request, session: SessionDep) -> User:
-    session_user = request.session.get("user")
-    if not session_user:
+    user_id = request.session.get("user_id")
+    if not user_id:
         raise HTTPException(status_code=401, detail="Not authenticated (no session)")
 
-    user = session.exec(select(User).where(User.email == session_user["email"])).first()
-    if not user or not user.is_active:
-        raise HTTPException(status_code=401, detail="Invalid session user")
-    return UserPublic.model_validate(user)
+    from src.users.services import get_user_by_id
+    import uuid
+
+    try:
+        user_uuid = uuid.UUID(user_id)
+        user = get_user_by_id(session=session, user_id=user_uuid)
+        if not user or not user.is_active:
+            raise HTTPException(status_code=401, detail="Invalid session user")
+        return UserPublic.model_validate(user)
+    except (ValueError, TypeError):
+        raise HTTPException(status_code=401, detail="Invalid user ID in session")
 
 
 def get_user_from_token(
@@ -66,12 +73,15 @@ def get_current_user(
         ),
     ] = None,
 ) -> User:
-    session_user = request.session.get("user")
+    # Check for token-based authentication first
     if token:
         return get_user_from_token(session, token)
-    if session_user:
+
+    # Check for session-based authentication
+    if request.session.get("user_id"):
         return get_user_from_session(request, session)
 
+    # No valid authentication method found
     raise HTTPException(status_code=401, detail="Not authenticated")
 
 

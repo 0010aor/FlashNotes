@@ -1,5 +1,6 @@
 from authlib.integrations.starlette_client import OAuth
-from fastapi import APIRouter, Request
+from sqlmodel import Session
+from fastapi import APIRouter, Request, Depends, HTTPException
 from fastapi.responses import RedirectResponse
 
 from src.auth.services import get_or_create_user_by_email  # Fix the import path
@@ -28,33 +29,35 @@ async def login(request: Request, redirect_to: str = "/collections"):
 
 
 @router.get("/callback", name="auth0_callback")
-async def auth0_callback(request: Request):
+async def auth0_callback(request: Request, db: Session = Depends(get_db)):
+    # Exchange code for token
     token = await oauth.auth0.authorize_access_token(request)
-    user = token.get("userinfo") or await oauth.auth0.userinfo(token=token)
 
-    db = next(get_db())
+    # Extract user info
+    user_info = token.get("userinfo")
+    if not user_info:
+        user_info = await oauth.auth0.userinfo(token=token)
+
+    if not user_info or "email" not in user_info:
+        raise HTTPException(status_code=400, detail="Invalid user info from Auth0")
+
+    # Create or get user in local DB
     db_user = get_or_create_user_by_email(
         session=db,
-        email=user["email"],
+        email=user_info["email"],
         defaults={
-            "auth0_id": user["sub"],
-            "full_name": user.get("name"),
-            "picture": user.get("picture"),
+            "auth0_id": user_info["sub"],
+            "full_name": user_info.get("name"),
             "is_active": True,
         },
     )
 
-    request.session["user"] = {
-        "email": user["email"],
-        "name": user.get("name"),
-        "picture": user.get("picture"),
-        "sub": user.get("sub"),
-    }
+    # Store user in session
     request.session["user_id"] = str(db_user.id)
 
-    frontend_url = settings.FRONTEND_URL
+    # Determine redirect target
     redirect_to = request.session.pop("redirect_to", "/collections")
-    redirect_url = f"{frontend_url}{redirect_to}"
+    redirect_url = f"{settings.FRONTEND_URL}{redirect_to}"
 
     return RedirectResponse(url=redirect_url)
 
