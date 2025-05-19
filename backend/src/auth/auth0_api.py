@@ -1,7 +1,7 @@
 from authlib.integrations.starlette_client import OAuth
-from sqlmodel import Session
-from fastapi import APIRouter, Request, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.responses import RedirectResponse
+from sqlmodel import Session
 
 from src.auth.services import get_or_create_user_by_email  # Fix the import path
 from src.core.config import settings
