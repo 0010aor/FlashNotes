@@ -2,6 +2,8 @@ from datetime import datetime, timedelta, timezone
 from typing import Annotated, Any
 
 import jwt
+import uuid
+
 from fastapi import Depends, HTTPException, Request
 from fastapi.security import OAuth2PasswordBearer
 from jwt.exceptions import InvalidTokenError
@@ -30,7 +32,6 @@ def get_user_from_session(request: Request, session: SessionDep) -> User:
         raise HTTPException(status_code=401, detail="Not authenticated (no session)")
 
     from src.users.services import get_user_by_id
-    import uuid
 
     try:
         user_uuid = uuid.UUID(user_id)
