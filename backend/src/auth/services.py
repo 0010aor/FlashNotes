@@ -1,9 +1,8 @@
+import uuid
 from datetime import datetime, timedelta, timezone
 from typing import Annotated, Any
 
 import jwt
-import uuid
-
 from fastapi import Depends, HTTPException, Request
 from fastapi.security import OAuth2PasswordBearer
 from jwt.exceptions import InvalidTokenError
