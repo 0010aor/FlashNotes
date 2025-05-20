@@ -2,11 +2,13 @@ import type { Collection } from '@/client/types.gen'
 import CollectionDialog from '@/components/collections/CollectionDialog'
 import CollectionListItem from '@/components/collections/CollectionListItem'
 import AiPromptDialog from '@/components/commonUI/AiPromptDialog'
+import ConfirmationDialog from '@/components/commonUI/ConfirmationDialog'
 import EmptyState from '@/components/commonUI/EmptyState'
 import ErrorState from '@/components/commonUI/ErrorState'
 import ListSkeleton from '@/components/commonUI/ListSkeleton'
 import ScrollableContainer from '@/components/commonUI/ScrollableContainer'
 import SpeedDial, { type SpeedDialActionItem } from '@/components/commonUI/SpeedDial'
+import { toaster } from '@/components/ui/toaster'
 import {
   createCollection,
   deleteCollection as deleteCollectionApi,
@@ -32,6 +34,9 @@ function Collections() {
   const [isSpeedDialLoading, setIsSpeedDialLoading] = useState(false)
   const [isAiDialogOpen, setIsAiDialogOpen] = useState(false)
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
+  const [collectionToDelete, setCollectionToDelete] = useState<string | null>(null)
+  const [collectionNameToDelete, setCollectionNameToDelete] = useState<string>('')
 
   const { data, error, isLoading } = useQuery<Collection[]>({
     queryKey: ['collections'],
@@ -77,12 +82,39 @@ function Collections() {
     }
   }
 
-  const handleDeleteCollection = async (collectionId: string) => {
+  const openDeleteConfirmation = (collectionId: string, collectionName: string) => {
+    setCollectionToDelete(collectionId)
+    setCollectionNameToDelete(collectionName)
+    setIsDeleteDialogOpen(true)
+  }
+
+  const closeDeleteDialog = () => {
+    setIsDeleteDialogOpen(false)
+    setCollectionToDelete(null)
+    setCollectionNameToDelete('')
+  }
+
+  const handleDeleteCollection = async () => {
+    if (!collectionToDelete) return
+
     try {
-      await deleteCollectionApi(collectionId)
+      await deleteCollectionApi(collectionToDelete)
       queryClient.invalidateQueries({ queryKey: ['collections'] })
+
+      toaster.create({
+        title: t('general.actions.collectionDeletedDescription'),
+        type: 'success',
+      })
     } catch (error) {
       console.error(error)
+      toaster.create({
+        title: t('general.errors.errorDeletingCollection'),
+        type: 'error',
+      })
+    } finally {
+      setIsDeleteDialogOpen(false)
+      setCollectionToDelete(null)
+      setCollectionNameToDelete('')
     }
   }
 
@@ -124,7 +156,7 @@ function Collections() {
               <CollectionListItem
                 key={collection.id}
                 collection={collection}
-                onDelete={handleDeleteCollection}
+                onDelete={() => openDeleteConfirmation(collection.id, collection.name)}
                 onRename={renameCollection}
               />
             ))
@@ -146,6 +178,15 @@ function Collections() {
         isLoading={isCreatingAiCollection}
         title={t('components.AiCollectionDialog.title')}
         placeholder={t('components.AiCollectionDialog.placeholder')}
+      />
+
+      <ConfirmationDialog
+        isOpen={isDeleteDialogOpen}
+        message={t('components.confirmationDialog.warningMessages', {
+          name: collectionNameToDelete,
+        })}
+        onClose={closeDeleteDialog}
+        onConfirm={handleDeleteCollection}
       />
     </>
   )
