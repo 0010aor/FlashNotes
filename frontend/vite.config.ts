@@ -9,6 +9,7 @@ export default defineConfig({
 	plugins: [react(), TanStackRouterVite(), tsconfigPaths(),
 		VitePWA({
 			registerType: 'autoUpdate',
+			injectRegister: 'auto',
 			workbox: {
 				globPatterns: ['**/*.{js,css,html,ico,png,svg}']
 			},
