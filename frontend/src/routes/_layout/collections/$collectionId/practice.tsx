@@ -46,7 +46,7 @@ function PracticeComponent() {
         isFlipped={isFlipped}
         onFlip={handleFlip}
       />
-      <PracticeControls isFlipped={isFlipped} onFlip={handleFlip} onAnswer={handleAnswer} />
+      <PracticeControls isFlipped={isFlipped} onAnswer={handleAnswer} />
     </VStack>
   )
 }
