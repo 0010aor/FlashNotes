@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.routing import APIRoute
 from fastapi_pagination import add_pagination
 from starlette.middleware.cors import CORSMiddleware
+from starlette.middleware.sessions import SessionMiddleware
 
 from src.core.config import settings
 from src.routers import api_router
@@ -28,6 +29,15 @@ if settings.BACKEND_CORS_ORIGINS:
         allow_methods=["*"],
         allow_headers=["*"],
     )
+
+# Setup session middleware
+app.add_middleware(
+    SessionMiddleware,
+    secret_key=settings.SECRET_KEY,
+    same_site="lax",  # adjust for production
+    https_only=False,
+    max_age=settings.AUTH_EXPIRE_MINUTES * 60,
+)
 
 app.include_router(api_router, prefix=settings.API_V1_STR)
 add_pagination(app)

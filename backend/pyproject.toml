@@ -16,6 +16,9 @@ dependencies = [
     "fastapi-pagination>=0.12.34",
     "bcrypt==4.0.1",
     "google-genai>=1.5.0",
+    "starlette (>=0.46.2,<0.47.0)",
+    "itsdangerous (>=2.2.0,<3.0.0)",
+    "authlib (>=1.5.2,<2.0.0)",
 ]
 
 [tool.uv]

@@ -1,3 +1,4 @@
+import { UsersService } from '@/client'
 import type React from 'react'
 import { createContext, useContext, useEffect, useState } from 'react'
 
@@ -8,7 +9,7 @@ interface AuthContextType {
   isGuest: boolean
   isLoggedIn: boolean
   setGuestMode: (value: boolean) => void
-  logout: () => void
+  logout: () => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -20,6 +21,23 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
       Boolean(localStorage.getItem(ACCESS_TOKEN_KEY)) ||
       localStorage.getItem(GUEST_MODE_KEY) === 'true',
   )
+
+  useEffect(() => {
+    const checkUser = async () => {
+      if (localStorage.getItem(GUEST_MODE_KEY) === 'true') {
+        setIsLoggedIn(true)
+        return
+      }
+
+      try {
+        const user = await UsersService.readUserMe()
+        setIsLoggedIn(Boolean(user))
+      } catch (error) {
+        console.error('Error fetching user:', error)
+      }
+    }
+    checkUser()
+  }, [])
 
   useEffect(() => {
     const handleStorage = (e: StorageEvent) => {
@@ -45,8 +63,25 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
     setIsLoggedIn(value || Boolean(localStorage.getItem(ACCESS_TOKEN_KEY)))
   }
 
-  const logout = () => {
-    localStorage.removeItem(ACCESS_TOKEN_KEY)
+  const logout = async () => {
+    const isGuest = localStorage.getItem('guest_mode') === 'true'
+    const hasToken = Boolean(localStorage.getItem('access_token'))
+
+    try {
+      if (isGuest) {
+        localStorage.removeItem('guest_mode')
+      } else if (hasToken) {
+        localStorage.removeItem('access_token')
+      }
+
+      await fetch(`${import.meta.env.VITE_API_URL}/api/v1/auth0/logout`, {
+        method: 'GET',
+        credentials: 'include',
+      })
+    } catch (e) {
+      console.error('Logout request failed', e)
+    }
+
     setGuestMode(false)
     setIsLoggedIn(false)
   }
