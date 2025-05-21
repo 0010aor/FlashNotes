@@ -1,1 +1,8 @@
 /resources/*
+
+# Node modules
+*/node_modules/
+
+# Production build output
+*/dist/
+*/dev-dist/
