@@ -5,14 +5,13 @@ description = ""
 requires-python = ">=3.10,<4.0"
 dependencies = [
     "fastapi[standard]<1.0.0,>=0.114.2",
-    "alembic>=1.14.1",
-    "email-validator>=2.2.0",
-    "passlib[bcrypt]>=1.7.4",
-    "psycopg>=3.2.4",
-    "psycopg-binary>=3.2.4",
+    "alembic<2.0.0,>=1.12.1",
+    "email-validator<3.0.0.0,>=2.1.0.post1",
+    "passlib[bcrypt]<2.0.0,>=1.7.4",
+    "psycopg[binary]<4.0.0,>=3.1.13",
     "pydantic-settings>=2.7.1",
-    "pyjwt>=2.10.1",
-    "sqlmodel>=0.0.22",
+    "pyjwt<3.0.0,>=2.8.0",
+    "sqlmodel<1.0.0,>=0.0.21",
     "tenacity>=9.0.0",
     "fastapi-pagination>=0.12.34",
     "bcrypt==4.0.1",
@@ -22,7 +21,6 @@ dependencies = [
 [tool.uv]
 dev-dependencies = [
     "pytest>=8.3.4",
-    "coverage>=7.8.0",
     "ruff>=0.9.5",
     "pre-commit>=4.2.0",
     "pytest-cov>=6.1.1",

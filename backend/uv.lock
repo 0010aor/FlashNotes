@@ -51,8 +51,7 @@ dependencies = [
     { name = "fastapi-pagination" },
     { name = "google-genai" },
     { name = "passlib", extra = ["bcrypt"] },
-    { name = "psycopg" },
-    { name = "psycopg-binary" },
+    { name = "psycopg", extra = ["binary"] },
     { name = "pydantic-settings" },
     { name = "pyjwt" },
     { name = "sqlmodel" },
@@ -61,7 +60,6 @@ dependencies = [
 
 [package.dev-dependencies]
 dev = [
-    { name = "coverage" },
     { name = "pre-commit" },
     { name = "pytest" },
     { name = "pytest-asyncio" },
@@ -71,24 +69,22 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "alembic", specifier = ">=1.14.1" },
+    { name = "alembic", specifier = "<2.0.0,>=1.12.1" },
     { name = "bcrypt", specifier = "==4.0.1" },
-    { name = "email-validator", specifier = ">=2.2.0" },
-    { name = "fastapi", extras = ["standard"], specifier = ">=0.114.2,<1.0.0" },
+    { name = "email-validator", specifier = "<3.0.0.0,>=2.1.0.post1" },
+    { name = "fastapi", extras = ["standard"], specifier = "<1.0.0,>=0.114.2" },
     { name = "fastapi-pagination", specifier = ">=0.12.34" },
     { name = "google-genai", specifier = ">=1.5.0" },
-    { name = "passlib", extras = ["bcrypt"], specifier = ">=1.7.4" },
-    { name = "psycopg", specifier = ">=3.2.4" },
-    { name = "psycopg-binary", specifier = ">=3.2.4" },
+    { name = "passlib", extras = ["bcrypt"], specifier = "<2.0.0,>=1.7.4" },
+    { name = "psycopg", extras = ["binary"], specifier = "<4.0.0,>=3.1.13" },
     { name = "pydantic-settings", specifier = ">=2.7.1" },
-    { name = "pyjwt", specifier = ">=2.10.1" },
-    { name = "sqlmodel", specifier = ">=0.0.22" },
+    { name = "pyjwt", specifier = "<3.0.0,>=2.8.0" },
+    { name = "sqlmodel", specifier = "<1.0.0,>=0.0.21" },
     { name = "tenacity", specifier = ">=9.0.0" },
 ]
 
 [package.metadata.requires-dev]
 dev = [
-    { name = "coverage", specifier = ">=7.8.0" },
     { name = "pre-commit", specifier = ">=4.2.0" },
     { name = "pytest", specifier = ">=8.3.4" },
     { name = "pytest-asyncio", specifier = ">=0.26.0" },
@@ -208,7 +204,7 @@ name = "click"
 version = "8.1.8"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "colorama", marker = "sys_platform == 'win32'" },
+    { name = "colorama", marker = "platform_system == 'Windows'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/b9/2e/0090cbf739cee7d23781ad4b89a9894a41538e4fcf4c31dcdd705b78eb8b/click-8.1.8.tar.gz", hash = "sha256:ed53c9d8990d83c2a27deae68e4ee337473f6330c040a31d4225c9574d16096a", size = 226593 }
 wheels = [
@@ -346,10 +342,12 @@ wheels = [
 [package.optional-dependencies]
 standard = [
     { name = "email-validator" },
+    { name = "fastapi-cli" },
     { name = "fastapi-cli", extra = ["standard"] },
     { name = "httpx" },
     { name = "jinja2" },
     { name = "python-multipart" },
+    { name = "uvicorn" },
     { name = "uvicorn", extra = ["standard"] },
 ]
 
@@ -369,6 +367,7 @@ wheels = [
 
 [package.optional-dependencies]
 standard = [
+    { name = "uvicorn" },
     { name = "uvicorn", extra = ["standard"] },
 ]
 
@@ -757,6 +756,11 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/e0/f2/954b1467b3e2ca5945b83b5e320268be1f4df486c3e8ffc90f4e4b707979/psycopg-3.2.4.tar.gz", hash = "sha256:f26f1346d6bf1ef5f5ef1714dd405c67fb365cfd1c6cea07de1792747b167b92", size = 156109 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/40/49/15114d5f7ee68983f4e1a24d47e75334568960352a07c6f0e796e912685d/psycopg-3.2.4-py3-none-any.whl", hash = "sha256:43665368ccd48180744cab26b74332f46b63b7e06e8ce0775547a3533883d381", size = 198716 },
+]
+
+[package.optional-dependencies]
+binary = [
+    { name = "psycopg-binary", marker = "implementation_name != 'pypy'" },
 ]
 
 [[package]]
