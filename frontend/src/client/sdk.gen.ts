@@ -38,6 +38,7 @@ import type {
   LoginLoginAccessTokenResponse,
   StatsGetCollectionStatisticsEndpointData,
   StatsGetCollectionStatisticsEndpointResponse,
+  UsersGetMyAiUsageQuotaResponse,
   UsersReadUserMeResponse,
   UsersRegisterUserData,
   UsersRegisterUserResponse,
@@ -500,6 +501,18 @@ export class UsersService {
       errors: {
         422: 'Validation Error',
       },
+    })
+  }
+
+  /**
+   * Get My Ai Usage Quota
+   * @returns AIUsageQuota Successful Response
+   * @throws ApiError
+   */
+  public static getMyAiUsageQuota(): CancelablePromise<UsersGetMyAiUsageQuotaResponse> {
+    return __request(OpenAPI, {
+      method: 'GET',
+      url: '/api/v1/users/users/me/ai-usage-quota',
     })
   }
 }

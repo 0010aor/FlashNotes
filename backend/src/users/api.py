@@ -4,7 +4,7 @@ from fastapi import APIRouter, HTTPException
 
 from src.auth.services import CurrentUser, SessionDep
 from src.core.config import settings
-from src.users.schemas import UserCreate, UserPublic, UserRegister
+from src.users.schemas import AIUsageQuota, UserCreate, UserPublic, UserRegister
 
 from . import services
 
@@ -38,3 +38,8 @@ def register_user(session: SessionDep, user_in: UserRegister) -> Any:
     user_create = UserCreate.model_validate(user_in)
     user = services.create_user(session=session, user_create=user_create)
     return user
+
+
+@router.get("/users/me/ai-usage-quota", response_model=AIUsageQuota)
+def get_my_ai_usage_quota(current_user: CurrentUser):
+    return services.get_ai_usage_quota_for_user(current_user)

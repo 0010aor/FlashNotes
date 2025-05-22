@@ -394,18 +394,22 @@ def test_create_card_with_prompt_ai(
     with patch(
         "src.flashcards.services.generate_ai_flashcard", new_callable=AsyncMock
     ) as mock_ai:
-        mock_ai.return_value = type("Card", (), ai_card)()
-        card_data = {"prompt": prompt, "front": "", "back": ""}
-        rsp = client.post(
-            f"{settings.API_V1_STR}/collections/{collection_id}/cards/",
-            json=card_data,
-            headers=normal_user_token_headers,
-        )
-        assert rsp.status_code == 200
-        content = rsp.json()
-        assert content["front"] == ai_card["front"]
-        assert content["back"] == ai_card["back"]
-        mock_ai.assert_called_once_with(prompt, ANY)
+        with patch(
+            "src.flashcards.api.check_and_increment_ai_usage_quota"
+        ) as mock_quota_check:
+            mock_quota_check.return_value = True
+            mock_ai.return_value = type("Card", (), ai_card)()
+            card_data = {"prompt": prompt, "front": "", "back": ""}
+            rsp = client.post(
+                f"{settings.API_V1_STR}/collections/{collection_id}/cards/",
+                json=card_data,
+                headers=normal_user_token_headers,
+            )
+            assert rsp.status_code == 200
+            content = rsp.json()
+            assert content["front"] == ai_card["front"]
+            assert content["back"] == ai_card["back"]
+            mock_ai.assert_called_once_with(prompt, ANY)
 
 
 def test_create_card_with_prompt_too_long(

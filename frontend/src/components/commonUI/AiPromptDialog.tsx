@@ -1,3 +1,5 @@
+import { UsersService } from '@/client'
+import type { AIUsageQuota } from '@/client/types.gen'
 import {
   DialogActionTrigger,
   DialogBody,
@@ -9,6 +11,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { Text } from '@chakra-ui/react'
+import { useQuery } from '@tanstack/react-query'
 import type { OpenChangeDetails } from 'node_modules/@chakra-ui/react/dist/types/components/dialog/namespace'
 import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -37,6 +40,16 @@ const AiPromptDialog: React.FC<AiDialogProps> = ({
   const { t } = useTranslation()
   const [prompt, setPrompt] = useState<string>('')
   const closeButtonRef = useRef<HTMLButtonElement>(null)
+  const { data } = useQuery<AIUsageQuota>({
+    queryKey: ['usageQuota'],
+    queryFn: UsersService.getMyAiUsageQuota,
+    enabled: isOpen,
+  })
+  const usageQuota: AIUsageQuota = data || {
+    max_usage_allowed: 0,
+    usage_count: 0,
+    reset_date: new Date().toLocaleDateString(),
+  }
 
   const handleSubmit = () => {
     if (!prompt.trim() || isLoading) return
@@ -85,6 +98,12 @@ const AiPromptDialog: React.FC<AiDialogProps> = ({
           <Text fontSize="xs" textAlign="right" color="gray.500" mt={1}>
             {prompt.length}/{MAX_CHARS}
           </Text>
+          <Text fontSize="xs" textAlign="right" color="white.500" mt={1}>
+            {`${t('general.actions.aiQuotaResetDate')}: ${new Date(usageQuota.reset_date).toLocaleDateString()}`}
+          </Text>
+          <Text fontSize="xs" textAlign="right" mt={1} color="white.500">
+            {`${t('general.actions.aiUsageLeft')}: ${usageQuota.max_usage_allowed - usageQuota.usage_count}`}
+          </Text>
         </DialogBody>
         <DialogFooter>
           <DialogActionTrigger asChild>
@@ -93,7 +112,14 @@ const AiPromptDialog: React.FC<AiDialogProps> = ({
             </RedButton>
           </DialogActionTrigger>
           <DialogActionTrigger asChild>
-            <BlueButton onClick={handleSubmit} disabled={isLoading || !prompt.trim()}>
+            <BlueButton
+              onClick={handleSubmit}
+              disabled={
+                isLoading ||
+                !prompt.trim() ||
+                usageQuota.usage_count === usageQuota.max_usage_allowed
+              }
+            >
               {isLoading ? `${t('general.actions.creating')}...` : t('general.actions.create')}
             </BlueButton>
           </DialogActionTrigger>

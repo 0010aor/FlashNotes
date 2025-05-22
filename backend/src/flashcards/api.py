@@ -7,6 +7,7 @@ from fastapi import APIRouter, HTTPException
 from src.ai_models.gemini import GeminiProviderDep
 from src.ai_models.gemini.exceptions import AIGenerationError
 from src.auth.services import CurrentUser, SessionDep
+from src.users.services import check_and_increment_ai_usage_quota
 
 from . import services
 from .exceptions import EmptyCollectionError
@@ -52,6 +53,12 @@ async def create_collection(
 
     if collection_in.prompt:
         try:
+            if not await asyncio.to_thread(
+                lambda: check_and_increment_ai_usage_quota(session, current_user)
+            ):
+                raise HTTPException(
+                    status_code=429, detail="Quota for AI usage is reached."
+                )
             flashcard_collection = await services.generate_ai_collection(
                 provider, collection_in.prompt
             )
@@ -145,6 +152,12 @@ async def create_card(
     if not access_checked:
         raise HTTPException(status_code=404, detail="Collection not found")
     if card_in.prompt:
+        if not await asyncio.to_thread(
+            lambda: check_and_increment_ai_usage_quota(session, current_user)
+        ):
+            raise HTTPException(
+                status_code=429, detail="Quota for AI usage is reached."
+            )
         card_base = await services.generate_ai_flashcard(card_in.prompt, provider)
         card_in.front = card_base.front
         card_in.back = card_base.back
