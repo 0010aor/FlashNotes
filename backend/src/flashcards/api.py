@@ -53,7 +53,9 @@ async def create_collection(
 
     if collection_in.prompt:
         try:
-            if not check_and_increment_ai_usage_quota(session, current_user):
+            if not await asyncio.to_thread(
+                lambda: check_and_increment_ai_usage_quota(session, current_user)
+            ):
                 raise HTTPException(
                     status_code=429, detail="Quota for AI usage is reached."
                 )
@@ -150,7 +152,9 @@ async def create_card(
     if not access_checked:
         raise HTTPException(status_code=404, detail="Collection not found")
     if card_in.prompt:
-        if not check_and_increment_ai_usage_quota(session, current_user):
+        if not await asyncio.to_thread(
+            lambda: check_and_increment_ai_usage_quota(session, current_user)
+        ):
             raise HTTPException(
                 status_code=429, detail="Quota for AI usage is reached."
             )

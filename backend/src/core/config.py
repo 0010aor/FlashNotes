@@ -64,8 +64,8 @@ class Settings(BaseSettings):
 
     AI_API_KEY: str | None = None
     AI_MODEL: str | None = None
-    AI_MAX_USAGE_QUOTA: int | None = None
-    AI_QUOTA_TIME_RANGE_DAYS: int | None = None
+    AI_MAX_USAGE_QUOTA: int = 30
+    AI_QUOTA_TIME_RANGE_DAYS: int = 1
 
     COLLECTION_GENERATION_PROMPT: str | None = None
     CARD_GENERATION_PROMPT: str | None = None

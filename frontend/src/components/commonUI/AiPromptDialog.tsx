@@ -48,7 +48,7 @@ const AiPromptDialog: React.FC<AiDialogProps> = ({
   const usageQuota: AIUsageQuota = data || {
     max_usage_allowed: 0,
     usage_count: 0,
-    reset_date: new Date().toDateString(),
+    reset_date: new Date().toLocaleDateString(),
   }
 
   const handleSubmit = () => {
