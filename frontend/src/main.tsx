@@ -12,6 +12,7 @@ import { routeTree } from './routeTree.gen'
 import { system } from './theme'
 
 OpenAPI.BASE = import.meta.env.VITE_API_URL
+OpenAPI.WITH_CREDENTIALS = true
 OpenAPI.TOKEN = async () => {
   return localStorage.getItem('access_token') || ''
 }

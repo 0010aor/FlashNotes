@@ -1,4 +1,5 @@
 import Logo from '@/assets/Logo.svg'
+import { UsersService } from '@/client'
 import type { Collection } from '@/client/types.gen'
 import { useColorMode } from '@/components/ui/color-mode'
 import {
@@ -13,7 +14,7 @@ import {
 import useAuth from '@/hooks/useAuth'
 import { getCollections } from '@/services/collections'
 import { HStack, IconButton, Image, List, Spinner, Text, VStack } from '@chakra-ui/react'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { Link, useNavigate } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { FiLogOut, FiMoon, FiSun } from 'react-icons/fi'
@@ -54,14 +55,23 @@ function Drawer({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: bool
   const { t } = useTranslation()
   const { logout } = useAuth()
   const { colorMode, toggleColorMode } = useColorMode()
-  const queryClient = useQueryClient()
-  const currentUser = queryClient.getQueryData<{ email: string }>(['currentUser'])
-  const flashcardsService = { getCollections }
   const navigate = useNavigate()
 
+  const { data: currentUser } = useQuery({
+    queryKey: ['currentUser'],
+    queryFn: async () => {
+      try {
+        return await UsersService.readUserMe()
+      } catch (error) {
+        return null
+      }
+    },
+  })
+
+  // Fetch collections data
   const { data, isLoading } = useQuery({
     queryKey: ['collections'],
-    queryFn: flashcardsService.getCollections,
+    queryFn: getCollections,
     placeholderData: (prevData) => prevData,
   })
 

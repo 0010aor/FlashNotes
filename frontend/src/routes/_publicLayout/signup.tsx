@@ -1,10 +1,21 @@
 import Logo from '@/assets/Logo.svg'
 import useAuth from '@/hooks/useAuth'
-import { Button, Container, Field, Fieldset, Image, Text } from '@chakra-ui/react'
+import {
+  Box,
+  Button,
+  Container,
+  Field,
+  Fieldset,
+  HStack,
+  Image,
+  Text,
+  VStack,
+} from '@chakra-ui/react'
 import { Link, createFileRoute, redirect } from '@tanstack/react-router'
 import { type SubmitHandler, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import type { UserRegister } from '../../client'
+import { GoogleAuthButton } from '../../components/commonUI/GoogleAuthButton'
 import { DefaultInput } from '../../components/commonUI/Input'
 import PasswordInput from '../../components/commonUI/PasswordInput'
 import { confirmPasswordRules, emailPattern, passwordRules } from '../../utils'
@@ -52,6 +63,10 @@ function SignUp() {
     signUpMutation.mutate(data)
   }
 
+  const handleGoogleSignup = () => {
+    window.location.href = `${import.meta.env.VITE_API_URL}/api/v1/auth0/login?redirect_to=/collections`
+  }
+
   return (
     <Container
       h="100dvh"
@@ -62,70 +77,86 @@ function SignUp() {
       centerContent
     >
       <Image src={Logo} alt="Logo" height="auto" maxW="2xs" alignSelf="center" mb={4} />
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <Fieldset.Root maxW="sm">
-          <Fieldset.Content>
-            <Field.Root>
-              <Field.Label>{t('general.words.email')}</Field.Label>
-              <DefaultInput
-                placeholder={t('general.words.email')}
-                type="email"
-                {...register('email', {
-                  required: t('general.errors.emailIsRequired'),
-                  pattern: emailPattern,
-                })}
-              />
-              {errors.email && (
-                <Text color="red.500" fontSize="sm">
-                  {errors.email.message}
-                </Text>
-              )}
-              {error && (
-                <Text color="red.500" fontSize="sm">
-                  {error}
-                </Text>
-              )}
-            </Field.Root>
 
-            <Field.Root>
-              <Field.Label>{t('general.words.password')}</Field.Label>
-              <PasswordInput
-                placeholder={t('general.words.password')}
-                {...register('password', passwordRules())}
-              />
-              {errors.password && (
-                <Text color="red.500" fontSize="sm">
-                  {errors.password.message}
-                </Text>
-              )}
-            </Field.Root>
+      <VStack spacing={4} width="100%">
+        <form onSubmit={handleSubmit(onSubmit)} style={{ width: '100%' }}>
+          <Fieldset.Root maxW="sm">
+            <Fieldset.Content>
+              <Field.Root>
+                <Field.Label>{t('general.words.email')}</Field.Label>
+                <DefaultInput
+                  placeholder={t('general.words.email')}
+                  type="email"
+                  {...register('email', {
+                    required: t('general.errors.emailIsRequired'),
+                    pattern: emailPattern,
+                  })}
+                />
+                {errors.email && (
+                  <Text color="red.500" fontSize="sm">
+                    {errors.email.message}
+                  </Text>
+                )}
+                {error && (
+                  <Text color="red.500" fontSize="sm">
+                    {error}
+                  </Text>
+                )}
+              </Field.Root>
 
-            <Field.Root>
-              <Field.Label>{t('general.actions.confirmPassword')}</Field.Label>
-              <PasswordInput
-                placeholder={t('general.actions.repeatPassword')}
-                {...register('confirm_password', confirmPasswordRules(getValues))}
-              />
-              {errors.confirm_password && (
-                <Text color="red.500" fontSize="sm">
-                  {errors.confirm_password.message}
-                </Text>
-              )}
-            </Field.Root>
-          </Fieldset.Content>
-          <Button type="submit" loading={isSubmitting}>
-            {t('general.actions.signUp')}
-          </Button>
-        </Fieldset.Root>
-      </form>
-      <Text>
-        {t('routes.publicLayout.signUp.alreadyHaveAccount')}{' '}
-        <Link to="/login">
-          <Text as="span" color="blue.500">
-            {t('general.actions.login')}!
+              <Field.Root>
+                <Field.Label>{t('general.words.password')}</Field.Label>
+                <PasswordInput
+                  placeholder={t('general.words.password')}
+                  {...register('password', passwordRules())}
+                />
+                {errors.password && (
+                  <Text color="red.500" fontSize="sm">
+                    {errors.password.message}
+                  </Text>
+                )}
+              </Field.Root>
+
+              <Field.Root>
+                <Field.Label>{t('general.actions.confirmPassword')}</Field.Label>
+                <PasswordInput
+                  placeholder={t('general.actions.repeatPassword')}
+                  {...register('confirm_password', confirmPasswordRules(getValues))}
+                />
+                {errors.confirm_password && (
+                  <Text color="red.500" fontSize="sm">
+                    {errors.confirm_password.message}
+                  </Text>
+                )}
+              </Field.Root>
+            </Fieldset.Content>
+            <Button type="submit" loading={isSubmitting} width="100%">
+              {t('general.actions.signUp')}
+            </Button>
+          </Fieldset.Root>
+        </form>
+
+        <HStack width="100%" my={2}>
+          <Box flex="1" height="1px" bg="bg.200" />
+          <Text fontSize="sm" color="fg.muted" px={2}>
+            {t('general.words.or')}
           </Text>
-        </Link>
-      </Text>
+          <Box flex="1" height="1px" bg="bg.200" />
+        </HStack>
+
+        <GoogleAuthButton action="signup" onClick={handleGoogleSignup} />
+      </VStack>
+
+      <Box>
+        <Text>
+          {t('routes.publicLayout.signUp.alreadyHaveAccount')}{' '}
+          <Link to="/login">
+            <Text as="span" color="blue.500">
+              {t('general.actions.login')}!
+            </Text>
+          </Link>
+        </Text>
+      </Box>
     </Container>
   )
 }

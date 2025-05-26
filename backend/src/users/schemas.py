@@ -16,7 +16,8 @@ class UserUpdate(UserBase):
 
 
 class UserCreate(UserBase):
-    password: str = Field(min_length=8, max_length=40)
+    password: str | None = Field(default=None, min_length=8, max_length=40)
+    auth0_id: str | None = None
 
 
 class UserRegister(SQLModel):
@@ -26,3 +27,4 @@ class UserRegister(SQLModel):
 
 class UserPublic(UserBase):
     id: uuid.UUID
+    auth0_id: str | None = None

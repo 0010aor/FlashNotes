@@ -338,13 +338,13 @@ def test_different_user_delete(
     test_collection: dict[str, Any],
 ):
     collection_id = test_collection["id"]
+
     rsp = client.delete(
         f"{settings.API_V1_STR}/collections/{collection_id}",
         headers=superuser_token_headers,
     )
 
     assert rsp.status_code == 404
-
     # Verity the data still exists
     verify_rsp = client.get(
         f"{settings.API_V1_STR}/collections/{collection_id}",

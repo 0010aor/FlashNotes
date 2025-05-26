@@ -11,7 +11,8 @@ if TYPE_CHECKING:
 
 class User(UserBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
-    hashed_password: str
+    auth0_id: str | None = Field(default=None, index=True)
+    hashed_password: str | None = Field(default=None)
     collections: list["Collection"] = Relationship(
         back_populates="user",
         cascade_delete=True,
