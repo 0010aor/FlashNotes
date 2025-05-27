@@ -3,6 +3,7 @@ from datetime import datetime, timedelta, timezone
 from typing import Any
 
 from sqlmodel import Session, select, update
+from sqlalchemy.exc import IntegrityError
 
 from src.auth.services import get_password_hash
 from src.core.config import settings
@@ -68,26 +69,44 @@ def get_ai_usage_quota_for_user(user: User) -> AIUsageQuota:
 
 
 def check_and_increment_ai_usage_quota(session: Session, user: User) -> bool:
-    quota = user.ai_usage_quota
     now = datetime.now(timezone.utc)
-    if not quota:
-        quota = AIUsageQuotaModel(user_id=user.id, usage_count=1, last_reset_time=now)
-        session.add(quota)
+    reset_threshold = now - timedelta(days=settings.AI_QUOTA_TIME_RANGE_DAYS)
+
+    if not user.ai_usage_quota:
+        try:
+            quota = AIUsageQuotaModel(
+                user_id=user.id, usage_count=1, last_reset_time=now
+            )
+            session.add(quota)
+            session.commit()
+            return True
+        except IntegrityError:
+            session.rollback()
+
+            session.refresh(user)
+
+    result_reset = session.exec(
+        update(AIUsageQuotaModel)
+        .where(
+            (AIUsageQuotaModel.user_id == user.id)
+            & (AIUsageQuotaModel.last_reset_time <= reset_threshold)
+        )
+        .values(usage_count=1, last_reset_time=now)
+    )
+
+    if result_reset.rowcount > 0:
         session.commit()
         return True
 
-    if now - quota.last_reset_time >= timedelta(days=settings.AI_QUOTA_TIME_RANGE_DAYS):
-        quota.usage_count = 0
-        quota.last_reset_time = now
-        session.add(quota)
-        session.commit()
-    result = session.exec(
+    result_increment = session.exec(
         update(AIUsageQuotaModel)
         .where(
-            (AIUsageQuotaModel.id == quota.id)
-            & (AIUsageQuotaModel.usage_count <= settings.AI_MAX_USAGE_QUOTA)
+            (AIUsageQuotaModel.user_id == user.id)
+            & (AIUsageQuotaModel.last_reset_time > reset_threshold)
+            & (AIUsageQuotaModel.usage_count < settings.AI_MAX_USAGE_QUOTA)
         )
         .values(usage_count=AIUsageQuotaModel.usage_count + 1)
     )
+
     session.commit()
-    return result.rowcount > 0
+    return result_increment.rowcount > 0
