@@ -2,8 +2,8 @@ import uuid
 from datetime import datetime, timedelta, timezone
 from typing import Any
 
-from sqlmodel import Session, select, update
 from sqlalchemy.exc import IntegrityError
+from sqlmodel import Session, select, update
 
 from src.auth.services import get_password_hash
 from src.core.config import settings

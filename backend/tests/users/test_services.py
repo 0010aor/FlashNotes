@@ -1,9 +1,11 @@
-from datetime import datetime, timedelta, timezone
-from unittest.mock import MagicMock, patch
+from datetime import datetime, timezone
+from unittest.mock import patch
+
 from fastapi.encoders import jsonable_encoder
 from sqlmodel import Session
 
 from src.auth.services import verify_password
+from src.core.config import settings
 from src.users.models import AIUsageQuota, User
 from src.users.schemas import UserCreate, UserUpdate
 from src.users.services import (
@@ -14,7 +16,6 @@ from src.users.services import (
     update_user,
 )
 from tests.utils.utils import random_email, random_lower_string
-from src.core.config import settings
 
 
 def test_create_user(db: Session) -> None:
