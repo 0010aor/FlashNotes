@@ -14,6 +14,10 @@
     "collectionDialog": {
       "title": "Nieuwe Collectie Toevoegen"
     },
+    "confirmationDialog": {
+      "title": "Collectie verwijderen",
+      "warningMessages": "Weet u zeker dat u de verzameling {{name}} wilt verwijderen? Deze actie is onomkeerbaar en verwijdert ook de bijbehorende kaarten."
+    },
     "editorToolbar": {
       "heading1": "Kop 1",
       "heading2": "Kop 2",
@@ -95,6 +99,7 @@
       "backToCollection": "Terug naar Collectie",
       "cancel": "Annuleren",
       "close": "Sluiten",
+      "collectionDeletedDescription": "Collectie succesvol verwijderd",
       "comingSoon": "Binnenkort beschikbaar",
       "confirmPassword": "Bevestig Wachtwoord",
       "create": "Creëren",
@@ -124,6 +129,7 @@
       "default": "Er is iets misgegaan",
       "emailIsRequired": "E-mail is vereist",
       "errorCreatingAccount": "Fout bij het aanmaken van account",
+      "errorDeletingCollection": "Fout bij het verwijderen van de collectie",
       "errorLoadingCard": "Fout bij het laden van kaart",
       "errorLoadingAIUsageQuota": "Fout bij het laden van AI-gebruiksquota",
       "errorSavingCard": "Fout bij het opslaan van kaart",
