@@ -1,0 +1,46 @@
+services:
+  db:
+    image: postgres:15
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=flashnotes
+      - POSTGRES_USER=flashnotes
+      - POSTGRES_PASSWORD=flashnotes
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      - PROJECT_NAME=FlashNotes
+      - DOMAIN=localhost
+      - POSTGRES_SERVER=db
+      - POSTGRES_USER=flashnotes
+      - POSTGRES_PASSWORD=flashnotes
+      - POSTGRES_DB=flashnotes
+      - FIRST_SUPERUSER=admin@example.com
+      - FIRST_SUPERUSER_PASSWORD=admin123
+      - USERS_OPEN_REGISTRATION=true
+    volumes:
+      - ./backend:/app
+    command: sh -c "./prestart.sh && uvicorn src.main:app --reload --host 0.0.0.0 --port 8000"
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    command: pnpm run dev --host 0.0.0.0
+
+volumes:
+  postgres_data:
